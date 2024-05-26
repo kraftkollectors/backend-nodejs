@@ -1,7 +1,12 @@
-const jwt = require("jsonwebtoken");
-const { SESSION_SECRET } = require('../config')
-const Admin = require('../models/admin')
-const User = require('../models/users')
+import dotenv from 'dotenv';
+dotenv.config();
+
+import jwt from 'jsonwebtoken';
+import Admin from '../models/admin'
+import User from '../models/users'
+
+
+const JWT_SECRET: any = process.env.JWT_SECRET
 
 
 const verifyToken = async (req: any, res: any, next: any) => {
@@ -13,7 +18,7 @@ const verifyToken = async (req: any, res: any, next: any) => {
       return res.status(403).json({ message: "A token is required for authentication" })
     }
     
-    const decoded = jwt.verify(token, SESSION_SECRET);
+    const decoded: any = jwt.verify(token, JWT_SECRET);
     if(decoded.id){
 
       if(decoded.type === 'admin'){

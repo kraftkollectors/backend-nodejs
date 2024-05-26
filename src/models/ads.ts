@@ -30,6 +30,6 @@ const AdSchema = new Schema({
 }, { timestamps: true })
 
 
-const Ad: any = mongoose.model('Ad', AdSchema);
+const Ad: any = mongoose.models.Ad || mongoose.model('Ad', AdSchema);
 
 export default Ad

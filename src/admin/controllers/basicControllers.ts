@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import BasicService from '../services/BasicService';
+import BasicService from '../services/basicService';
 
 
 // driver login
