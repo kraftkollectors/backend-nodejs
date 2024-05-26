@@ -4,6 +4,11 @@ import BasicService from '../services/basicService';
 
 // driver login
 const BasicController = {
+    testServer: async (req: Request, res: Response) => {
+        const data = await BasicService.testServer()
+        return res.status(data.statusCode).json(data)
+    },
+    
     createAdmin: async (req: Request, res: Response) => {
         try {
             const sendData = req.body;

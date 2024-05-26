@@ -6,7 +6,8 @@ import generateUploadURL from '../../middlewares/cloudinary';
 // driver login
 const BasicController = {
     testServer: async (req: Request, res: Response) => {
-        return res.status(500).json({ data: 'working', status: 201, msg: "Success" });
+        const data = await BasicService.testServer()
+        return res.status(data.statusCode).json(data)
     },
 
     createUser: async (req: Request, res: Response) => {

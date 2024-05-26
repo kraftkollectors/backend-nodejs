@@ -9,7 +9,8 @@ import TransController from '../controllers/transControllers';
 const router: Router = express.Router();
 
 // Onboarding routes
-router.get("", BasicController.loginAdmin);
+router.get("", BasicController.testServer);
+router.get("/login", BasicController.loginAdmin);
 router.get("/register", BasicController.createAdmin);
 router.get("/forgot", BasicController.adminForgot);
 router.get("/reset", BasicController.adminReset);

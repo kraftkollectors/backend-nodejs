@@ -11,6 +11,19 @@ import generateToken from '../../utils/tokenUtils';
 const SALT: any = process.env.SALT
 
 const BasicService = {
+    testServer: async () => {
+        try {
+            // Check if the email exists
+            const user = await User.find().limit(10)
+
+            return { data: user, statusCode: 201, msg: "Success" };
+        } catch (error: any) {
+            console.log(error);
+            throw new Error(`Error logging in: ${error.message}`);
+        }
+    },
+
+
     createUser: async (userData: UserData) => {
         try {
             // Check if the email already exists
