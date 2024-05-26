@@ -32,8 +32,8 @@ const startServer = async () => {
     })
 
     // get socket connection and send to socket file
-    const io = socket(server)
-    mySocket(io)
+    // const io = socket(server)
+    // mySocket(io)
 
     app.use('/users', usersRoutes)
     app.use('/admin', adminRoutes)
