@@ -31,7 +31,7 @@ const BasicService = {
             
 
             let fakePassword = '';
-            admin.dataValues.password = fakePassword
+            admin.password = fakePassword
 
             return { data: { admin, token }, statusCode: 201, msg: "Success" };
         } catch (error: any) {
@@ -51,17 +51,19 @@ const BasicService = {
             // Compare passwords using bcrypt
             let password: string = await bcrypt.hash(adminData.password, SALT)
 
-            if (admin.dataValues.password !== password) {
+            if (admin.password !== password) {
                 return { data: 'Incorrect password', statusCode: 401, msg: "Failure" };
             }
 
+            admin.type = 'admin'
+            
             // Generate a token with admin information
             const token = generateToken(admin);
 
             console.log(token);
 
             let fakePassword = '';
-            admin.dataValues.password = fakePassword
+            admin.password = fakePassword
 
             return { data: { admin, token }, statusCode: 201, msg: "Success" };
         } catch (error: any) {

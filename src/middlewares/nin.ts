@@ -43,4 +43,4 @@ const veriNIN = async (nin: string) => {
     
 }
 
-module.exports = veriNIN;
+export default veriNIN;

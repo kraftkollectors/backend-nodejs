@@ -38,10 +38,15 @@ const AdminSchema = new Schema({
         type: String,
         required: false
     },
-    approved: {
-        type: Number,
-        required: true,
-        default: 0
+    isArtisan: {
+        type: Boolean,
+        required: false,
+        default: false
+    },
+    active: {
+        type: Boolean,
+        required: false,
+        default: true
     },
 }, { timestamps: true })
 

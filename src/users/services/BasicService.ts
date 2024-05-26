@@ -25,6 +25,8 @@ const BasicService = {
             const hashedPassword = await bcrypt.hash(userData.password, SALT);
             const user = await new User({ ...userData, password: hashedPassword }).save();
 
+            user.type = 'user'
+
             // Generate a token with user information
             const token = generateToken(user);
 
@@ -32,7 +34,7 @@ const BasicService = {
             
 
             let fakePassword = '';
-            user.dataValues.password = fakePassword
+            user.password = fakePassword
 
             return { data: { user, token }, statusCode: 201, msg: "Success" };
         } catch (error: any) {
@@ -50,6 +52,8 @@ const BasicService = {
             }
 
             const user = await new User({ ...userData }).save();
+
+            user.type = 'user'
 
             // Generate a token with user information
             const token = generateToken(user);
@@ -74,9 +78,11 @@ const BasicService = {
             // Compare passwords using bcrypt
             let password: string = await bcrypt.hash(userData.password, SALT)
 
-            if (user.dataValues.password !== password) {
+            if (user.password !== password) {
                 return { data: 'Incorrect password', statusCode: 401, msg: "Failure" };
             }
+
+            user.type = 'user'
 
             // Generate a token with user information
             const token = generateToken(user);
@@ -84,7 +90,7 @@ const BasicService = {
             console.log(token);
 
             let fakePassword = '';
-            user.dataValues.password = fakePassword
+            user.password = fakePassword
 
             return { data: { user, token }, statusCode: 201, msg: "Success" };
         } catch (error: any) {
@@ -103,13 +109,15 @@ const BasicService = {
                 return { data: 'User With The Specified Email Not Found', statusCode: 404, msg: "Failure" };
             }
 
+            user.type = 'user'
+
             // Generate a token with user information
             const token = generateToken(user);
 
             console.log(token);
 
             let fakePassword = '';
-            user.dataValues.password = fakePassword
+            user.password = fakePassword
 
             return { data: { user, token }, statusCode: 201, msg: "Success" };
         } catch (error: any) {
