@@ -14,6 +14,8 @@ let app: any = express()
 const startServer = async () => {
 
     const dbURI: any = process.env.dbURI
+    console.log(dbURI);
+    
     await databaseConnection(dbURI)
 
     app.use(cors())
