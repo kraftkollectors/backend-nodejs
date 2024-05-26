@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import BasicService from '../services/aabasicService';
+import BasicService from '../services/basicService';
 import generateUploadURL from '../../middlewares/cloudinary';
 
 
