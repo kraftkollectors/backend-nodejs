@@ -1,8 +1,8 @@
-import { saveRide, endRide } from './ride'
+import { saveChat } from './userChat'
 
 
 // Map to store driver's room association
-const driverRooms = new Map();
+const userRooms = new Map();
 
 const mySocket = (io: any) => {
     io.on('connection', (socket:any) => {
@@ -15,20 +15,20 @@ const mySocket = (io: any) => {
             // If the user is a driver, associate them with the room
             if (userType === 'driver') {
                 // Check if the user is a driver and if they are already in a room
-                if (driverRooms.has(driverId)) {
+                if (userRooms.has(driverId)) {
                     // If the driver is already in a room, get the roomID
-                    roomID = driverRooms.get(driverId);
+                    roomID = userRooms.get(driverId);
                 }else{                    
                     // Generate a unique room ID if the driver is not in any room
                     roomID = generateRoomID();
-                    driverRooms.set(driverId, roomID);
+                    userRooms.set(driverId, roomID);
                 }
                 // Join the driver to negotiation room
                 socket.join(roomID);
             }else if (userType === 'user'){
                 // get the roomID of driver you want to book and join the room
-                roomID = driverRooms.get(driverId);
-                driverRooms.set(userId, roomID);
+                roomID = userRooms.get(driverId);
+                userRooms.set(userId, roomID);
                 // Join the user to negotiation room
                 socket.join(roomID);
 
@@ -47,7 +47,7 @@ const mySocket = (io: any) => {
             // listen for driver accept message sent from front end
             socket.on('accept', async (sentData: any) => {   
                 console.log(sentData);
-                const createRide = await saveRide(sentData)
+                const createRide = await saveChat(sentData)
                 if (createRide !== false){ 
                     io.to(roomID).emit('acceptMessage', { message: 'history created', sentData, rideData: createRide });
                 }else{
@@ -59,7 +59,7 @@ const mySocket = (io: any) => {
             // listen for user message sent from front end
             socket.on('end', async (rideID: any) => {   
                 console.log(rideID);
-                const finishRide = await endRide(rideID)
+                const finishRide = await saveChat(rideID)
                 if (finishRide === true){ 
                     io.to(roomID).emit('endRide', { message: 'ride ended' });
                 }else{
@@ -76,7 +76,7 @@ const mySocket = (io: any) => {
                 socket.leave(roomID);
                 // If the user is a driver, remove the association with the room
                 if (userType === 'driver') {
-                    driverRooms.delete(userId);
+                    userRooms.delete(userId);
                 }
             });
         });
