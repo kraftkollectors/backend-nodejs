@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import BasicService from '../services/basicService';
+import BasicService from '../services/aabasicService';
 import generateUploadURL from '../../middlewares/cloudinary';
 
 
@@ -17,6 +17,7 @@ const BasicController = {
             return res.status(data.statusCode).json(data);
 
         } catch (error: any) {
+            console.log(error.message)
             return res.status(500).json({ error: error.message, status: error.statusCode, msg: "Failure" });
         }
     },
@@ -28,6 +29,7 @@ const BasicController = {
             return res.status(data.statusCode).json(data);
 
         } catch (error: any) {
+            console.log(error.message)
             return res.status(500).json({ error: error.message, status: error.statusCode, msg: "Failure" });
         }
     },
@@ -38,6 +40,7 @@ const BasicController = {
             const data = await BasicService.loginUser(sendData);
             return res.status(data.statusCode).json(data);
         } catch (error: any) {
+            console.log(error.message)
             return res.status(500).json({ error: error.message, status: error.statusCode, msg: "Failure" });
         }
     },
@@ -48,6 +51,7 @@ const BasicController = {
             const data = await BasicService.thirdPartyLogin(sendData);
             return res.status(data.statusCode).json(data);
         } catch (error: any) {
+            console.log(error.message)
             return res.status(500).json({ error: error.message, status: error.statusCode, msg: "Failure" });
         }
     },
@@ -58,6 +62,7 @@ const BasicController = {
             const data = await BasicService.userForgot(sendData);
             return res.status(data.statusCode).json(data);
         } catch (error: any) {
+            console.log(error.message)
             return res.status(500).json({ error: error.message, status: error.statusCode, msg: "Failure" });
         }
     },
@@ -68,6 +73,7 @@ const BasicController = {
             const data = await BasicService.userReset(sendData);
             return res.status(data.statusCode).json(data);
         } catch (error: any) {
+            console.log(error.message)
             return res.status(500).json({ error: error.message, status: error.statusCode, msg: "Failure" });
         }
     },
@@ -86,6 +92,7 @@ const BasicController = {
     
             return res.status(200).json({ data: data, status: 201, msg: 'Success' });
         } catch (error: any) {
+            console.log(error.message)
             return res.status(500).json({ error: error.message, status: error.statusCode, msg: "Failure" });
         }
     }

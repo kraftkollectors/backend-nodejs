@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import BasicService from '../services/basicService';
+import BasicService from '../services/aabasicService';
 
 
 // driver login
@@ -16,6 +16,7 @@ const BasicController = {
             res.status(data.statusCode).json(data);
 
         } catch (error: any) {
+            console.log(error.message)
             res.status(500).json({ error: error.message, status: error.statusCode, msg: "Failure" });
         }
     },
@@ -26,6 +27,7 @@ const BasicController = {
             const data = await BasicService.loginAdmin(sendData);
             res.status(data.statusCode).json(data);
         } catch (error: any) {
+            console.log(error.message)
             res.status(500).json({ error: error.message, status: error.statusCode, msg: "Failure" });
         }
     },
@@ -36,6 +38,7 @@ const BasicController = {
             const data = await BasicService.adminForgot(sendData);
             res.status(data.statusCode).json(data);
         } catch (error: any) {
+            console.log(error.message)
             res.status(500).json({ error: error.message, status: error.statusCode, msg: "Failure" });
         }
     },
@@ -46,6 +49,7 @@ const BasicController = {
             const data = await BasicService.adminReset(sendData);
             res.status(data.statusCode).json(data);
         } catch (error: any) {
+            console.log(error.message)
             res.status(500).json({ error: error.message, status: error.statusCode, msg: "Failure" });
         }
     }

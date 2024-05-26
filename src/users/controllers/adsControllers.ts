@@ -12,6 +12,7 @@ const AdsController = {
             return res.status(data.statusCode).json(data);
 
         } catch (error: any) {
+            console.log(error.message)
             return res.status(500).json({ error: error.message, status: error.statusCode, msg: "Failure" });
         }
     },
@@ -23,6 +24,7 @@ const AdsController = {
             return res.status(data.statusCode).json(data);
 
         } catch (error: any) {
+            console.log(error.message)
             return res.status(500).json({ error: error.message, status: error.statusCode, msg: "Failure" });
         }
     },
@@ -35,6 +37,7 @@ const AdsController = {
             return res.status(data.statusCode).json(data);
 
         } catch (error: any) {
+            console.log(error.message)
             return res.status(500).json({ error: error.message, status: error.statusCode, msg: "Failure" });
         }
     },
@@ -46,6 +49,7 @@ const AdsController = {
             return res.status(data.statusCode).json(data);
 
         } catch (error: any) {
+            console.log(error.message)
             return res.status(500).json({ error: error.message, status: error.statusCode, msg: "Failure" });
         }
     },
@@ -62,6 +66,7 @@ const AdsController = {
             return res.status(data.statusCode).json(data);
 
         } catch (error: any) {
+            console.log(error.message)
             return res.status(500).json({ error: error.message, status: error.statusCode, msg: "Failure" });
         }
     },
@@ -78,6 +83,7 @@ const AdsController = {
             return res.status(data.statusCode).json(data);
 
         } catch (error: any) {
+            console.log(error.message)
             return res.status(500).json({ error: error.message, status: error.statusCode, msg: "Failure" });
         }
     },
@@ -93,6 +99,7 @@ const AdsController = {
             return res.status(data.statusCode).json(data);
 
         } catch (error: any) {
+            console.log(error.message)
             return res.status(500).json({ error: error.message, status: error.statusCode, msg: "Failure" });
         }
     },
