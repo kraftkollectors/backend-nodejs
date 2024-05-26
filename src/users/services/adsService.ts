@@ -6,11 +6,14 @@ import veriNIN from '../../middlewares/nin'
 
 
 const AdsService = {
-    getAllAd: async () => {
+    getAllAd: async (query: any) => {
         try {
+            const resPerPage = 10
+            const currentPageNum = Number(query.page) || 1
+            const skip = resPerPage * (currentPageNum - 1)
 
             // Check if the email already exists
-            const existingRecord = await Ad.findOne({ active: true })
+            const existingRecord = await Ad.findOne({ active: true }).limit(resPerPage).skip(skip)
 
             if (!existingRecord) {
                 return { data: 'No records found', statusCode: 404, msg: "Failure" };
@@ -43,7 +46,7 @@ const AdsService = {
         }
     },
 
-    getMyAd: async (userid: string) => {
+    getMyAd: async (query: any, userid: string) => {
         try {
             const isValidId = mongoose.isValidObjectId(userid)
 
@@ -51,8 +54,12 @@ const AdsService = {
                 return { data: 'Please enter a valid id', statusCode: 404, msg: "Failure" };
             }
 
+            const resPerPage = 10
+            const currentPageNum = Number(query.page) || 1
+            const skip = resPerPage * (currentPageNum - 1)
+
             // Check if the email already exists
-            const existingRecord = await Ad.find({ userid })
+            const existingRecord = await Ad.find({ userid }).limit(resPerPage).skip(skip)
 
             if (!existingRecord) {
                 return { data: 'No records found', statusCode: 404, msg: "Failure" };

@@ -5,11 +5,16 @@ import mongoose from 'mongoose';
 
 
 const UsersService = {
-    getUsers: async () => {
+    getUsers: async (query: any) => {
         try {
+
+            const resPerPage = 10
+            const currentPageNum = Number(query.page) || 1
+            const skip = resPerPage * (currentPageNum - 1)
 
             // Check if the email already exists
             const existingUser = await Users.find({ active: true }, { active: 0, password: 0, createdAt: 0 })
+            .limit(resPerPage).skip(skip)
 
             if (!existingUser) {
                 return { data: 'No user found', statusCode: 404, msg: "Failure" };

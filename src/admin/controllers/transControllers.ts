@@ -5,10 +5,11 @@ import transService from '../services/transService';
 // driver login
 const TransController = {
 
-    getTransactions: async (req: Request, res: Response) => {
+    getTransactions: async (req: any, res: Response) => {
         try {
             const id = req.params.id;
-            const data = await transService.getTransactions();
+            const query = req.query
+            const data = await transService.getTransactions(query);
             return res.status(data.statusCode).json(data);
 
         } catch (error: any) {
@@ -27,10 +28,11 @@ const TransController = {
         }
     },
 
-    getUserTransactions: async (req: Request, res: Response) => {
+    getUserTransactions: async (req: any, res: Response) => {
         try {
             const userid = req.params.userid;
-            const data = await transService.getUserTransactions(userid);
+            const query = req.query
+            const data = await transService.getUserTransactions(query, userid);
             return res.status(data.statusCode).json(data);
 
         } catch (error: any) {

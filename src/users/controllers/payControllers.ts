@@ -5,10 +5,11 @@ import PayService from '../services/payService';
 // driver login
 const PayController = {
 
-    getAllPayment: async (req: Request, res: Response) => {
+    getAllPayment: async (req: any, res: Response) => {
         try {
             const userid = req.params.userid;
-            const data = await PayService.getAllPayment(userid);
+            const query = req.query
+            const data = await PayService.getAllPayment(query, userid);
             return res.status(data.statusCode).json(data);
 
         } catch (error: any) {

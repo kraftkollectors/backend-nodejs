@@ -5,11 +5,14 @@ import mongoose from 'mongoose';
 
 
 const transService = {
-    getTransactions: async () => {
+    getTransactions: async (query: any) => {
         try {
+            const resPerPage = 10
+            const currentPageNum = Number(query.page) || 1
+            const skip = resPerPage * (currentPageNum - 1)
 
             // Check if the email alrepaymenty exists
-            const existingPay = await Payment.find()
+            const existingPay = await Payment.find().limit(resPerPage).skip(skip)
 
             if (!existingPay) {
                 return { data: 'No payment found', statusCode: 404, msg: "Failure" };
@@ -43,7 +46,7 @@ const transService = {
         }
     },
     
-    getUserTransactions: async (id: string) => {
+    getUserTransactions: async (query: any, id: string) => {
         try {
             // check if id is a valid mongoose id
             const isValidId = mongoose.isValidObjectId(id)
@@ -52,8 +55,12 @@ const transService = {
                 return { data: 'Please enter a correct id', statusCode: 404, msg: "Failure" };
             }
 
+            const resPerPage = 10
+            const currentPageNum = Number(query.page) || 1
+            const skip = resPerPage * (currentPageNum - 1)
+
             // Check if the email alrepaymenty exists
-            const existingPay = await Payment.find({ userid: id })
+            const existingPay = await Payment.find({ userid: id }).limit(resPerPage).skip(skip)
 
             if (!existingPay) {
                 return { data: 'No user payment found', statusCode: 404, msg: "Failure" };

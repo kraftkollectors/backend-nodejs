@@ -5,11 +5,14 @@ import mongoose from 'mongoose';
 
 
 const AdsService = {
-    getAds: async () => {
+    getAds: async (query: any) => {
         try {
+            const resPerPage = 10
+            const currentPageNum = Number(query.page) || 1
+            const skip = resPerPage * (currentPageNum - 1)
 
             // Check if the email already exists
-            const existingAd = await Ads.find({ active: true })
+            const existingAd = await Ads.find({ active: true }).limit(resPerPage).skip(skip)
 
             if (!existingAd) {
                 return { data: 'No ad found', statusCode: 404, msg: "Failure" };
@@ -43,7 +46,7 @@ const AdsService = {
         }
     },
     
-    getUserAds: async (id: string) => {
+    getUserAds: async (query: any, id: string) => {
         try {
             // check if id is a valid mongoose id
             const isValidId = mongoose.isValidObjectId(id)
@@ -52,8 +55,12 @@ const AdsService = {
                 return { data: 'Please enter a correct id', statusCode: 404, msg: "Failure" };
             }
 
+            const resPerPage = 10
+            const currentPageNum = Number(query.page) || 1
+            const skip = resPerPage * (currentPageNum - 1)
+
             // Check if the email already exists
-            const existingAd = await Ads.find({ userid: id })
+            const existingAd = await Ads.find({ userid: id }).limit(resPerPage).skip(skip)
 
             if (!existingAd) {
                 return { data: 'No user ad found', statusCode: 404, msg: "Failure" };

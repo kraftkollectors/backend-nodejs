@@ -7,7 +7,7 @@ import veriNIN from '../../middlewares/nin'
 
 
 const PayService = {
-    getAllPayment: async (id: string) => {
+    getAllPayment: async (query: any, id: string) => {
         try {
             // check if id is a valid mongoose id
             const isValidId = mongoose.isValidObjectId(id)
@@ -16,8 +16,12 @@ const PayService = {
                 return { data: 'Please enter a correct id', statusCode: 404, msg: "Failure" };
             }
 
+            const resPerPage = 10
+            const currentPageNum = Number(query.page) || 1
+            const skip = resPerPage * (currentPageNum - 1)
+
             // Check if the email already exists
-            const existingRecord = await Payment.findOne({ userid: id })
+            const existingRecord = await Payment.findOne({ userid: id }).limit(resPerPage).skip(skip)
 
             if (!existingRecord) {
                 return { data: 'No record found', statusCode: 404, msg: "Failure" };

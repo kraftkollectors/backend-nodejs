@@ -5,10 +5,11 @@ import UsersService from '../services/usersService';
 // driver login
 const UsersController = {
 
-    getUsers: async (req: Request, res: Response) => {
+    getUsers: async (req: any, res: Response) => {
         try {
             const id = req.params.id;
-            const data = await UsersService.getUsers();
+            const query = req.query
+            const data = await UsersService.getUsers(query);
             return res.status(data.statusCode).json(data);
 
         } catch (error: any) {

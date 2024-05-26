@@ -5,10 +5,11 @@ import AdsService from '../services/adsService';
 // driver login
 const AdsController = {
 
-    getAds: async (req: Request, res: Response) => {
+    getAds: async (req: any, res: Response) => {
         try {
             const id = req.params.id;
-            const data = await AdsService.getAds();
+            const query = req.query
+            const data = await AdsService.getAds(query);
             return res.status(data.statusCode).json(data);
 
         } catch (error: any) {
@@ -27,10 +28,11 @@ const AdsController = {
         }
     },
 
-    getUserAds: async (req: Request, res: Response) => {
+    getUserAds: async (req: any, res: Response) => {
         try {
             const userid = req.params.userid;
-            const data = await AdsService.getUserAds(userid);
+            const query = req.query
+            const data = await AdsService.getUserAds(query, userid);
             return res.status(data.statusCode).json(data);
 
         } catch (error: any) {
