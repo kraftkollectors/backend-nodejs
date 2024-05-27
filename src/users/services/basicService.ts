@@ -70,8 +70,6 @@ const BasicService = {
 
             // Generate a token with user information
             const token = generateToken(user);
-
-            console.log(token);
             
 
             let fakePassword = '';
