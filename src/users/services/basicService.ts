@@ -48,14 +48,16 @@ const BasicService = {
                     name: userData.firstName + ' ' + userData.lastName,
                     intro: 'We got a request to verify your mail. Please enter OTP on next page to complete verification and access account. If this was you, enter the otp in the next page or ignore and nothing will happen to your account.\n',
 
-                    action: {
-                        instructions: 'To get started, enter the OTP in the app window',
-                        button: {
-                            color: '#2680bf',
-                            text: `${num}`,
-                            link: ''
-                        }
-                    },
+                    title: num,
+
+                    // action: {
+                    //     instructions: 'To get started, enter the OTP in the app window',
+                    //     button: {
+                    //         color: '#2680bf',
+                    //         text: `${num}`,
+                    //         link: ''
+                    //     }
+                    // },
                     
                     outro: 'Need help, or have questions? Just reply to this email, we\'d love to help.\n\n Team Hardware Mall.'
                 }
