@@ -12,6 +12,14 @@ const UsersService = {
             const currentPageNum = Number(query.page) || 1
             const skip = resPerPage * (currentPageNum - 1)
 
+            // const keyword = query.keyword ? {
+            //     title: {
+            //         $regex: query.keyword,
+            //         $options: 'i'
+            //     }
+            // } : {}
+            // await this.bookModel.find({ ...keyword }).limit(resPerPage).skip(skip)
+
             // Check if the email already exists
             const existingUser = await Users.find({ active: true }, { active: 0, password: 0, createdAt: 0 })
             .limit(resPerPage).skip(skip)
