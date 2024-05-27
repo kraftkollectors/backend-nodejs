@@ -1,7 +1,7 @@
 export interface UserData {
-    firstname: string,
-    lastname: string,
-    username: string,
+    firstName: string,
+    lastName: string,
+    userName: string,
     email: string,
     password: string,
     gender: string,
