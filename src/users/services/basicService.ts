@@ -133,8 +133,6 @@ const BasicService = {
 
             // Generate a token with user information
             const token = generateToken(user);
-
-            console.log(token);
             
             return { data: { user, token }, statusCode: 201, msg: "Success" };
         } catch (error: any) {
@@ -171,8 +169,6 @@ const BasicService = {
             // Generate a token with user information
             const token = generateToken(user);
 
-            console.log(token);
-
             let fakePassword = '';
             user.password = fakePassword
 
@@ -197,8 +193,6 @@ const BasicService = {
 
             // Generate a token with user information
             const token = generateToken(user);
-
-            console.log(token);
 
             let fakePassword = '';
             user.password = fakePassword

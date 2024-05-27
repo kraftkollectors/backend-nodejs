@@ -2,15 +2,19 @@ import mongoose from "mongoose"
 const Schema: any = mongoose.Schema
 
 const EducationSchema = new Schema({
-    userid: {
+    userId: {
         type: String,
         required: true
     },
-    school: {
+    university: {
         type: String,
         required: true
     },
-    certificate: {
+    degree: {
+        type: String,
+        required: true
+    },
+    areaOfStudy: {
         type: String,
         required: true
     },

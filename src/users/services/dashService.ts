@@ -24,8 +24,7 @@ const DashService = {
                 return { data: 'No user found', statusCode: 404, msg: "Failure" };
             }            
 
-            let fakePassword = '';
-            existingUser.dataValues.password = fakePassword
+            existingUser.password = ''
 
             return { data: { existingUser }, statusCode: 201, msg: "Success" };
         } catch (error: any) {

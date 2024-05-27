@@ -2,15 +2,15 @@ import mongoose from "mongoose"
 const Schema: any = mongoose.Schema
 
 const CertificateSchema = new Schema({
-    userid: {
+    userId: {
         type: String,
         required: true
     },
-    name: {
+    certificate: {
         type: String,
         required: true
     },
-    organization: {
+    certifiedBy: {
         type: String,
         required: false
     },

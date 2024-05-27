@@ -30,8 +30,8 @@ router.post("/geturl", upload.single("file"), BasicController.getURL);
 // Authenticated Routes
 // users
 router.get("/dashboard/:userid", verifyToken, DashController.getUser);
-router.patch("dashboard/:userid", verifyToken, DashController.editUser);
-router.patch("dashboard/password/:userid", verifyToken, DashController.editUserPassword);
+router.patch("/dashboard/profile/:userid", verifyToken, DashController.editUser);
+router.patch("/dashboard/password/:userid", verifyToken, DashController.editUserPassword);
 
 // adds
 router.post("/adds", verifyToken, AdsController.postAd);
@@ -44,10 +44,25 @@ router.get("/myadds/:userid", verifyToken, AdsController.getMyAd);
 
 
 // become an artisan
-router.patch("/artisan/:userid", verifyToken, PayController.becomeArtisan);
+router.post("/artisan", verifyToken, PayController.becomeArtisan);
+router.get("/artisan/:userid", verifyToken, PayController.getAccount);
+
+router.post("/certificate", verifyToken, PayController.createCert);
+router.get("/certificate/:userid", verifyToken, PayController.getUserCert);
+router.get("/certificate/:id", verifyToken, PayController.getSingleCert);
+router.patch("/certificate/:id", verifyToken, PayController.editCert);
+router.delete("/certificate/:id", verifyToken, PayController.deleteCert);
+
+router.post("/education", verifyToken, PayController.createEdu);
+router.get("/education/:userid", verifyToken, PayController.getUserEdu);
+router.get("/education/:id", verifyToken, PayController.getSingleEdu);
+router.patch("/education/:id", verifyToken, PayController.editEdu);
+router.delete("/education/:id", verifyToken, PayController.deleteEdu);
+
+
 // payment and transaction history
 router.post("/pay/:userid", verifyToken, PayController.makePayment);
-router.get("/pay/:userid", verifyToken, PayController.getAllPayment);
+router.get("/pay/:userid", verifyToken, PayController.getAllUserPayment);
 
 
 export default router;

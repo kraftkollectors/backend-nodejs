@@ -2,11 +2,61 @@ import mongoose from "mongoose"
 const Schema: any = mongoose.Schema
 
 const ArtisanSchema = new Schema({
-    userid: {
+    userId: {
         type: String,
         required: true
     },
-    name: {
+    picture: {
+        type: String,
+        required: true
+    },
+    workHourFrom: {
+        type: String,
+        required: true
+    },
+    workHourTo: {
+        type: String,
+        required: true
+    },
+    website: {
+        type: String,
+        required: false,
+        default: ''
+    },
+    instagram: {
+        type: String,
+        required: false,
+        default: ''
+    },
+    twitter: {
+        type: String,
+        required: false,
+        default: ''
+    },
+    facebook: {
+        type: String,
+        required: false,
+        default: ''
+    },
+    linkedln: {
+        type: String,
+        required: false,
+        default: ''
+    },
+    phoneNumber: {
+        type: String,
+        required: true
+    },
+    description: {
+        type: String,
+        required: false,
+        default: ''
+    },
+    firstName: {
+        type: String,
+        required: true
+    },
+    lastName: {
         type: String,
         required: true
     },
@@ -19,10 +69,6 @@ const ArtisanSchema = new Schema({
         required: true
     },
     areaOfSpecialization: {
-        type: String,
-        required: true
-    },
-    workingHour: {
         type: String,
         required: true
     },

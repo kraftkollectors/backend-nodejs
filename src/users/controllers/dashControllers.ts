@@ -19,7 +19,7 @@ const DashController = {
 
     editUser: async (req: any, res: Response) => {
         try {
-            if(req.body.user_email != req.user.email){
+            if(req.body.userEmail != req.user.email){
                 res.status(400).json({ error: 'Authentication error', status: 400, msg: "Failure" });
             }
 
@@ -36,7 +36,7 @@ const DashController = {
 
     editUserPassword: async (req: any, res: Response) => {
         try {
-            if(req.body.user_email != req.user.email){
+            if(req.body.userEmail != req.user.email){
                 res.status(400).json({ error: 'Authentication error', status: 400, msg: "Failure" });
             }
 
