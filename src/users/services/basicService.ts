@@ -51,8 +51,8 @@ const BasicService = {
                     action: {
                         instructions: 'To get started, enter the OTP in the app window',
                         button: {
-                            color: '#2680bf',
-                            text: `<span style="font-size: 40px; font-weight: bolder;">${num}</span>`,
+                            color: '#ffffff',
+                            text: `<span style="font-size: 30px; font-weight: bolder; color: black">${num}</span>`,
                             link: ''
                         }
                     },
@@ -90,8 +90,17 @@ const BasicService = {
             }
             var emailSender: any = {
                 body: {
-                    name: 'KraftKollectors',
-                    intro: `We got a request to send an OTP to complete verification, if this was you, enter the otp in the next page or ignore and nothing will happen to your account.\n\n${num}`,
+                    name: 'User',
+                    intro: 'We got a request for an OTP to complete request. Please enter the OTP on next page to complete verification and access account. If this was you, enter the otp in the next page or ignore and nothing will happen to your account.\n',
+
+                    action: {
+                        instructions: 'To get started, enter the OTP in the app window',
+                        button: {
+                            color: '#ffffff',
+                            text: `<span style="font-size: 30px; font-weight: bolder; color: black">${num}</span>`,
+                            link: ''
+                        }
+                    },
                     
                     outro: 'Need help, or have questions? Just reply to this email, we\'d love to help.\n\n Team Hardware Mall.'
                 }
@@ -142,11 +151,11 @@ const BasicService = {
                 return { data: 'User With The Specified Email Not Found', statusCode: 404, msg: "Failure" };
             }
 
-            if (user.active !== false) {
+            if (user.active === false) {
                 return { data: 'account blocked', statusCode: 401, msg: "Failure" };
             }
             
-            if (user.emailVerify !== false) {
+            if (user.emailVerify === false) {
                 return { data: 'email not verified', statusCode: 401, msg: "Failure" };
             }
 
@@ -218,8 +227,17 @@ const BasicService = {
 
             var emailSender: any = {
                 body: {
-                    name: 'KraftKollectors',
-                    intro: `We got a request to reset your password, if this was you, enter the otp in the next page to reset password or ignore and nothing will happen to your account.\n\n${num}`,
+                    name: 'User',
+                    intro: 'We got a request to reset your password, if this was you, enter the otp in the next page to reset password or ignore and nothing will happen to your account',
+
+                    action: {
+                        instructions: 'To get started, enter the OTP in the app window',
+                        button: {
+                            color: '#ffffff',
+                            text: `<span style="font-size: 30px; font-weight: bolder; color: black">${num}</span>`,
+                            link: ''
+                        }
+                    },
                     
                     outro: 'Need help, or have questions? Just reply to this email, we\'d love to help.\n\n Team Hardware Mall.'
                 }
@@ -243,7 +261,13 @@ const BasicService = {
 
     verifyUserEmail: async (userData: any) => {
         try {
-            const res = await User.updateOne({ emailVerify: true }, { where: { email: userData.email }})
+            const res = await User.updateOne({ email: userData.email }, 
+                {
+                    $set:{
+                        emailVerify: true
+                    }
+                }
+            )
            
             if(res){
                 return { data: 'email verified', statusCode: 201, msg: "Success" };
@@ -262,7 +286,13 @@ const BasicService = {
         try {
             let password: string = await bcrypt.hash(userData.password, SALT)
 
-            const res = await User.updateOne({ password:password }, { where: { email: userData.email }})
+            const res = await User.updateOne({ email: userData.email }, 
+                {
+                    $set:{
+                        password: password
+                    }
+                }
+            )
            
             if(res){
                 return { data: 'password changed', statusCode: 201, msg: "Success" };

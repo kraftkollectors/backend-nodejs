@@ -11,6 +11,21 @@ const socket = require('socket.io')
 
 let app: any = express()
 
+const listRoutes = async (app: express.Application) => {
+    const chalk = (await import('chalk')).default;
+    app._router.stack.forEach((middleware: any) => {
+        if (middleware.route) { // if it's a route
+            const methods = Object.keys(middleware.route.methods).map((method) => method.toUpperCase()).join(', ');
+            console.log(chalk.green(`${methods} ${middleware.route.path}`));
+        } else if (middleware.name === 'router') { // if it's a router
+            middleware.handle.stack.forEach((handler: any) => {
+                const methods = Object.keys(handler.route.methods).map((method) => method.toUpperCase()).join(', ');
+                console.log(chalk.green(`${methods} ${middleware.regexp}${handler.route.path}`));
+            });
+        }
+    });
+};
+
 const startServer = async () => {
 
     const DBURI: any = process.env.DBURI
@@ -26,6 +41,7 @@ const startServer = async () => {
 
     const server = app.listen(PORT, (req: any, res: any) => {
         console.log(`listening on port ${PORT}`)
+        listRoutes(app);
     })
     .on('error', (err: any) => {
         console.log(err)
