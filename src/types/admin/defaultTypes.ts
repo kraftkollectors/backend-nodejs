@@ -1,8 +1,8 @@
 export interface AdminData {
-    email: string;
-    password: string;
+    email: string,
+    password: string,
 }
 
 export interface AdminDataForgot {
-    email: string;
+    email: string,
 }
