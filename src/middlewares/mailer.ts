@@ -1,13 +1,20 @@
-import nodemailer from 'nodemailer'
-import Mailgen from 'mailgen'
+import dotenv from 'dotenv';
+dotenv.config();
+import * as nodemailer from 'nodemailer';
+import Mailgen = require('mailgen');
+
+const HOST: any = process.env.EMAIL_HOST
+const PORT: any = process.env.EMAIL_PORT
+const USER: any = process.env.EMAIL_USER
+const PASS: any = process.env.EMAIL_PASS
 
 // Configure mailgen by setting a theme and your product info
 export const mailGenerator = new Mailgen({
     theme: 'default',
     product: {
         // Appears in header & footer of e-mails
-        name: 'Hardware Mall',
-        link: 'https://www.crystalhealth.com/'
+        name: 'KRAFTKOLLECTORS',
+        link: 'https://www.kraftkollectors.com/'
     }
 });
 
@@ -17,16 +24,16 @@ export const sendmail = (to: string, subject: string, message: string): Promise<
     return new Promise((resolve, reject) => {
         // email configuration 
         const transporter = nodemailer.createTransport({
-            host: 'mail.crystalhealth.com',
-            port: 465,
+            host: HOST,
+            port: PORT,
             auth: {
-            user: 'testemail@crystalhealth.com',
-            pass: 'Nodetest2022'
+            user: USER,
+            pass: PASS
             }
         });
 
         const mailOptions = {
-            from: 'testemail@crystalhealth.com',
+            from: USER,
             to: to,
             subject: subject,
             html: message

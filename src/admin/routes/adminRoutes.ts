@@ -14,6 +14,7 @@ router.get("/login", BasicController.loginAdmin);
 router.get("/register", BasicController.createAdmin);
 router.get("/forgot", BasicController.adminForgot);
 router.get("/reset", BasicController.adminReset);
+router.post("/otpagain", BasicController.createOTP);
 
 
 

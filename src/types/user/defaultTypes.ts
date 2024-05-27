@@ -1,11 +1,10 @@
 export interface UserData {
-    fullname: string,
+    firstname: string,
+    lastname: string,
+    username: string,
     email: string;
     password: string;
     gender: string;
-    startDate: string;
-    livingArrangement: string;
-    questions: string;
 }
 
 export interface UserDataLogin {

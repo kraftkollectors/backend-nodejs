@@ -21,6 +21,18 @@ const BasicController = {
         }
     },
 
+    createOTP: async (req: Request, res: Response) => {
+        try {
+            const sendData = req.body;
+            const data = await BasicService.createOTP(sendData);
+            return res.status(data.statusCode).json(data);
+
+        } catch (error: any) {
+            console.log(error.message)
+            return res.status(500).json({ error: error.message, status: error.statusCode, msg: "Failure" });
+        }
+    },
+
     loginAdmin: async (req: Request, res: Response) => {
         try {
             const sendData = req.body;

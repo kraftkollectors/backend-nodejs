@@ -2,7 +2,15 @@ import mongoose from "mongoose"
 const Schema: any = mongoose.Schema
 
 const UserSchema = new Schema({
-    fullname: {
+    firstName: {
+        type: String,
+        required: true
+    },
+    lastName: {
+        type: String,
+        required: true
+    },
+    userName: {
         type: String,
         required: true
     },
@@ -18,26 +26,6 @@ const UserSchema = new Schema({
         type: String,
         required: true
     },
-    startDate: {
-        type: String,
-        required: true
-    },
-    livingArrangement: {
-        type: String,
-        required: true
-    },
-    questions: {
-        type: String,
-        required: true
-    },
-    img: {
-        type: String,
-        required: false
-    },
-    cloudinaryid: {
-        type: String,
-        required: false
-    },
     isArtisan: {
         type: Boolean,
         required: false,
@@ -47,6 +35,11 @@ const UserSchema = new Schema({
         type: Boolean,
         required: false,
         default: true
+    },
+    emailVerify: {
+        type: Boolean,
+        required: false,
+        default: false
     },
 }, { timestamps: true })
 

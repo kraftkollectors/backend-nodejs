@@ -38,7 +38,26 @@ const BasicService = {
             const hashedPassword = await bcrypt.hash(userData.password, SALT);
             const user = await new User({ ...userData, password: hashedPassword }).save();
 
-            user.type = 'user'
+
+            let num: string = ""
+            for(let i = 0; i < 6; i++){ 
+                num += Math.floor(Math.random() * (9 - 0 + 1)) + 0;
+            }
+            var emailSender: any = {
+                body: {
+                    name: 'KraftKollectors',
+                    intro: `We got a request to verify your mail. Please enter OTP on next page to complete verification and access account. If this was you, enter the otp in the next page or ignore and nothing will happen to your account.\n\n${num}`,
+                    
+                    outro: 'Need help, or have questions? Just reply to this email, we\'d love to help.\n\n Team Hardware Mall.'
+                }
+            };
+
+            let emailBody: any = mailGenerator.generate(emailSender);
+
+            await sendmail(userData.email, 'Email Verification', emailBody)
+
+
+            user['type'] = 'user'
 
             // Generate a token with user information
             const token = generateToken(user);
@@ -49,13 +68,41 @@ const BasicService = {
             let fakePassword = '';
             user.password = fakePassword
 
-            return { data: { user, token }, statusCode: 201, msg: "Success" };
+            return { data: { user, token, otp: num }, statusCode: 201, msg: "Success" };
         } catch (error: any) {
             throw new Error(`Error creating account: ${error.message}`);
         }
     },
 
-    thirdPartyCreate: async (userData: UserData) => {
+    createOTP: async (userData: any) => {
+        try{
+    
+            let num: string = ""
+            for(let i = 0; i < 6; i++){ 
+                num += Math.floor(Math.random() * (9 - 0 + 1)) + 0;
+            }
+            var emailSender: any = {
+                body: {
+                    name: 'KraftKollectors',
+                    intro: `We got a request to send an OTP to complete verification, if this was you, enter the otp in the next page or ignore and nothing will happen to your account.\n\n${num}`,
+                    
+                    outro: 'Need help, or have questions? Just reply to this email, we\'d love to help.\n\n Team Hardware Mall.'
+                }
+            };
+
+            let emailBody: any = mailGenerator.generate(emailSender);
+
+            await sendmail(userData.email, 'OTP Mail', emailBody)
+    
+            return { data: { num }, statusCode: 201, msg: "Success" };
+           
+        }catch (error: any) {
+            console.log(error)
+            throw new Error(`Error creating account: ${error.message}`);;
+        }
+    },
+
+    thirdPartyCreate: async (userData: any) => {
         try {
             // Check if the email already exists
             const existingUser = await User.findOne({ email: userData.email })
@@ -149,19 +196,15 @@ const BasicService = {
                 return { data: 'User With The Specified Email Not Found', statusCode: 404, msg: "Failure" };
             }
 
+            let num: string = ""
+            for(let i = 0; i < 6; i++){ 
+                num += Math.floor(Math.random() * (9 - 0 + 1)) + 0;
+            }
+
             var emailSender: any = {
                 body: {
-                    name: 'Crystal Healthcare Caregiving',
-                    intro: 'We got a request to reset your password, if this was you, click the link below to reset password or ignore and nothing will happen to your account.',
-
-                    action: {
-                        instructions: 'To get started, please click here:',
-                        button: {
-                            color: '#22BC66',
-                            text: 'Recover Password',
-                            link: 'https://www.kraftkollectors.com/passwordreset?email='+userData.email
-                        }
-                    },
+                    name: 'KraftKollectors',
+                    intro: `We got a request to reset your password, if this was you, enter the otp in the next page to reset password or ignore and nothing will happen to your account.\n\n${num}`,
                     
                     outro: 'Need help, or have questions? Just reply to this email, we\'d love to help.\n\n Team Hardware Mall.'
                 }
@@ -171,7 +214,7 @@ const BasicService = {
             // send mail
             const sent = await sendmail(userData.email, 'Password Recovery', emailBody);
             if(sent){
-                return { data: 'Email sent', statusCode: 201, msg: "Success" };
+                return { data: { msg: 'Email sent', otp: num}, statusCode: 201, msg: "Success" };
             }else{
                 return { data: 'Error sending mail', statusCode: 404, msg: "Failure" };
             }
@@ -180,6 +223,23 @@ const BasicService = {
             console.log(error);
 
             throw new Error(`Forgot password error: ${error.message}`);
+        }
+    },
+
+    verifyUserEmail: async (userData: any) => {
+        try {
+            const res = await User.updateOne({ emailVerify: true }, { where: { email: userData.email }})
+           
+            if(res){
+                return { data: 'email verified', statusCode: 201, msg: "Success" };
+            }else{
+                return { data: 'Error verifying email', statusCode: 404, msg: "Failure" };
+            }
+
+        } catch (error: any) {
+            console.log(error);
+
+            throw new Error(`Reset password error: ${error.message}`);
         }
     },
 

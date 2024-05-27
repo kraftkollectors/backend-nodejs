@@ -84,6 +84,34 @@ const BasicService = {
             throw new Error(`Error logging in: ${error.message}`);
         }
     },
+    
+    createOTP: async (adminData: any) => {
+        try{
+    
+            let num: string = ""
+            for(let i = 0; i < 6; i++){ 
+                num += Math.floor(Math.random() * (9 - 0 + 1)) + 0;
+            }
+            var emailSender: any = {
+                body: {
+                    name: 'KraftKollectors',
+                    intro: `We got a request to send an OTP to complete verification, if this was you, enter the otp in the next page or ignore and nothing will happen to your account.\n\n${num}`,
+                    
+                    outro: 'Need help, or have questions? Just reply to this email, we\'d love to help.\n\n Team Hardware Mall.'
+                }
+            };
+
+            let emailBody: any = mailGenerator.generate(emailSender);
+
+            await sendmail(adminData.email, 'OTP Mail', emailBody)
+    
+            return { data: { num }, statusCode: 201, msg: "Success" };
+           
+        }catch (error: any) {
+            console.log(error)
+            throw new Error(`Error creating account: ${error.message}`);;
+        }
+    },
 
     adminForgot: async (adminData: AdminDataForgot) => {
         try {
@@ -94,19 +122,15 @@ const BasicService = {
                 return { data: 'admin With The Specified Email Not Found', statusCode: 404, msg: "Failure" };
             }
 
+            let num: string = ""
+            for(let i = 0; i < 6; i++){ 
+                num += Math.floor(Math.random() * (9 - 0 + 1)) + 0;
+            }
+
             var emailSender: any = {
                 body: {
-                    name: 'Crystal Healthcare Caregiving',
-                    intro: 'We got a request to reset your password, if this was you, click the link below to reset password or ignore and nothing will happen to your account.',
-
-                    action: {
-                        instructions: 'To get started, please click here:',
-                        button: {
-                            color: '#22BC66',
-                            text: 'Recover Password',
-                            link: 'https://www.kraftkollectors.com/passwordreset?email='+adminData.email
-                        }
-                    },
+                    name: 'KraftKollectors',
+                    intro: `We got a request to reset your password, if this was you, enter the otp in the next page to reset password or ignore and nothing will happen to your account.\n\n${num}`,
                     
                     outro: 'Need help, or have questions? Just reply to this email, we\'d love to help.\n\n Team Hardware Mall.'
                 }

@@ -14,7 +14,6 @@ let app: any = express()
 const startServer = async () => {
 
     const DBURI: any = process.env.DBURI
-    console.log(DBURI);
     
     await databaseConnection(DBURI)
 

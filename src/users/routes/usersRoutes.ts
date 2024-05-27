@@ -18,6 +18,8 @@ router.post("/login", BasicController.loginUser);
 router.post("/google/login", BasicController.thirdPartyLogin);
 router.post("/google/signup", BasicController.thirdPartyCreate);
 router.post("/register", BasicController.createUser);
+router.post("/verifyemail", BasicController.verifyUserEmail);
+router.post("/otpagain", BasicController.createOTP);
 router.post("/forgot", BasicController.userForgot);
 router.post("/reset", BasicController.userReset);
 
