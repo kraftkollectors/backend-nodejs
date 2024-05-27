@@ -10,6 +10,14 @@ const AdSchema = new Schema({
         type: String,
         required: true
     },
+    category: {
+        type: String,
+        required: true
+    },
+    description: {
+        type: String,
+        required: true
+    },
     amount: {
         type: Number,
         required: true
@@ -18,7 +26,15 @@ const AdSchema = new Schema({
         type: String,
         required: true
     },
-    image: {
+    coverPhoto: {
+        type: String,
+        required: true
+    },
+    publicId: {
+        type: String,
+        required: true
+    },
+    portfolio: {
         type: String,
         required: true
     },
