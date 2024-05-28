@@ -5,6 +5,8 @@ import Admin from '../../models/admin'
 import bcrypt from 'bcrypt';
 import { AdminData, AdminDataForgot } from '../../types/admin/defaultTypes';
 import generateToken from '../../utils/tokenUtils';
+import Contact from '../../models/contact';
+import mongoose from 'mongoose';
 
 const SALT: any = process.env.SALT
 
@@ -15,6 +17,22 @@ const BasicService = {
             const admin = await Admin.find().limit(10)
 
             return { data: admin, statusCode: 201, msg: "Success" };
+        } catch (error: any) {
+            console.log(error);
+            throw new Error(`Error logging in: ${error.message}`);
+        }
+    },
+    
+    getContact: async (query: any) => {
+        try {
+            const resPerPage = 10
+            const currentPageNum = Number(query.page) || 1
+            const skip = resPerPage * (currentPageNum - 1)
+
+            // Check if the email exists
+            const contact = await Contact.find().limit(resPerPage).skip(skip)
+
+            return { data: contact, statusCode: 201, msg: "Success" };
         } catch (error: any) {
             console.log(error);
             throw new Error(`Error logging in: ${error.message}`);
@@ -181,6 +199,24 @@ const BasicService = {
             console.log(error);
 
             throw new Error(`Reset password error: ${error.message}`);
+        }
+    },
+
+    deleteContact: async (id: string) => {
+        try {
+            // check if id is a valid mongoose id
+            const isValidId = mongoose.isValidObjectId(id)
+
+            if(!isValidId){
+                return { data: 'Please enter a correct id', statusCode: 404, msg: "Failure" };
+            }
+
+            // Check if the email already exists
+            await Contact.findByIdAndDelete({ _id: id })
+
+            return { data: 'contact deleted', statusCode: 201, msg: "Success" };
+        } catch (error: any) {
+            throw new Error(`Error fetching contact: ${error.message}`);
         }
     },
 }

@@ -65,3 +65,18 @@ export interface UserDataAds {
     subCategory: string,
     portfolio: []
 }
+
+export interface UserDataReport {
+    reporterId: string,
+    reportedId: string,
+    postId: string,
+    text: string
+}
+
+export interface UserDataContact {
+    email: string,
+    name: string,
+    phone: string,
+    subject: string
+    message: string
+}

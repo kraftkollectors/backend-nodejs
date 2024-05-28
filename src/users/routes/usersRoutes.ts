@@ -23,6 +23,8 @@ router.post("/otpagain", BasicController.createOTP);
 router.post("/forgot", BasicController.userForgot);
 router.post("/reset", BasicController.userReset);
 
+router.post("/contact", BasicController.contact);
+
 // Upload Files to Cloud And Get UploadURL
 router.post("/geturl", upload.single("file"), BasicController.getURL);
 router.post("/geturls", upload.array('files', 5), BasicController.getURLS);
@@ -43,6 +45,7 @@ router.get("/adds", verifyToken, AdsController.getAllAd);
 router.get("/adds/:id", verifyToken, AdsController.getSingleAd);
 router.get("/myadds/:userid", verifyToken, AdsController.getMyAd);
 router.get("/myadds/getcategory", verifyToken, AdsController.getcategory);
+router.post("/reportad", verifyToken, AdsController.createReport);
 
 
 // become an artisan

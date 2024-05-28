@@ -7,7 +7,6 @@ const UsersController = {
 
     getUsers: async (req: any, res: Response) => {
         try {
-            const id = req.params.id;
             const query = req.query
             const data = await UsersService.getUsers(query);
             return res.status(data.statusCode).json(data);

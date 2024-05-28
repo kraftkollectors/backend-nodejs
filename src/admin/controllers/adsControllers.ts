@@ -7,9 +7,20 @@ const AdsController = {
 
     getAds: async (req: any, res: Response) => {
         try {
-            const id = req.params.id;
             const query = req.query
             const data = await AdsService.getAds(query);
+            return res.status(data.statusCode).json(data);
+
+        } catch (error: any) {
+            console.log(error.message)
+            return res.status(500).json({ error: error.message, status: error.statusCode, msg: "Failure" });
+        }
+    },
+
+    getReport: async (req: any, res: Response) => {
+        try {
+            const query = req.query
+            const data = await AdsService.getReport(query);
             return res.status(data.statusCode).json(data);
 
         } catch (error: any) {
@@ -47,6 +58,18 @@ const AdsController = {
         try {
             const id = req.params.id;
             const data = await AdsService.deleteAd(id);
+            return res.status(data.statusCode).json(data);
+
+        } catch (error: any) {
+            console.log(error.message)
+            return res.status(500).json({ error: error.message, status: error.statusCode, msg: "Failure" });
+        }
+    },
+
+    deleteReport: async (req: Request, res: Response) => {
+        try {
+            const id = req.params.id;
+            const data = await AdsService.deleteReport(id);
             return res.status(data.statusCode).json(data);
 
         } catch (error: any) {
