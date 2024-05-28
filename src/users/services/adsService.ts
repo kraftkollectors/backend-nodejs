@@ -3,6 +3,7 @@ dotenv.config();
 import Ad from '../../models/ads'
 import mongoose from 'mongoose';
 import veriNIN from '../../middlewares/nin'
+import { UserDataAds } from '../../types/user/defaultTypes';
 
 
 const AdsService = {
@@ -139,7 +140,7 @@ const AdsService = {
         }
     },
 
-    postAd: async (userData: any) => {
+    postAd: async (userData: UserDataAds) => {
         try {
             const ad = await new Ad({ ...userData }).save();
             if(ad !== null){

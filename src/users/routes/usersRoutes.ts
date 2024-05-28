@@ -49,19 +49,19 @@ router.get("/artisan/:userid", verifyToken, PayController.getAccount);
 
 router.post("/certificate", verifyToken, PayController.createCert);
 router.get("/certificate/:userid", verifyToken, PayController.getUserCert);
-router.get("/certificate/:id", verifyToken, PayController.getSingleCert);
+router.get("/certificate/single/:id", verifyToken, PayController.getSingleCert);
 router.patch("/certificate/:id", verifyToken, PayController.editCert);
 router.delete("/certificate/:id", verifyToken, PayController.deleteCert);
 
 router.post("/education", verifyToken, PayController.createEdu);
 router.get("/education/:userid", verifyToken, PayController.getUserEdu);
-router.get("/education/:id", verifyToken, PayController.getSingleEdu);
+router.get("/education/single/:id", verifyToken, PayController.getSingleEdu);
 router.patch("/education/:id", verifyToken, PayController.editEdu);
 router.delete("/education/:id", verifyToken, PayController.deleteEdu);
 
 
 // payment and transaction history
-router.post("/pay/:userid", verifyToken, PayController.makePayment);
+router.post("/pay", verifyToken, PayController.makePayment);
 router.get("/pay/:userid", verifyToken, PayController.getAllUserPayment);
 
 

@@ -94,8 +94,17 @@ const BasicService = {
             }
             var emailSender: any = {
                 body: {
-                    name: 'KraftKollectors',
-                    intro: `We got a request to send an OTP to complete verification, if this was you, enter the otp in the next page or ignore and nothing will happen to your account.\n\n${num}`,
+                    name: 'User',
+                    intro: 'We got a request for an OTP to complete request. Please enter the OTP on next page to complete verification and access account. If this was you, enter the otp in the next page or ignore and nothing will happen to your account.\n',
+
+                    action: {
+                        instructions: 'To get started, enter the OTP in the app window',
+                        button: {
+                            color: '#ffffff',
+                            text: `<span style="font-size: 30px; font-weight: bolder; color: black">${num}</span>`,
+                            link: ''
+                        }
+                    },
                     
                     outro: 'Need help, or have questions? Just reply to this email, we\'d love to help.\n\n Team Hardware Mall.'
                 }
@@ -129,8 +138,17 @@ const BasicService = {
 
             var emailSender: any = {
                 body: {
-                    name: 'KraftKollectors',
-                    intro: `We got a request to reset your password, if this was you, enter the otp in the next page to reset password or ignore and nothing will happen to your account.\n\n${num}`,
+                    name: 'Admin',
+                    intro: 'We got a request to reset your password, if this was you, enter the otp in the next page to reset password or ignore and nothing will happen to your account',
+
+                    action: {
+                        instructions: 'To get started, enter the OTP in the app window',
+                        button: {
+                            color: '#ffffff',
+                            text: `<span style="font-size: 30px; font-weight: bolder; color: black">${num}</span>`,
+                            link: ''
+                        }
+                    },
                     
                     outro: 'Need help, or have questions? Just reply to this email, we\'d love to help.\n\n Team Hardware Mall.'
                 }

@@ -200,6 +200,15 @@ const PayService = {
             let data = await new Artisan({ ...userData }).save()
 
             if(data !== null){
+
+                await User.updateOne({ email: userData.userId }, 
+                    {
+                        $set:{
+                            isArtisan: true
+                        }
+                    }
+                )
+
                 return { data: { data }, statusCode: 201, msg: "Success" };
             }else{
                 return { data: 'Error upgrading account to artisan', statusCode: 401, msg: "Failure" };
@@ -210,19 +219,13 @@ const PayService = {
         }
     },
 
-    makePayment: async (userid: string, userData: any) => {
+    makePayment: async (userData: any) => {
         try {
-            // check if id is a valid mongoose id
-            const isValidId = mongoose.isValidObjectId(userid)
 
-            if(!isValidId){
-                return { data: 'Please enter a correct id', statusCode: 404, msg: "Failure" };
-            }
-
-            let user = await User.findOne({ _id: userid })
+            let user = await User.findOne({ _id: userData.userId })
 
             if(user !== null){
-                const pay = await new Payment({ userid, ...userData }).save();
+                const pay = await new Payment({ ...userData }).save();
                 if(pay !== null){
                     return { data: { pay }, statusCode: 201, msg: "Success" };
                 }else{

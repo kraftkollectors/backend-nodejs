@@ -2,7 +2,7 @@ import mongoose from "mongoose"
 const Schema: any = mongoose.Schema
 
 const AdSchema = new Schema({
-    userid: {
+    userId: {
         type: String,
         required: true
     },

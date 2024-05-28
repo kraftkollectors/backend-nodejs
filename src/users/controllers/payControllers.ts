@@ -134,9 +134,8 @@ const PayController = {
                 res.status(400).json({ error: 'Authentication error', status: 400, msg: "Failure" });
             }
 
-            const userid = req.params.userid;
             const sendData = req.body;
-            const data = await PayService.makePayment(userid, sendData);
+            const data = await PayService.makePayment(sendData);
             return res.status(data.statusCode).json(data);
 
         } catch (error: any) {

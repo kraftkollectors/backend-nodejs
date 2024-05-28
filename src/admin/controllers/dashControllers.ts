@@ -19,7 +19,7 @@ const DashController = {
 
     editAdmin: async (req: any, res: Response) => {
         try {
-            if(req.body.admin_email != req.admin.email){
+            if(req.body.adminEmail != req.admin.email){
                 res.status(400).json({ error: 'Authentication error', status: 400, msg: "Failure" });
             }
 

@@ -13,7 +13,7 @@ const UsersService = {
             const skip = resPerPage * (currentPageNum - 1)
 
             const search = query.keyword ? {
-                title: {
+                userName: {
                     $regex: query.keyword,
                     $options: 'i'
                 },

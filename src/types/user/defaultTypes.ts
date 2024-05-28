@@ -55,3 +55,15 @@ export interface UserDataEducation {
     areaOfStudy: string,
     year: string
 }
+
+export interface UserDataAds {
+    userId: string,
+    title: string,
+    category: string,
+    description: string,
+    amount: number,
+    location: string,
+    coverPhoto: string,
+    publicId: string,
+    portfolio: string
+}
