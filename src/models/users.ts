@@ -26,6 +26,16 @@ const UserSchema = new Schema({
         type: String,
         required: true
     },
+    image: {
+        type: String,
+        required: false,
+        default: ''
+    },
+    publicId: {
+        type: String,
+        required: false,
+        default: ''
+    },
     isArtisan: {
         type: Boolean,
         required: false,

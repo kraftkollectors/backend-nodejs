@@ -41,9 +41,7 @@ const BasicService = {
 
             console.log(token);
             
-
-            let fakePassword = '';
-            admin.password = fakePassword
+            admin.password = ''
 
             return { data: { admin, token }, statusCode: 201, msg: "Success" };
         } catch (error: any) {
@@ -72,10 +70,7 @@ const BasicService = {
             // Generate a token with admin information
             const token = generateToken(admin);
 
-            console.log(token);
-
-            let fakePassword = '';
-            admin.password = fakePassword
+            admin.password = ''
 
             return { data: { admin, token }, statusCode: 201, msg: "Success" };
         } catch (error: any) {

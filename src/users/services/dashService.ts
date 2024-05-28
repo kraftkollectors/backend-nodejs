@@ -1,6 +1,9 @@
 import dotenv from 'dotenv';
 dotenv.config();
 import User from '../../models/users'
+import Certificate from '../../models/certification'
+import Education from '../../models/education'
+import Artisan from '../../models/artisan'
 import bcrypt from 'bcrypt';
 import mongoose from 'mongoose';
 
@@ -22,11 +25,26 @@ const DashService = {
 
             if (!existingUser) {
                 return { data: 'No user found', statusCode: 404, msg: "Failure" };
-            }            
+            }
 
             existingUser.password = ''
 
-            return { data: { existingUser }, statusCode: 201, msg: "Success" };
+             // Fetch certificates and education records
+             const [certificates, education, artisan] = await Promise.all([
+                Certificate.find({ userId: id }),
+                Education.find({ userId: id }),
+                Artisan.find({ userId: id })
+            ]);
+
+            // Combine user details with certificates and education
+            const userDetails = {
+                ...existingUser.toObject(),
+                certificates,
+                education,
+                artisan
+            };       
+
+            return { data: { userDetails }, statusCode: 201, msg: "Success" };
         } catch (error: any) {
             throw new Error(`Error fetching account: ${error.message}`);
         }

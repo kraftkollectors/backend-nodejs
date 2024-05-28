@@ -25,6 +25,7 @@ router.post("/reset", BasicController.userReset);
 
 // Upload Files to Cloud And Get UploadURL
 router.post("/geturl", upload.single("file"), BasicController.getURL);
+router.post("/geturls", upload.array('files', 5), BasicController.getURLS);
 
 
 // Authenticated Routes
@@ -41,6 +42,7 @@ router.delete("/adds/:id", verifyToken, AdsController.deleteAd);
 router.get("/adds", verifyToken, AdsController.getAllAd);
 router.get("/adds/:id", verifyToken, AdsController.getSingleAd);
 router.get("/myadds/:userid", verifyToken, AdsController.getMyAd);
+router.get("/myadds/getcategory", verifyToken, AdsController.getcategory);
 
 
 // become an artisan

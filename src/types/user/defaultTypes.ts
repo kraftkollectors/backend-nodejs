@@ -19,7 +19,6 @@ export interface UserDataForgot {
 export interface UserDataArtisan {
     userId: string,
     userEmail: string,
-    picture: string,
     workHourFrom: string,
     workHourTo: string,
     website: string,
@@ -29,8 +28,6 @@ export interface UserDataArtisan {
     linkedln: string,
     phoneNumber: string,
     description: string,
-    firstName: string,
-    lastName: string,
     businessName: string,
     location: string,
     areaOfSpecialization: string,
@@ -59,11 +56,12 @@ export interface UserDataEducation {
 export interface UserDataAds {
     userId: string,
     title: string,
-    category: string,
     description: string,
-    amount: number,
+    estimatedPrice: number,
+    charge: string,
     location: string,
     coverPhoto: string,
-    publicId: string,
-    portfolio: string
+    category: string,
+    subCategory: string,
+    portfolio: []
 }

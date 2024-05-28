@@ -6,10 +6,6 @@ const ArtisanSchema = new Schema({
         type: String,
         required: true
     },
-    picture: {
-        type: String,
-        required: true
-    },
     workHourFrom: {
         type: String,
         required: true
@@ -51,14 +47,6 @@ const ArtisanSchema = new Schema({
         type: String,
         required: false,
         default: ''
-    },
-    firstName: {
-        type: String,
-        required: true
-    },
-    lastName: {
-        type: String,
-        required: true
     },
     businessName: {
         type: String,

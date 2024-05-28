@@ -42,6 +42,17 @@ const AdsController = {
         }
     },
 
+    getcategory: async (req: any, res: Response) => {
+        try {
+            const data = await AdsService.getcategory();
+            return res.status(data.statusCode).json(data);
+
+        } catch (error: any) {
+            console.log(error.message)
+            return res.status(500).json({ error: error.message, status: error.statusCode, msg: "Failure" });
+        }
+    },
+
     deleteAd: async (req: Request, res: Response) => {
         try {
             const id = req.params.id;

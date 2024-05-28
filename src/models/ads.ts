@@ -14,11 +14,19 @@ const AdSchema = new Schema({
         type: String,
         required: true
     },
+    subCategory: {
+        type: String,
+        required: true
+    },
     description: {
         type: String,
         required: true
     },
-    amount: {
+    estimatedPrice: {
+        type: Number,
+        required: true
+    },
+    charge: {
         type: Number,
         required: true
     },
@@ -30,12 +38,8 @@ const AdSchema = new Schema({
         type: String,
         required: true
     },
-    publicId: {
-        type: String,
-        required: true
-    },
     portfolio: {
-        type: String,
+        type: [],
         required: true
     },
     active: {

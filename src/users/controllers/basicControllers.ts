@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import BasicService from '../services/basicService';
-import generateUploadURL from '../../middlewares/cloudinary';
+import { generateUploadURL, generateUploadURLs } from '../../middlewares/cloudinary';
 
 
 // driver login
@@ -112,6 +112,28 @@ const BasicController = {
     
             if(data === null){
                 return res.status(500).json({ error: 'error creating link', status: 401, msg: 'Failure'})
+            }
+    
+            return res.status(200).json({ data: data, status: 201, msg: 'Success' });
+        } catch (error: any) {
+            console.log(error.message)
+            return res.status(500).json({ error: error.message, status: error.statusCode, msg: "Failure" });
+        }
+    },
+
+    getURLS: async (req: Request, res: Response) => {
+        try {
+            if (!req.files || !Array.isArray(req.files)) {
+                return res.status(400).json({ error: 'Please portfolio files', status: 401, msg: 'Failure' });
+            }
+    
+            const data: any = await generateUploadURLs(req.files);
+
+            console.log(data);
+            
+    
+            if(!data){
+                return res.status(500).json({ error: 'error creating links', status: 401, msg: 'Failure'})
             }
     
             return res.status(200).json({ data: data, status: 201, msg: 'Success' });

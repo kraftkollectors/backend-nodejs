@@ -1,6 +1,8 @@
 import dotenv from 'dotenv';
 dotenv.config();
 import Ad from '../../models/ads'
+import Category from '../../models/category'
+import SubCategory from '../../models/subcategory'
 import mongoose from 'mongoose';
 import veriNIN from '../../middlewares/nin'
 import { UserDataAds } from '../../types/user/defaultTypes';
@@ -67,6 +69,28 @@ const AdsService = {
             }            
 
             return { data: { existingRecord }, statusCode: 201, msg: "Success" };
+        } catch (error: any) {
+            throw new Error(`Error getting records: ${error.message}`);
+        }
+    },
+
+    getcategory: async () => {
+        try {
+            
+            // Fetch all categories
+            const categories = await Category.find();
+
+            // Fetch subcategories for each category and attach them
+            const categoriesWithSubcategories = await Promise.all(
+                categories.map(async (category: any) => {
+                    const subcategories = await SubCategory.find({ categoryId: category._id });
+                    return {
+                        ...category.toObject(),
+                        subcategories,
+                    };
+                })
+            );
+            return { data: { categoriesWithSubcategories }, statusCode: 201, msg: "Success" };
         } catch (error: any) {
             throw new Error(`Error getting records: ${error.message}`);
         }

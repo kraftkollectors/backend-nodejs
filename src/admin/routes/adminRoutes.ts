@@ -10,10 +10,10 @@ const router: Router = express.Router();
 
 // Onboarding routes
 router.get("", BasicController.testServer);
-router.get("/login", BasicController.loginAdmin);
-router.get("/register", BasicController.createAdmin);
-router.get("/forgot", BasicController.adminForgot);
-router.get("/reset", BasicController.adminReset);
+router.post("/login", BasicController.loginAdmin);
+router.post("/register", BasicController.createAdmin);
+router.post("/forgot", BasicController.adminForgot);
+router.post("/reset", BasicController.adminReset);
 router.post("/otpagain", BasicController.createOTP);
 
 
@@ -22,6 +22,19 @@ router.post("/otpagain", BasicController.createOTP);
 // admin
 router.get("/dashboard/:adminid", verifyToken, DashController.getAdmin);
 router.patch("/dashboard/password/:adminid", verifyToken, DashController.editAdmin);
+
+router.post("/dashboard/cat/category", verifyToken, DashController.addCategory);
+router.post("/dashboard/cat/subcategory", verifyToken, DashController.addSubCategory);
+
+router.get("/dashboard/cat/category", verifyToken, DashController.getCategories);
+router.get("/dashboard/cat/category/:id", verifyToken, DashController.getSingleCategory);
+router.patch("/dashboard/cat/category/:id", verifyToken, DashController.editCategory);
+router.delete("/dashboard/cat/category/:id", verifyToken, DashController.deleteCategory);
+
+router.get("/dashboard/cat/subcategory", verifyToken, DashController.getSUbCategories);
+router.get("/dashboard/cat/subcategory/:id", verifyToken, DashController.getSingleSubCategory);
+router.patch("/dashboard/cat/subcategory/:id", verifyToken, DashController.editSubCategory);
+router.delete("/dashboard/cat/subcategory/:id", verifyToken, DashController.deleteSubCategory);
 
 // users
 router.get("/users", verifyToken, UsersController.getUsers);

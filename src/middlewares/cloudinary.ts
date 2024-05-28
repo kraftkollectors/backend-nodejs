@@ -10,7 +10,9 @@ cloudinaryV2.config({
     api_secret: process.env.CLOUD_SECRET
 });
 
-export default function generateUploadURL(image: Express.Multer.File) {
+
+
+export function generateUploadURL(image: Express.Multer.File) {
     try {
         // Convert the buffer to a readable stream
         const bufferStream = streamifier.createReadStream(image.buffer);
@@ -37,4 +39,25 @@ export default function generateUploadURL(image: Express.Multer.File) {
         console.error('Upload error:', e.message);
         throw new Error(`Error logging in: ${e.message}`);
     }
+}
+
+
+
+export function generateUploadURLs(files: Express.Multer.File[]): Promise<any[]> {
+    return Promise.all(files.map((file) => {
+        return new Promise((resolve, reject) => {
+            const bufferStream = streamifier.createReadStream(file.buffer);
+
+            const uploadStream = cloudinaryV2.uploader.upload_stream((error: any, result: any) => {
+                if (error) {
+                    console.error('Upload error:', error);
+                    reject(error);
+                } else {
+                    resolve({ uploadUrl: result.secure_url, publicId: result.public_id });
+                }
+            });
+
+            bufferStream.pipe(uploadStream);
+        });
+    }));
 }
