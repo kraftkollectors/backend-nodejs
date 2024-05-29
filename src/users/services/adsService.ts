@@ -7,6 +7,7 @@ import Report from '../../models/report'
 import mongoose from 'mongoose';
 import veriNIN from '../../middlewares/nin'
 import { UserDataAds, UserDataReport } from '../../types/user/defaultTypes';
+import Review from '../../models/reviews';
 
 
 const AdsService = {
@@ -191,7 +192,21 @@ const AdsService = {
         } catch (error: any) {
             throw new Error(`Error adding report: ${error.message}`);
         }
-    }
+    },
+
+    rateAd: async (userData: any) => {
+        try {
+            const review = await new Review({ ...userData }).save();
+            if(review !== null){
+                return { data: { review }, statusCode: 201, msg: "Success" };
+            }else{
+                return { data: 'Error creating review', statusCode: 401, msg: "Failure" };
+            }
+            
+        } catch (error: any) {
+            throw new Error(`Error adding review: ${error.message}`);
+        }
+    },
 
 }
 

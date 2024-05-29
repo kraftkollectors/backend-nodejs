@@ -30,16 +30,39 @@ const AdSchema = new Schema({
         type: Number,
         required: true
     },
-    location: {
+    state: {
         type: String,
         required: true
+    },
+    address: {
+        type: String,
+        required: true
+    },
+    latitude: {
+        type: String,
+        required: false,
+        default: ''
+    },
+    longitude: {
+        type: String,
+        required: false,
+        default: ''
     },
     coverPhoto: {
         type: String,
         required: true
     },
+    video: {
+        type: String,
+        required: false,
+        default: ''
+    },
     portfolio: {
-        type: [],
+        type: [
+            'https:/',
+            'https:/',
+            'https:/'
+        ],
         required: true
     },
     active: {

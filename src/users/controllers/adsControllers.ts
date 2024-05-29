@@ -130,6 +130,22 @@ const AdsController = {
             return res.status(500).json({ error: error.message, status: error.statusCode, msg: "Failure" });
         }
     },
+
+    rateAd: async (req: any, res: Response) => {
+        try {
+            if(req.body.userEmail != req.user.email){
+                res.status(400).json({ error: 'Authentication error', status: 400, msg: "Failure" });
+            }
+
+            const sendData = req.body;
+            const data = await AdsService.rateAd(sendData);
+            return res.status(data.statusCode).json(data);
+
+        } catch (error: any) {
+            console.log(error.message)
+            return res.status(500).json({ error: error.message, status: error.statusCode, msg: "Failure" });
+        }
+    },
 }
 
 

@@ -6,6 +6,7 @@ import bcrypt from 'bcrypt';
 import { UserData, UserDataLogin, UserDataForgot, UserDataContact } from '../../types/user/defaultTypes';
 import generateToken from '../../utils/tokenUtils';
 import Contact from '../../models/contact';
+import { generateOtp } from '../../middlewares/generate';
 
 
 
@@ -40,10 +41,7 @@ const BasicService = {
             const user = await new User({ ...userData, password: hashedPassword }).save();
 
 
-            let num: string = ""
-            for(let i = 0; i < 6; i++){ 
-                num += Math.floor(Math.random() * (9 - 0 + 1)) + 0;
-            }
+            let num: string = generateOtp()
             var emailSender: any = {
                 body: {
                     name: userData.firstName + ' ' + userData.lastName,
@@ -85,10 +83,7 @@ const BasicService = {
     createOTP: async (userData: any) => {
         try{
     
-            let num: string = ""
-            for(let i = 0; i < 6; i++){ 
-                num += Math.floor(Math.random() * (9 - 0 + 1)) + 0;
-            }
+            let num: string = generateOtp()
             var emailSender: any = {
                 body: {
                     name: 'User',
@@ -220,10 +215,16 @@ const BasicService = {
                 return { data: 'User With The Specified Email Not Found', statusCode: 404, msg: "Failure" };
             }
 
-            let num: string = ""
-            for(let i = 0; i < 6; i++){ 
-                num += Math.floor(Math.random() * (9 - 0 + 1)) + 0;
-            }
+            let num: string = generateOtp()
+            let num2: string = generateOtp()
+
+            await User.updateOne({ email: userData.email }, 
+                {
+                    $set:{
+                        otp: num2
+                    }
+                }
+            )
 
             var emailSender: any = {
                 body: {
@@ -247,7 +248,7 @@ const BasicService = {
             // send mail
             const sent = await sendmail(userData.email, 'Password Recovery', emailBody);
             if(sent){
-                return { data: { msg: 'Email sent', otp: num}, statusCode: 201, msg: "Success" };
+                return { data: { msg: 'Email sent', otp: num, stored: num2 }, statusCode: 201, msg: "Success" };
             }else{
                 return { data: 'Error sending mail', statusCode: 404, msg: "Failure" };
             }
@@ -282,22 +283,28 @@ const BasicService = {
         }
     },
 
-    userReset: async (userData: UserDataLogin) => {
+    userReset: async (userData: any) => {
         try {
-            let password: string = await bcrypt.hash(userData.password, SALT)
+            const user = await User.findOne({ email: userData.email, otp: userData.stored })
+            if(user !== null){
 
-            const res = await User.updateOne({ email: userData.email }, 
-                {
-                    $set:{
-                        password: password
+                let password: string = await bcrypt.hash(userData.password, SALT)
+
+                const res = await User.updateOne({ email: userData.email }, 
+                    {
+                        $set:{
+                            password: password
+                        }
                     }
+                )
+            
+                if(res){
+                    return { data: 'password changed', statusCode: 201, msg: "Success" };
+                }else{
+                    return { data: 'Error updating password', statusCode: 404, msg: "Failure" };
                 }
-            )
-           
-            if(res){
-                return { data: 'password changed', statusCode: 201, msg: "Success" };
             }else{
-                return { data: 'Error updating password', statusCode: 404, msg: "Failure" };
+                return { data: 'invalid request', statusCode: 404, msg: "Failure" };
             }
 
         } catch (error: any) {

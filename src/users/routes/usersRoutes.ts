@@ -37,15 +37,16 @@ router.patch("/dashboard/profile/:userid", verifyToken, DashController.editUser)
 router.patch("/dashboard/password/:userid", verifyToken, DashController.editUserPassword);
 
 // adds
-router.post("/adds", verifyToken, AdsController.postAd);
-router.patch("/adds/:id", verifyToken, AdsController.editAd);
-router.patch("/adds/edit/:id", verifyToken, AdsController.enableDisableAd);
-router.delete("/adds/:id", verifyToken, AdsController.deleteAd);
-router.get("/adds", verifyToken, AdsController.getAllAd);
-router.get("/adds/:id", verifyToken, AdsController.getSingleAd);
-router.get("/myadds/:userid", verifyToken, AdsController.getMyAd);
-router.get("/myadds/getcategory", verifyToken, AdsController.getcategory);
+router.post("/ads", verifyToken, AdsController.postAd);
+router.patch("/ads/:id", verifyToken, AdsController.editAd);
+router.patch("/ads/edit/:id", verifyToken, AdsController.enableDisableAd);
+router.delete("/ads/:id", verifyToken, AdsController.deleteAd);
+router.get("/ads", verifyToken, AdsController.getAllAd);
+router.get("/ads/:id", verifyToken, AdsController.getSingleAd);
+router.get("/myads/:userid", verifyToken, AdsController.getMyAd);
+router.get("/myads/getcategory", verifyToken, AdsController.getcategory);
 router.post("/reportad", verifyToken, AdsController.createReport);
+router.post("/rateads", verifyToken, AdsController.rateAd);
 
 
 // become an artisan

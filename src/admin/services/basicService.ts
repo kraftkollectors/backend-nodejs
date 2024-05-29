@@ -7,6 +7,7 @@ import { AdminData, AdminDataForgot } from '../../types/admin/defaultTypes';
 import generateToken from '../../utils/tokenUtils';
 import Contact from '../../models/contact';
 import mongoose from 'mongoose';
+import { generateOtp } from '../../middlewares/generate';
 
 const SALT: any = process.env.SALT
 
@@ -101,10 +102,7 @@ const BasicService = {
     createOTP: async (adminData: any) => {
         try{
     
-            let num: string = ""
-            for(let i = 0; i < 6; i++){ 
-                num += Math.floor(Math.random() * (9 - 0 + 1)) + 0;
-            }
+            let num: string = generateOtp()
             var emailSender: any = {
                 body: {
                     name: 'User',
@@ -144,10 +142,7 @@ const BasicService = {
                 return { data: 'admin With The Specified Email Not Found', statusCode: 404, msg: "Failure" };
             }
 
-            let num: string = ""
-            for(let i = 0; i < 6; i++){ 
-                num += Math.floor(Math.random() * (9 - 0 + 1)) + 0;
-            }
+            let num: string = generateOtp()
 
             var emailSender: any = {
                 body: {
