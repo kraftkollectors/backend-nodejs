@@ -130,7 +130,7 @@ const BasicService = {
                 // Generate a token with user information
                 const token = generateToken(existingUser);
                 
-                return { data: { existingUser, token }, statusCode: 404, msg: "Failure" };
+                return { data: { user: existingUser, token }, statusCode: 201, msg: "Success" };
             }
 
             const user = await new User({ ...userData }).save();
