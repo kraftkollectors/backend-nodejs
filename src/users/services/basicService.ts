@@ -124,7 +124,12 @@ const BasicService = {
             const existingUser = await User.findOne({ email: userData.email })
 
             if (existingUser) {
-                return { data: 'Email is already in use', statusCode: 404, msg: "Failure" };
+                existingUser.type = 'user'
+
+                // Generate a token with user information
+                const token = generateToken(existingUser);
+                
+                return { data: { existingUser, token }, statusCode: 404, msg: "Failure" };
             }
 
             const user = await new User({ ...userData }).save();
