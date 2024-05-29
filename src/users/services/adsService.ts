@@ -3,9 +3,10 @@ dotenv.config();
 import Ad from '../../models/ads'
 import Category from '../../models/category'
 import SubCategory from '../../models/subcategory'
+import Report from '../../models/report'
 import mongoose from 'mongoose';
 import veriNIN from '../../middlewares/nin'
-import { UserDataAds } from '../../types/user/defaultTypes';
+import { UserDataAds, UserDataReport } from '../../types/user/defaultTypes';
 
 
 const AdsService = {
@@ -175,6 +176,20 @@ const AdsService = {
             
         } catch (error: any) {
             throw new Error(`Error adding post: ${error.message}`);
+        }
+    },
+
+    createReport: async (userData: UserDataReport) => {
+        try {
+            const report = await new Report({ ...userData }).save();
+            if(report !== null){
+                return { data: { report }, statusCode: 201, msg: "Success" };
+            }else{
+                return { data: 'Error creating report', statusCode: 401, msg: "Failure" };
+            }
+            
+        } catch (error: any) {
+            throw new Error(`Error adding report: ${error.message}`);
         }
     }
 

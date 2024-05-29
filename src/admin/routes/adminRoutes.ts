@@ -16,6 +16,9 @@ router.post("/forgot", BasicController.adminForgot);
 router.post("/reset", BasicController.adminReset);
 router.post("/otpagain", BasicController.createOTP);
 
+router.get("/contact", BasicController.getContact);
+router.delete("/contact/:id", BasicController.deleteContact);
+
 
 
 // Authenticated Routes
@@ -48,6 +51,9 @@ router.get("/ads/:id", verifyToken, AdsController.getSingleAd);
 router.get("/ads/users/:userid", verifyToken, AdsController.getUserAds);
 router.patch("/ads/:id", verifyToken, AdsController.editAd);
 router.delete("/ads/:id", verifyToken, AdsController.deleteAd);
+
+router.get("/report", verifyToken, AdsController.getReport);
+router.delete("/report/:id", verifyToken, AdsController.deleteReport);
 
 // transactions
 router.get("/transactions", verifyToken, TransController.getTransactions);

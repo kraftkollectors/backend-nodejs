@@ -3,8 +3,9 @@ dotenv.config();
 import { sendmail, mailGenerator } from '../../middlewares/mailer'
 import User from '../../models/users'
 import bcrypt from 'bcrypt';
-import { UserData, UserDataLogin, UserDataForgot } from '../../types/user/defaultTypes';
+import { UserData, UserDataLogin, UserDataForgot, UserDataContact } from '../../types/user/defaultTypes';
 import generateToken from '../../utils/tokenUtils';
+import Contact from '../../models/contact';
 
 
 
@@ -297,6 +298,22 @@ const BasicService = {
                 return { data: 'password changed', statusCode: 201, msg: "Success" };
             }else{
                 return { data: 'Error updating password', statusCode: 404, msg: "Failure" };
+            }
+
+        } catch (error: any) {
+            console.log(error);
+
+            throw new Error(`Reset password error: ${error.message}`);
+        }
+    },
+
+    contact: async (userData: UserDataContact) => {
+        try {
+            const contact = await new Contact({ ...userData }).save();
+            if(contact !== null){
+                return { data: { contact }, statusCode: 201, msg: "Success" };
+            }else{
+                return { data: 'Error creating contact', statusCode: 401, msg: "Failure" };
             }
 
         } catch (error: any) {

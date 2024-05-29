@@ -64,7 +64,29 @@ const BasicController = {
             console.log(error.message)
             res.status(500).json({ error: error.message, status: error.statusCode, msg: "Failure" });
         }
-    }
+    },
+
+    getContact: async (req: Request, res: Response) => {
+        try {
+            const query = req.query
+            const data = await BasicService.getContact(query);
+            res.status(data.statusCode).json(data);
+        } catch (error: any) {
+            console.log(error.message)
+            res.status(500).json({ error: error.message, status: error.statusCode, msg: "Failure" });
+        }
+    },
+
+    deleteContact: async (req: Request, res: Response) => {
+        try {
+            const id = req.params.id;
+            const data = await BasicService.deleteContact(id);
+            res.status(data.statusCode).json(data);
+        } catch (error: any) {
+            console.log(error.message)
+            res.status(500).json({ error: error.message, status: error.statusCode, msg: "Failure" });
+        }
+    },
 }
 
 

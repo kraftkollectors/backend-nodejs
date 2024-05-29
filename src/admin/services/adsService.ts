@@ -2,6 +2,8 @@ import dotenv from 'dotenv';
 dotenv.config();
 import Ads from '../../models/ads'
 import mongoose from 'mongoose';
+import Report from '../../models/report';
+import Users from '../../models/users';
 
 
 const AdsService = {
@@ -19,6 +21,39 @@ const AdsService = {
             }            
 
             return { data: { existingAd }, statusCode: 201, msg: "Success" };
+        } catch (error: any) {
+            throw new Error(`Error fetching ad: ${error.message}`);
+        }
+    },
+
+    getReport: async (query: any) => {
+        try {
+            const resPerPage = 10
+            const currentPageNum = Number(query.page) || 1
+            const skip = resPerPage * (currentPageNum - 1)
+
+            // Check if the email already exists
+            const reports = await Report.find({ active: true }).limit(resPerPage).skip(skip)
+
+            if (!reports) {
+                return { data: 'No report found', statusCode: 404, msg: "Failure" };
+            }
+
+            // Fetch user details for each report
+            const reportDetails = await Promise.all(
+                reports.map(async (report: any) => {
+                    const reporter = await Users.findById(report.reporterId, 'userName email _id').lean();
+                    const reported = await Users.findById(report.reportedId, 'userName email _id').lean();
+
+                    return {
+                        ...report,
+                        reporter: reporter || null,
+                        reported: reported || null,
+                    };
+                })
+            );                        
+
+            return { data: { reportDetails }, statusCode: 201, msg: "Success" };
         } catch (error: any) {
             throw new Error(`Error fetching ad: ${error.message}`);
         }
@@ -87,6 +122,24 @@ const AdsService = {
             return { data: 'ad deleted', statusCode: 201, msg: "Success" };
         } catch (error: any) {
             throw new Error(`Error deleting ad: ${error.message}`);
+        }
+    },
+    
+    deleteReport: async (id: string) => {
+        try {
+            // check if id is a valid mongoose id
+            const isValidId = mongoose.isValidObjectId(id)
+
+            if(!isValidId){
+                return { data: 'Please enter a correct id', statusCode: 404, msg: "Failure" };
+            }
+
+            // Check if the email already exists
+            await Report.findByIdAndDelete({ _id: id })
+
+            return { data: 'report deleted', statusCode: 201, msg: "Success" };
+        } catch (error: any) {
+            throw new Error(`Error deleting report: ${error.message}`);
         }
     },
 
