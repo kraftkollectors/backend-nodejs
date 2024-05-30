@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import PayService from '../services/payService';
+import { checkIfArtisan } from '../../middlewares/checkArtisan';
 
 
 // driver login
@@ -86,6 +87,10 @@ const PayController = {
                 res.status(400).json({ data: 'Authentication error', statusCode: 400, msg: "Failure" });
             }
 
+            if(!checkIfArtisan(req.body.userEmail)){
+                res.status(400).json({ data: 'Not an artisan', statusCode: 400, msg: "Failure" });
+            }
+
             const sendData = req.body;
             const data = await PayService.createCert(sendData);
             return res.status(data.statusCode).json(data);
@@ -100,6 +105,10 @@ const PayController = {
         try {
             if(req.body.userEmail != req.user.email){
                 res.status(400).json({ data: 'Authentication error', statusCode: 400, msg: "Failure" });
+            }
+
+            if(!checkIfArtisan(req.body.userEmail)){
+                res.status(400).json({ data: 'Not an artisan', statusCode: 400, msg: "Failure" });
             }
 
             const sendData = req.body;
@@ -150,6 +159,10 @@ const PayController = {
                 res.status(400).json({ data: 'Authentication error', statusCode: 400, msg: "Failure" });
             }
 
+            if(!checkIfArtisan(req.body.userEmail)){
+                res.status(400).json({ data: 'Not an artisan', statusCode: 400, msg: "Failure" });
+            }
+
             const id = req.params.id;
             const sendData = req.body;
             const data = await PayService.editCert(id, sendData);
@@ -167,6 +180,10 @@ const PayController = {
                 res.status(400).json({ data: 'Authentication error', statusCode: 400, msg: "Failure" });
             }
 
+            if(!checkIfArtisan(req.body.userEmail)){
+                res.status(400).json({ data: 'Not an artisan', statusCode: 400, msg: "Failure" });
+            }
+
             const id = req.params.id;
             const sendData = req.body;
             const data = await PayService.editEdu(id, sendData);
@@ -180,6 +197,10 @@ const PayController = {
 
     deleteEdu: async (req: any, res: Response) => {
         try {
+            if(!checkIfArtisan(req.body.userEmail)){
+                res.status(400).json({ data: 'Not an artisan', statusCode: 400, msg: "Failure" });
+            }
+
             const id = req.params.id;
             const data = await PayService.deleteEdu(id);
             return res.status(data.statusCode).json(data);
@@ -192,6 +213,10 @@ const PayController = {
 
     deleteCert: async (req: any, res: Response) => {
         try {
+            if(!checkIfArtisan(req.body.userEmail)){
+                res.status(400).json({ data: 'Not an artisan', statusCode: 400, msg: "Failure" });
+            }
+
             const id = req.params.id;
             const data = await PayService.deleteCert(id);
             return res.status(data.statusCode).json(data);

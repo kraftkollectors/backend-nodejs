@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import AdsService from '../services/adsService';
+import { checkIfArtisan } from '../../middlewares/checkArtisan';
 
 
 // driver login
@@ -55,6 +56,10 @@ const AdsController = {
 
     deleteAd: async (req: Request, res: Response) => {
         try {
+            if(!checkIfArtisan(req.body.userEmail)){
+                res.status(400).json({ data: 'Not an artisan', statusCode: 400, msg: "Failure" });
+            }
+
             const id = req.params.id;
             const data = await AdsService.deleteAd(id);
             return res.status(data.statusCode).json(data);
@@ -69,6 +74,10 @@ const AdsController = {
         try {
             if(req.body.userEmail != req.user.email){
                 res.status(400).json({ data: 'Authentication error', statusCode: 400, msg: "Failure" });
+            }
+            
+            if(!checkIfArtisan(req.body.userEmail)){
+                res.status(400).json({ data: 'Not an artisan', statusCode: 400, msg: "Failure" });
             }
 
             const id = req.params.id;
@@ -88,6 +97,10 @@ const AdsController = {
                 res.status(400).json({ data: 'Authentication error', statusCode: 400, msg: "Failure" });
             }
 
+            if(!checkIfArtisan(req.body.userEmail)){
+                res.status(400).json({ data: 'Not an artisan', statusCode: 400, msg: "Failure" });
+            }
+
             const id = req.params.id;
             const sendData = req.body;
             const data = await AdsService.enableDisableAd(id, sendData);
@@ -103,6 +116,10 @@ const AdsController = {
         try {
             if(req.body.userEmail != req.user.email){
                 res.status(400).json({ data: 'Authentication error', statusCode: 400, msg: "Failure" });
+            }
+
+            if(!checkIfArtisan(req.body.userEmail)){
+                res.status(400).json({ data: 'Not an artisan', statusCode: 400, msg: "Failure" });
             }
 
             const sendData = req.body;

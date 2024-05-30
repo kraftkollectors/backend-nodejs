@@ -190,6 +190,10 @@ const BasicService = {
                 return { data: 'User With The Specified Email Not Found', statusCode: 404, msg: "Failure" };
             }
 
+            if (user.active === false) {
+                return { data: 'account blocked', statusCode: 401, msg: "Failure" };
+            }
+
             user.type = 'user'
 
             // Generate a token with user information
