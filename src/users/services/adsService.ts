@@ -107,7 +107,7 @@ const AdsService = {
             }
 
             // Check if the email already exists
-            await Ad.findByIdAndDelete({ id })          
+            await Ad.findByIdAndDelete(id)          
 
             return { data: 'Record deleted', statusCode: 201, msg: "Success" };
         } catch (error: any) {

@@ -301,12 +301,12 @@ const PayService = {
             }
 
             // Check if the email already exists
-            await Education.findByIdAndDelete({ id })          
+            await Education.findByIdAndDelete(id)          
 
             return { data: 'Record deleted', statusCode: 201, msg: "Success" };
             
         } catch (error: any) {
-            throw new Error(`Error editing education: ${error.message}`);
+            throw new Error(`Error deleting education: ${error.message}`);
         }
     },
 
@@ -320,12 +320,12 @@ const PayService = {
             }
 
             // Check if the email already exists
-            await Certificate.findByIdAndDelete({ id })          
+            await Certificate.findByIdAndDelete(id)          
 
             return { data: 'Record deleted', statusCode: 201, msg: "Success" };
             
         } catch (error: any) {
-            throw new Error(`Error editing education: ${error.message}`);
+            throw new Error(`Error deleting education: ${error.message}`);
         }
     },
 

@@ -18,7 +18,7 @@ const BasicController = {
 
         } catch (error: any) {
             console.log(error.message)
-            return res.status(500).json({ data: error.message, status: error.statusCode, msg: "Failure" });
+            return res.status(500).json({ data: error.message, statusCode: 400, msg: "Failure" });
         }
     },
 
@@ -30,7 +30,7 @@ const BasicController = {
 
         } catch (error: any) {
             console.log(error.message)
-            return res.status(500).json({ data: error.message, status: error.statusCode, msg: "Failure" });
+            return res.status(500).json({ data: error.message, statusCode: 400, msg: "Failure" });
         }
     },
 
@@ -42,7 +42,7 @@ const BasicController = {
 
         } catch (error: any) {
             console.log(error.message)
-            return res.status(500).json({ data: error.message, status: error.statusCode, msg: "Failure" });
+            return res.status(500).json({ data: error.message, statusCode: 400, msg: "Failure" });
         }
     },
 
@@ -54,7 +54,7 @@ const BasicController = {
 
         } catch (error: any) {
             console.log(error.message)
-            return res.status(500).json({ data: error.message, status: error.statusCode, msg: "Failure" });
+            return res.status(500).json({ data: error.message, statusCode: 400, msg: "Failure" });
         }
     },
 
@@ -65,7 +65,7 @@ const BasicController = {
             return res.status(data.statusCode).json(data);
         } catch (error: any) {
             console.log(error.message)
-            return res.status(500).json({ data: error.message, status: error.statusCode, msg: "Failure" });
+            return res.status(500).json({ data: error.message, statusCode: 400, msg: "Failure" });
         }
     },
 
@@ -76,7 +76,7 @@ const BasicController = {
             return res.status(data.statusCode).json(data);
         } catch (error: any) {
             console.log(error.message)
-            return res.status(500).json({ data: error.message, status: error.statusCode, msg: "Failure" });
+            return res.status(500).json({ data: error.message, statusCode: 400, msg: "Failure" });
         }
     },
 
@@ -87,7 +87,7 @@ const BasicController = {
             return res.status(data.statusCode).json(data);
         } catch (error: any) {
             console.log(error.message)
-            return res.status(500).json({ data: error.message, status: error.statusCode, msg: "Failure" });
+            return res.status(500).json({ data: error.message, statusCode: 400, msg: "Failure" });
         }
     },
 
@@ -98,7 +98,7 @@ const BasicController = {
             return res.status(data.statusCode).json(data);
         } catch (error: any) {
             console.log(error.message)
-            return res.status(500).json({ data: error.message, status: error.statusCode, msg: "Failure" });
+            return res.status(500).json({ data: error.message, statusCode: 400, msg: "Failure" });
         }
     },
 
@@ -109,33 +109,33 @@ const BasicController = {
             return res.status(data.statusCode).json(data);
         } catch (error: any) {
             console.log(error.message)
-            return res.status(500).json({ data: error.message, status: error.statusCode, msg: "Failure" });
+            return res.status(500).json({ data: error.message, statusCode: 400, msg: "Failure" });
         }
     },
 
     getURL: async (req: Request, res: Response) => {
         try {
             if (!req.file) {
-                return res.status(400).json({ error: 'Please upload an image', status: 401, msg: 'Failure' });
+                return res.status(400).json({ error: 'Please upload an image', statusCode: 401, msg: 'Failure' });
             }
     
             const data:any = await generateUploadURL(req.file);
     
             if(data === null){
-                return res.status(500).json({ error: 'error creating link', status: 401, msg: 'Failure'})
+                return res.status(500).json({ error: 'error creating link', statusCode: 401, msg: 'Failure'})
             }
     
-            return res.status(200).json({ data: data, status: 201, msg: 'Success' });
+            return res.status(200).json({ data: data, statusCode: 201, msg: 'Success' });
         } catch (error: any) {
             console.log(error.message)
-            return res.status(500).json({ data: error.message, status: error.statusCode, msg: "Failure" });
+            return res.status(500).json({ data: error.message, statusCode: 400, msg: "Failure" });
         }
     },
 
     getURLS: async (req: Request, res: Response) => {
         try {
             if (!req.files || !Array.isArray(req.files)) {
-                return res.status(400).json({ error: 'Please portfolio files', status: 401, msg: 'Failure' });
+                return res.status(400).json({ error: 'Please portfolio files', statusCode: 401, msg: 'Failure' });
             }
     
             const data: any = await generateUploadURLs(req.files);
@@ -144,13 +144,13 @@ const BasicController = {
             
     
             if(!data){
-                return res.status(500).json({ error: 'error creating links', status: 401, msg: 'Failure'})
+                return res.status(500).json({ error: 'error creating links', statusCode: 401, msg: 'Failure'})
             }
     
-            return res.status(200).json({ data: data, status: 201, msg: 'Success' });
+            return res.status(200).json({ data: data, statusCode: 201, msg: 'Success' });
         } catch (error: any) {
             console.log(error.message)
-            return res.status(500).json({ data: error.message, status: error.statusCode, msg: "Failure" });
+            return res.status(500).json({ data: error.message, statusCode: 400, msg: "Failure" });
         }
     }
 }

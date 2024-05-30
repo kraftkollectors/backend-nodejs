@@ -14,7 +14,7 @@ const TransController = {
 
         } catch (error: any) {
             console.log(error.message)
-            return res.status(500).json({ data: error.message, status: error.statusCode, msg: "Failure" });
+            return res.status(500).json({ data: error.message, statusCode: 400, msg: "Failure" });
         }
     },
 
@@ -26,7 +26,7 @@ const TransController = {
 
         } catch (error: any) {
             console.log(error.message)
-            return res.status(500).json({ data: error.message, status: error.statusCode, msg: "Failure" });
+            return res.status(500).json({ data: error.message, statusCode: 400, msg: "Failure" });
         }
     },
 
@@ -39,7 +39,7 @@ const TransController = {
 
         } catch (error: any) {
             console.log(error.message)
-            return res.status(500).json({ data: error.message, status: error.statusCode, msg: "Failure" });
+            return res.status(500).json({ data: error.message, statusCode: 400, msg: "Failure" });
         }
     },
 
@@ -51,14 +51,14 @@ const TransController = {
 
         } catch (error: any) {
             console.log(error.message)
-            return res.status(500).json({ data: error.message, status: error.statusCode, msg: "Failure" });
+            return res.status(500).json({ data: error.message, statusCode: 400, msg: "Failure" });
         }
     },
 
     editTransaction: async (req: any, res: Response) => {
         try {
             if(req.body.adminEmail != req.admin.email){
-                res.status(400).json({ data: 'Authentication error', status: 400, msg: "Failure" });
+                res.status(400).json({ data: 'Authentication error', statusCode: 400, msg: "Failure" });
             }
 
             const id = req.params.id;
@@ -68,7 +68,7 @@ const TransController = {
 
         } catch (error: any) {
             console.log(error.message)
-            return res.status(500).json({ data: error.message, status: error.statusCode, msg: "Failure" });
+            return res.status(500).json({ data: error.message, statusCode: 400, msg: "Failure" });
         }
     },
 

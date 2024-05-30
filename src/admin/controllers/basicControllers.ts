@@ -17,7 +17,7 @@ const BasicController = {
 
         } catch (error: any) {
             console.log(error.message)
-            res.status(500).json({ data: error.message, status: error.statusCode, msg: "Failure" });
+            res.status(500).json({ data: error.message, statusCode: 400, msg: "Failure" });
         }
     },
 
@@ -29,7 +29,7 @@ const BasicController = {
 
         } catch (error: any) {
             console.log(error.message)
-            return res.status(500).json({ data: error.message, status: error.statusCode, msg: "Failure" });
+            return res.status(500).json({ data: error.message, statusCode: 400, msg: "Failure" });
         }
     },
 
@@ -40,7 +40,7 @@ const BasicController = {
             res.status(data.statusCode).json(data);
         } catch (error: any) {
             console.log(error.message)
-            res.status(500).json({ data: error.message, status: error.statusCode, msg: "Failure" });
+            res.status(500).json({ data: error.message, statusCode: 400, msg: "Failure" });
         }
     },
 
@@ -51,7 +51,7 @@ const BasicController = {
             res.status(data.statusCode).json(data);
         } catch (error: any) {
             console.log(error.message)
-            res.status(500).json({ data: error.message, status: error.statusCode, msg: "Failure" });
+            res.status(500).json({ data: error.message, statusCode: 400, msg: "Failure" });
         }
     },
 
@@ -62,7 +62,7 @@ const BasicController = {
             res.status(data.statusCode).json(data);
         } catch (error: any) {
             console.log(error.message)
-            res.status(500).json({ data: error.message, status: error.statusCode, msg: "Failure" });
+            res.status(500).json({ data: error.message, statusCode: 400, msg: "Failure" });
         }
     },
 
@@ -73,7 +73,7 @@ const BasicController = {
             res.status(data.statusCode).json(data);
         } catch (error: any) {
             console.log(error.message)
-            res.status(500).json({ data: error.message, status: error.statusCode, msg: "Failure" });
+            res.status(500).json({ data: error.message, statusCode: 400, msg: "Failure" });
         }
     },
 
@@ -84,7 +84,7 @@ const BasicController = {
             res.status(data.statusCode).json(data);
         } catch (error: any) {
             console.log(error.message)
-            res.status(500).json({ data: error.message, status: error.statusCode, msg: "Failure" });
+            res.status(500).json({ data: error.message, statusCode: 400, msg: "Failure" });
         }
     },
 }
