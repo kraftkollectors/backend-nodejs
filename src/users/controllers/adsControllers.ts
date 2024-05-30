@@ -13,7 +13,7 @@ const AdsController = {
 
         } catch (error: any) {
             console.log(error.message)
-            return res.status(500).json({ error: error.message, status: error.statusCode, msg: "Failure" });
+            return res.status(500).json({ data: error.message, status: error.statusCode, msg: "Failure" });
         }
     },
 
@@ -25,7 +25,7 @@ const AdsController = {
 
         } catch (error: any) {
             console.log(error.message)
-            return res.status(500).json({ error: error.message, status: error.statusCode, msg: "Failure" });
+            return res.status(500).json({ data: error.message, status: error.statusCode, msg: "Failure" });
         }
     },
 
@@ -38,7 +38,7 @@ const AdsController = {
 
         } catch (error: any) {
             console.log(error.message)
-            return res.status(500).json({ error: error.message, status: error.statusCode, msg: "Failure" });
+            return res.status(500).json({ data: error.message, status: error.statusCode, msg: "Failure" });
         }
     },
 
@@ -49,7 +49,7 @@ const AdsController = {
 
         } catch (error: any) {
             console.log(error.message)
-            return res.status(500).json({ error: error.message, status: error.statusCode, msg: "Failure" });
+            return res.status(500).json({ data: error.message, status: error.statusCode, msg: "Failure" });
         }
     },
 
@@ -61,14 +61,14 @@ const AdsController = {
 
         } catch (error: any) {
             console.log(error.message)
-            return res.status(500).json({ error: error.message, status: error.statusCode, msg: "Failure" });
+            return res.status(500).json({ data: error.message, status: error.statusCode, msg: "Failure" });
         }
     },
 
     editAd: async (req: any, res: Response) => {
         try {
             if(req.body.userEmail != req.user.email){
-                res.status(400).json({ error: 'Authentication error', status: 400, msg: "Failure" });
+                res.status(400).json({ data: 'Authentication error', status: 400, msg: "Failure" });
             }
 
             const id = req.params.id;
@@ -78,14 +78,14 @@ const AdsController = {
 
         } catch (error: any) {
             console.log(error.message)
-            return res.status(500).json({ error: error.message, status: error.statusCode, msg: "Failure" });
+            return res.status(500).json({ data: error.message, status: error.statusCode, msg: "Failure" });
         }
     },
 
     enableDisableAd: async (req: any, res: Response) => {
         try {
             if(req.body.userEmail != req.user.email){
-                res.status(400).json({ error: 'Authentication error', status: 400, msg: "Failure" });
+                res.status(400).json({ data: 'Authentication error', status: 400, msg: "Failure" });
             }
 
             const id = req.params.id;
@@ -95,14 +95,14 @@ const AdsController = {
 
         } catch (error: any) {
             console.log(error.message)
-            return res.status(500).json({ error: error.message, status: error.statusCode, msg: "Failure" });
+            return res.status(500).json({ data: error.message, status: error.statusCode, msg: "Failure" });
         }
     },
 
     postAd: async (req: any, res: Response) => {
         try {
             if(req.body.userEmail != req.user.email){
-                res.status(400).json({ error: 'Authentication error', status: 400, msg: "Failure" });
+                res.status(400).json({ data: 'Authentication error', status: 400, msg: "Failure" });
             }
 
             const sendData = req.body;
@@ -111,14 +111,14 @@ const AdsController = {
 
         } catch (error: any) {
             console.log(error.message)
-            return res.status(500).json({ error: error.message, status: error.statusCode, msg: "Failure" });
+            return res.status(500).json({ data: error.message, status: error.statusCode, msg: "Failure" });
         }
     },
 
     createReport: async (req: any, res: Response) => {
         try {
             if(req.body.userEmail != req.user.email){
-                res.status(400).json({ error: 'Authentication error', status: 400, msg: "Failure" });
+                res.status(400).json({ data: 'Authentication error', status: 400, msg: "Failure" });
             }
 
             const sendData = req.body;
@@ -127,14 +127,14 @@ const AdsController = {
 
         } catch (error: any) {
             console.log(error.message)
-            return res.status(500).json({ error: error.message, status: error.statusCode, msg: "Failure" });
+            return res.status(500).json({ data: error.message, status: error.statusCode, msg: "Failure" });
         }
     },
 
     rateAd: async (req: any, res: Response) => {
         try {
             if(req.body.userEmail != req.user.email){
-                res.status(400).json({ error: 'Authentication error', status: 400, msg: "Failure" });
+                res.status(400).json({ data: 'Authentication error', status: 400, msg: "Failure" });
             }
 
             const sendData = req.body;
@@ -143,7 +143,7 @@ const AdsController = {
 
         } catch (error: any) {
             console.log(error.message)
-            return res.status(500).json({ error: error.message, status: error.statusCode, msg: "Failure" });
+            return res.status(500).json({ data: error.message, status: error.statusCode, msg: "Failure" });
         }
     },
 }

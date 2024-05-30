@@ -14,7 +14,7 @@ const PayController = {
 
         } catch (error: any) {
             console.log(error.message)
-            return res.status(500).json({ error: error.message, status: error.statusCode, msg: "Failure" });
+            return res.status(500).json({ data: error.message, status: error.statusCode, msg: "Failure" });
         }
     },
 
@@ -26,7 +26,7 @@ const PayController = {
 
         } catch (error: any) {
             console.log(error.message)
-            return res.status(500).json({ error: error.message, status: error.statusCode, msg: "Failure" });
+            return res.status(500).json({ data: error.message, status: error.statusCode, msg: "Failure" });
         }
     },
 
@@ -38,7 +38,7 @@ const PayController = {
 
         } catch (error: any) {
             console.log(error.message)
-            return res.status(500).json({ error: error.message, status: error.statusCode, msg: "Failure" });
+            return res.status(500).json({ data: error.message, status: error.statusCode, msg: "Failure" });
         }
     },
 
@@ -51,7 +51,7 @@ const PayController = {
 
         } catch (error: any) {
             console.log(error.message)
-            return res.status(500).json({ error: error.message, status: error.statusCode, msg: "Failure" });
+            return res.status(500).json({ data: error.message, status: error.statusCode, msg: "Failure" });
         }
     },
 
@@ -64,7 +64,7 @@ const PayController = {
 
         } catch (error: any) {
             console.log(error.message)
-            return res.status(500).json({ error: error.message, status: error.statusCode, msg: "Failure" });
+            return res.status(500).json({ data: error.message, status: error.statusCode, msg: "Failure" });
         }
     },
 
@@ -76,14 +76,14 @@ const PayController = {
 
         } catch (error: any) {
             console.log(error.message)
-            return res.status(500).json({ error: error.message, status: error.statusCode, msg: "Failure" });
+            return res.status(500).json({ data: error.message, status: error.statusCode, msg: "Failure" });
         }
     },
 
     createCert: async (req: any, res: Response) => {
         try {
             if(req.body.userEmail != req.user.email){
-                res.status(400).json({ error: 'Authentication error', status: 400, msg: "Failure" });
+                res.status(400).json({ data: 'Authentication error', status: 400, msg: "Failure" });
             }
 
             const sendData = req.body;
@@ -92,14 +92,14 @@ const PayController = {
 
         } catch (error: any) {
             console.log(error.message)
-            return res.status(500).json({ error: error.message, status: error.statusCode, msg: "Failure" });
+            return res.status(500).json({ data: error.message, status: error.statusCode, msg: "Failure" });
         }
     },
 
     createEdu: async (req: any, res: Response) => {
         try {
             if(req.body.userEmail != req.user.email){
-                res.status(400).json({ error: 'Authentication error', status: 400, msg: "Failure" });
+                res.status(400).json({ data: 'Authentication error', status: 400, msg: "Failure" });
             }
 
             const sendData = req.body;
@@ -108,14 +108,14 @@ const PayController = {
 
         } catch (error: any) {
             console.log(error.message)
-            return res.status(500).json({ error: error.message, status: error.statusCode, msg: "Failure" });
+            return res.status(500).json({ data: error.message, status: error.statusCode, msg: "Failure" });
         }
     },
 
     becomeArtisan: async (req: any, res: Response) => {
         try {
             if(req.body.userEmail != req.user.email){
-                res.status(400).json({ error: 'Authentication error', status: 400, msg: "Failure" });
+                res.status(400).json({ data: 'Authentication error', status: 400, msg: "Failure" });
             }
 
             const sendData = req.body;
@@ -124,14 +124,14 @@ const PayController = {
 
         } catch (error: any) {
             console.log(error.message)
-            return res.status(500).json({ error: error.message, status: error.statusCode, msg: "Failure" });
+            return res.status(500).json({ data: error.message, status: error.statusCode, msg: "Failure" });
         }
     },
 
     makePayment: async (req: any, res: Response) => {
         try {
             if(req.body.userEmail != req.user.email){
-                res.status(400).json({ error: 'Authentication error', status: 400, msg: "Failure" });
+                res.status(400).json({ data: 'Authentication error', status: 400, msg: "Failure" });
             }
 
             const sendData = req.body;
@@ -140,14 +140,14 @@ const PayController = {
 
         } catch (error: any) {
             console.log(error.message)
-            return res.status(500).json({ error: error.message, status: error.statusCode, msg: "Failure" });
+            return res.status(500).json({ data: error.message, status: error.statusCode, msg: "Failure" });
         }
     },
 
     editCert: async (req: any, res: Response) => {
         try {
             if(req.body.userEmail != req.user.email){
-                res.status(400).json({ error: 'Authentication error', status: 400, msg: "Failure" });
+                res.status(400).json({ data: 'Authentication error', status: 400, msg: "Failure" });
             }
 
             const id = req.params.id;
@@ -157,14 +157,14 @@ const PayController = {
 
         } catch (error: any) {
             console.log(error.message)
-            return res.status(500).json({ error: error.message, status: error.statusCode, msg: "Failure" });
+            return res.status(500).json({ data: error.message, status: error.statusCode, msg: "Failure" });
         }
     },
 
     editEdu: async (req: any, res: Response) => {
         try {
             if(req.body.userEmail != req.user.email){
-                res.status(400).json({ error: 'Authentication error', status: 400, msg: "Failure" });
+                res.status(400).json({ data: 'Authentication error', status: 400, msg: "Failure" });
             }
 
             const id = req.params.id;
@@ -174,14 +174,14 @@ const PayController = {
 
         } catch (error: any) {
             console.log(error.message)
-            return res.status(500).json({ error: error.message, status: error.statusCode, msg: "Failure" });
+            return res.status(500).json({ data: error.message, status: error.statusCode, msg: "Failure" });
         }
     },
 
     deleteEdu: async (req: any, res: Response) => {
         try {
             if(req.body.userEmail != req.user.email){
-                res.status(400).json({ error: 'Authentication error', status: 400, msg: "Failure" });
+                res.status(400).json({ data: 'Authentication error', status: 400, msg: "Failure" });
             }
 
             const id = req.params.id;
@@ -190,14 +190,14 @@ const PayController = {
 
         } catch (error: any) {
             console.log(error.message)
-            return res.status(500).json({ error: error.message, status: error.statusCode, msg: "Failure" });
+            return res.status(500).json({ data: error.message, status: error.statusCode, msg: "Failure" });
         }
     },
 
     deleteCert: async (req: any, res: Response) => {
         try {
             if(req.body.userEmail != req.user.email){
-                res.status(400).json({ error: 'Authentication error', status: 400, msg: "Failure" });
+                res.status(400).json({ data: 'Authentication error', status: 400, msg: "Failure" });
             }
 
             const id = req.params.id;
@@ -206,7 +206,7 @@ const PayController = {
 
         } catch (error: any) {
             console.log(error.message)
-            return res.status(500).json({ error: error.message, status: error.statusCode, msg: "Failure" });
+            return res.status(500).json({ data: error.message, status: error.statusCode, msg: "Failure" });
         }
     },
 }

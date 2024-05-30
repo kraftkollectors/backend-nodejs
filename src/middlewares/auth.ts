@@ -15,7 +15,7 @@ const verifyToken = async (req: any, res: any, next: any) => {
       req.body.token || req.query.token || req.headers["x-access-token"];
   
     if (!token) {
-      return res.status(403).json({ message: "A token is required for authentication" })
+      return res.status(400).json({ data: [], status: 400, msg: "A token is required for authentication" });
     }
     
     const decoded: any = jwt.verify(token, JWT_SECRET);
@@ -28,7 +28,7 @@ const verifyToken = async (req: any, res: any, next: any) => {
           req.admin = admin;
           next();
         }else{
-          return res.status(401).json({ message: "Invalid Token" })    
+          return res.status(400).json({ data: [], status: 400, msg: "Invalid token" });    
         }
 
       }else if (decoded.type === 'user'){
@@ -38,18 +38,18 @@ const verifyToken = async (req: any, res: any, next: any) => {
           req.user = user;
           next();
         }else{
-          return res.status(401).json({ message: "Invalid Token" })    
+          return res.status(400).json({ data: [], status: 400, msg: "Invalid token" });    
         }
 
       }else{
-        return res.status(403).json({ message: "unidentified user" })
+        return res.status(400).json({ data: [], status: 400, msg: "Unidentified user" });
       }
 
     }else{
-      return res.status(403).json({ message: "authentication error" })
+      return res.status(400).json({ data: [], status: 400, msg: "error while authenticating" });
     }
   } catch (err) {
-    return res.status(401).json({ message: "Invalid Token" })
+    return res.status(500).json({ data: [], status: 400, msg: "Invalid auth token" });
   }
     
   };

@@ -13,14 +13,14 @@ const DashController = {
 
         } catch (error: any) {
             console.log(error.message)
-            return res.status(500).json({ error: error.message, status: error.statusCode, msg: "Failure" });
+            return res.status(500).json({ data: error.message, status: error.statusCode, msg: "Failure" });
         }
     },
 
     editUser: async (req: any, res: Response) => {
         try {
             if(req.body.userEmail != req.user.email){
-                res.status(400).json({ error: 'Authentication error', status: 400, msg: "Failure" });
+                res.status(400).json({ data: 'Authentication error', status: 400, msg: "Failure" });
             }
 
             const userid = req.params.userid;
@@ -30,14 +30,14 @@ const DashController = {
 
         } catch (error: any) {
             console.log(error.message)
-            return res.status(500).json({ error: error.message, status: error.statusCode, msg: "Failure" });
+            return res.status(500).json({ data: error.message, status: error.statusCode, msg: "Failure" });
         }
     },
 
     editUserPassword: async (req: any, res: Response) => {
         try {
             if(req.body.userEmail != req.user.email){
-                res.status(400).json({ error: 'Authentication error', status: 400, msg: "Failure" });
+                res.status(400).json({ data: 'Authentication error', status: 400, msg: "Failure" });
             }
 
             const userid = req.params.userid;
@@ -47,7 +47,7 @@ const DashController = {
 
         } catch (error: any) {
             console.log(error.message)
-            return res.status(500).json({ error: error.message, status: error.statusCode, msg: "Failure" });
+            return res.status(500).json({ data: error.message, status: error.statusCode, msg: "Failure" });
         }
     },
 }
