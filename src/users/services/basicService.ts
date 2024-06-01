@@ -13,10 +13,13 @@ import { generateOtp } from '../../middlewares/generate';
 const SALT: any = process.env.SALT
 
 const BasicService = {
-    testServer: async () => {
+    testServer: async (query: any) => {
         try {
-            // Check if the email exists
-            const user = await User.find().limit(10)
+            const resPerPage = 10
+            const currentPageNum = Number(query.page) || 1
+            const skip = resPerPage * (currentPageNum - 1)
+
+            const user = await User.find().limit(resPerPage).skip(skip)
 
             return { data: user, statusCode: 201, msg: "Success" };
         } catch (error: any) {

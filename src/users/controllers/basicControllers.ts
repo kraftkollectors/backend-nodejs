@@ -6,7 +6,8 @@ import { generateUploadURL, generateUploadURLs } from '../../middlewares/cloudin
 // driver login
 const BasicController = {
     testServer: async (req: Request, res: Response) => {
-        const data = await BasicService.testServer()
+        const query = req.query
+        const data = await BasicService.testServer(query)
         return res.status(data.statusCode).json(data)
     },
 

@@ -59,7 +59,7 @@ const startServer = async () => {
 
     // 404 route
     app.use((req: any, res: any) => {
-        res.status(404).json({ data: `Cannot get route ${req.path}`, statusCode: 404, msg: "Failure" })
+        return res.status(404).json({ data: `Cannot ${req.method} route ${req.path}`, statusCode: 404, msg: "Failure" })
     })
 
 }

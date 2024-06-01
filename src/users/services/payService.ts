@@ -183,18 +183,15 @@ const PayService = {
 
     becomeArtisan: async (userData: UserDataArtisan) => {
         try {
-            // let nin = await veriNIN(userData.nin)
+            let nin = await veriNIN(userData.nin)
 
-            // console.log('nin', nin);
-            
-
-            // if (nin === false){
-            //     return { data: 'Check nin provided', statusCode: 401, msg: "Failure" };
-            // }else{
-            //     if(nin.data.firstName != userData.firstName || nin.data.lastName != userData.lastName || nin.data.phonenUmber != userData.phoneNumber){
-            //         return { data: 'NIN provided does not match any account details (first name, lastname or phone)', statusCode: 401, msg: "Failure" };
-            //     }
-            // }
+            if (nin === false){
+                return { data: 'Check nin provided', statusCode: 401, msg: "Failure" };
+            }else{                
+                if (nin.firstname != userData.firstName && nin.surname != userData.lastName && nin.telephoneno != userData.phoneNumber) {
+                    return { data: 'NIN provided does not match any account details (first name, lastname, or phone)', statusCode: 401, msg: "Failure" };
+                }
+            }
             
 
             let data = await new Artisan({ ...userData }).save()
