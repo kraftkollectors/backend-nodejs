@@ -153,7 +153,7 @@ const BasicService = {
 
     thirdPartyCreate: async (userData: any) => {
         try {
-            // Check if the email already exists
+            // Check if the email already exists and log user in else creste account
             const existingUser = await User.findOne({ email: userData.email })
 
             if (existingUser) {
@@ -165,7 +165,7 @@ const BasicService = {
                 return { data: { user: existingUser, token }, statusCode: 201, msg: "Success" };
             }
 
-            const user = await new User({ ...userData }).save();
+            const user = await new User({ ...userData, emailVerify: true }).save();
 
             user.type = 'user'
 
