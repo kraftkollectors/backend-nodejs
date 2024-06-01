@@ -249,11 +249,16 @@ const PayService = {
     becomeArtisan: async (userData: UserDataArtisan) => {
         try {
             let nin = await veriNIN(userData.nin)
+            let lastNineCharacters = userData.phoneNumber.slice(-9);
 
             if (nin === false){
                 return { data: 'Check nin provided', statusCode: 401, msg: "Failure" };
             }else{                
-                if (nin.firstname != userData.firstName && nin.surname != userData.lastName && nin.telephoneno != userData.phoneNumber) {
+                if (
+                    nin.firstname.toLowerCase() !== userData.firstName.toLowerCase() &&
+                    nin.surname.toLowerCase() !== userData.lastName.toLowerCase() &&
+                    !nin.telephoneno.includes(lastNineCharacters)
+                  ) {
                     return { data: 'NIN provided does not match any account details (first name, lastname, or phone)', statusCode: 401, msg: "Failure" };
                 }
             }
