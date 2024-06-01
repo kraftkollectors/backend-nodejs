@@ -43,6 +43,4 @@ const veriNIN = async (nin: string) => {
     
 }
 
-// veriNIN('94255406106')
-
 export default veriNIN;
