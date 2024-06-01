@@ -34,15 +34,42 @@ const DashService = {
         }
     },
 
-    getCategories: async () => {
+    getCategories: async (query: any) => {
         try {
-            const existingRecord = await Category.find().sort({ createdAt: -1 })
+            const resPerPage = 10
+            const currentPageNum = Number(query.page) || 1
+            const skip = resPerPage * (currentPageNum - 1)
 
-            if (!existingRecord) {
-                return { data: 'No record found', statusCode: 404, msg: "Failure" };
+            const existingRecords = await Category.find()
+            .sort({ createdAt: -1 })
+            .limit(resPerPage)
+            .skip(skip)
+
+            if (!existingRecords || existingRecords.length === 0) {
+                return { data: 'No records found', statusCode: 404, msg: "Failure" }
+            }           
+
+            // Count the total number of documents
+            const totalDocuments = await Category.countDocuments({ active: true });
+
+            // Calculate the total number of pages
+            const totalPages = Math.ceil(totalDocuments / resPerPage);
+
+            // Determine if there are previous and next pages
+            const hasPreviousPage = currentPageNum > 1;
+            const hasNextPage = currentPageNum < totalPages
+
+            // Calculate the number of previous and next pages available
+            const previousPages = currentPageNum - 1;
+            const nextPages = totalPages - currentPageNum;
+               
+
+            return { 
+                data: { existingRecords, hasPreviousPage, previousPages, hasNextPage, nextPages },  
+                statusCode: 201, 
+                msg: "Success" 
             }
 
-            return { data: { existingRecord }, statusCode: 201, msg: "Success" };
         } catch (error: any) {
             throw new Error(`Error fetching account: ${error.message}`);
         }
@@ -69,15 +96,41 @@ const DashService = {
         }
     },
 
-    getSUbCategories: async () => {
+    getSUbCategories: async (query: any) => {
         try {
-            const existingRecord = await SubCategory.find().sort({ createdAt: -1 })
+            const resPerPage = 10
+            const currentPageNum = Number(query.page) || 1
+            const skip = resPerPage * (currentPageNum - 1)
 
-            if (!existingRecord) {
-                return { data: 'No record found', statusCode: 404, msg: "Failure" };
+            const existingRecords = await SubCategory.find()
+            .sort({ createdAt: -1 })
+            .limit(resPerPage)
+            .skip(skip)
+
+            if (!existingRecords || existingRecords.length === 0) {
+                return { data: 'No records found', statusCode: 404, msg: "Failure" }
+            }           
+
+            // Count the total number of documents
+            const totalDocuments = await SubCategory.countDocuments({ active: true });
+
+            // Calculate the total number of pages
+            const totalPages = Math.ceil(totalDocuments / resPerPage);
+
+            // Determine if there are previous and next pages
+            const hasPreviousPage = currentPageNum > 1;
+            const hasNextPage = currentPageNum < totalPages
+
+            // Calculate the number of previous and next pages available
+            const previousPages = currentPageNum - 1;
+            const nextPages = totalPages - currentPageNum;
+               
+
+            return { 
+                data: { existingRecords, hasPreviousPage, previousPages, hasNextPage, nextPages },  
+                statusCode: 201, 
+                msg: "Success" 
             }
-
-            return { data: { existingRecord }, statusCode: 201, msg: "Success" };
         } catch (error: any) {
             throw new Error(`Error fetching account: ${error.message}`);
         }

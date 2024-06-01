@@ -19,9 +19,43 @@ const BasicService = {
             const currentPageNum = Number(query.page) || 1
             const skip = resPerPage * (currentPageNum - 1)
 
-            const user = await User.find().limit(resPerPage).skip(skip)
+            const search = query.keyword ? {
+                userName: {
+                    $regex: query.keyword,
+                    $options: 'i'
+                },
+                active: true
+            } : { active: true }
 
-            return { data: user, statusCode: 201, msg: "Success" };
+            const user = await User.find(search)
+            .limit(resPerPage)
+            .skip(skip)
+
+            if (!user || user.length === 0) {
+                return { data: 'No records found', statusCode: 404, msg: "Failure" }
+            }
+
+            // Count the total number of documents
+            const totalDocuments = await User.countDocuments({ active: true });
+
+            // Calculate the total number of pages
+            const totalPages = Math.ceil(totalDocuments / resPerPage);
+
+            // Determine if there are previous and next pages
+            const hasPreviousPage = currentPageNum > 1;
+            const hasNextPage = currentPageNum < totalPages
+
+            // Calculate the number of previous and next pages available
+            const previousPages = currentPageNum - 1;
+            const nextPages = totalPages - currentPageNum;
+               
+
+            return { 
+                data: { user, hasPreviousPage, previousPages, hasNextPage, nextPages }, 
+                statusCode: 201, 
+                msg: "Success" 
+            }
+            
         } catch (error: any) {
             console.log(error);
             throw new Error(`Error logging in: ${error.message}`);

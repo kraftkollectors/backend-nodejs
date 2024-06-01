@@ -19,7 +19,8 @@ const DashController = {
 
     getCategories: async (req: Request, res: Response) => {
         try {
-            const data = await DashService.getCategories();
+            const query = req.query
+            const data = await DashService.getCategories(query);
             return res.status(data.statusCode).json(data);
 
         } catch (error: any) {
@@ -42,7 +43,8 @@ const DashController = {
 
     getSUbCategories: async (req: Request, res: Response) => {
         try {
-            const data = await DashService.getSUbCategories();
+            const query = req.query
+            const data = await DashService.getSUbCategories(query);
             return res.status(data.statusCode).json(data);
 
         } catch (error: any) {

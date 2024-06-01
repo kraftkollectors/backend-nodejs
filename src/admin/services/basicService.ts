@@ -12,12 +12,40 @@ import { generateOtp } from '../../middlewares/generate';
 const SALT: any = process.env.SALT
 
 const BasicService = {
-    testServer: async () => {
+    testServer: async (query: any) => {
         try {
-            // Check if the email exists
-            const admin = await Admin.find().limit(10)
+            const resPerPage = 10
+            const currentPageNum = Number(query.page) || 1
+            const skip = resPerPage * (currentPageNum - 1)
 
-            return { data: admin, statusCode: 201, msg: "Success" };
+            const admin = await Admin.find()
+            .limit(resPerPage)
+            .skip(skip)
+
+            if (!admin || admin.length === 0) {
+                return { data: 'No records found', statusCode: 404, msg: "Failure" }
+            }
+
+            // Count the total number of documents
+            const totalDocuments = await Admin.countDocuments({ active: true });
+
+            // Calculate the total number of pages
+            const totalPages = Math.ceil(totalDocuments / resPerPage);
+
+            // Determine if there are previous and next pages
+            const hasPreviousPage = currentPageNum > 1;
+            const hasNextPage = currentPageNum < totalPages
+
+            // Calculate the number of previous and next pages available
+            const previousPages = currentPageNum - 1;
+            const nextPages = totalPages - currentPageNum;
+               
+
+            return { 
+                data: { admin, hasPreviousPage, previousPages, hasNextPage, nextPages }, 
+                statusCode: 201, 
+                msg: "Success" 
+            }
         } catch (error: any) {
             console.log(error);
             throw new Error(`Error logging in: ${error.message}`);

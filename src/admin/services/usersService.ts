@@ -24,14 +24,35 @@ const UsersService = {
             } : { active: true }
 
             // Check if the email already exists
-            const existingUser = await Users.find(search, { active: 0, password: 0, createdAt: 0 })
-            .limit(resPerPage).skip(skip)
+            const existingUser = await Users.find(search, { active: 0, password: 0 })
+            .limit(resPerPage)
+            .skip(skip)
 
-            if (!existingUser) {
-                return { data: 'No user found', statusCode: 404, msg: "Failure" };
-            }            
+            if (!existingUser || existingUser.length === 0) {
+                return { data: 'No user found', statusCode: 404, msg: "Failure" }
+            }
+            
+            // Count the total number of documents
+            const totalDocuments = await Users.countDocuments(search);
 
-            return { data: { existingUser }, statusCode: 201, msg: "Success" };
+            // Calculate the total number of pages
+            const totalPages = Math.ceil(totalDocuments / resPerPage);
+
+            // Determine if there are previous and next pages
+            const hasPreviousPage = currentPageNum > 1;
+            const hasNextPage = currentPageNum < totalPages
+
+            // Calculate the number of previous and next pages available
+            const previousPages = currentPageNum - 1;
+            const nextPages = totalPages - currentPageNum;
+               
+
+            return { 
+                data: { existingUser, hasPreviousPage, previousPages, hasNextPage, nextPages }, 
+                statusCode: 201, 
+                msg: "Success" 
+            }
+
         } catch (error: any) {
             throw new Error(`Error fetching account: ${error.message}`);
         }

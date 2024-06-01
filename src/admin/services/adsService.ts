@@ -14,13 +14,34 @@ const AdsService = {
             const skip = resPerPage * (currentPageNum - 1)
 
             // Check if the email already exists
-            const existingAd = await Ads.find({ active: true }).limit(resPerPage).skip(skip)
+            const existingAd = await Ads.find({ active: true })
+            .limit(resPerPage)
+            .skip(skip)
 
-            if (!existingAd) {
-                return { data: 'No ad found', statusCode: 404, msg: "Failure" };
-            }            
+            if (!existingAd || existingAd.length === 0) {
+                return { data: 'No records found', statusCode: 404, msg: "Failure" }
+            }           
 
-            return { data: { existingAd }, statusCode: 201, msg: "Success" };
+            // Count the total number of documents
+            const totalDocuments = await Ads.countDocuments({ active: true });
+
+            // Calculate the total number of pages
+            const totalPages = Math.ceil(totalDocuments / resPerPage);
+
+            // Determine if there are previous and next pages
+            const hasPreviousPage = currentPageNum > 1;
+            const hasNextPage = currentPageNum < totalPages
+
+            // Calculate the number of previous and next pages available
+            const previousPages = currentPageNum - 1;
+            const nextPages = totalPages - currentPageNum;
+               
+
+            return { 
+                data: { existingAd, hasPreviousPage, previousPages, hasNextPage, nextPages }, 
+                statusCode: 201, 
+                msg: "Success" 
+            }
         } catch (error: any) {
             throw new Error(`Error fetching ad: ${error.message}`);
         }
@@ -33,11 +54,27 @@ const AdsService = {
             const skip = resPerPage * (currentPageNum - 1)
 
             // Check if the email already exists
-            const reports = await Report.find({ active: true }).limit(resPerPage).skip(skip)
+            const reports = await Report.find({ active: true })
+            .limit(resPerPage)
+            .skip(skip)
 
-            if (!reports) {
-                return { data: 'No report found', statusCode: 404, msg: "Failure" };
-            }
+            if (!reports || reports.length === 0) {
+                return { data: 'No records found', statusCode: 404, msg: "Failure" }
+            }           
+
+            // Count the total number of documents
+            const totalDocuments = await Report.countDocuments({ active: true });
+
+            // Calculate the total number of pages
+            const totalPages = Math.ceil(totalDocuments / resPerPage);
+
+            // Determine if there are previous and next pages
+            const hasPreviousPage = currentPageNum > 1;
+            const hasNextPage = currentPageNum < totalPages
+
+            // Calculate the number of previous and next pages available
+            const previousPages = currentPageNum - 1;
+            const nextPages = totalPages - currentPageNum;
 
             // Fetch user details for each report
             const reportDetails = await Promise.all(
@@ -53,7 +90,12 @@ const AdsService = {
                 })
             );                        
 
-            return { data: { reportDetails }, statusCode: 201, msg: "Success" };
+            return { 
+                data: { reportDetails, hasPreviousPage, previousPages, hasNextPage, nextPages }, 
+                statusCode: 201, 
+                msg: "Success" 
+            }
+
         } catch (error: any) {
             throw new Error(`Error fetching ad: ${error.message}`);
         }
@@ -95,13 +137,33 @@ const AdsService = {
             const skip = resPerPage * (currentPageNum - 1)
 
             // Check if the email already exists
-            const existingAd = await Ads.find({ userid: id }).limit(resPerPage).skip(skip)
+            const existingAd = await Ads.find({ userid: id })
+            .limit(resPerPage)
+            .skip(skip)
 
-            if (!existingAd) {
-                return { data: 'No user ad found', statusCode: 404, msg: "Failure" };
-            }            
+            if (!existingAd || existingAd.length === 0) {
+                return { data: 'No records found', statusCode: 404, msg: "Failure" }
+            }           
 
-            return { data: { existingAd }, statusCode: 201, msg: "Success" };
+            // Count the total number of documents
+            const totalDocuments = await Report.countDocuments({ active: true });
+
+            // Calculate the total number of pages
+            const totalPages = Math.ceil(totalDocuments / resPerPage);
+
+            // Determine if there are previous and next pages
+            const hasPreviousPage = currentPageNum > 1;
+            const hasNextPage = currentPageNum < totalPages
+            
+            // Calculate the number of previous and next pages available
+            const previousPages = currentPageNum - 1;
+            const nextPages = totalPages - currentPageNum;
+
+            return { 
+                data: { existingAd, hasPreviousPage, previousPages, hasNextPage, nextPages }, 
+                statusCode: 201, 
+                msg: "Success" 
+            }
         } catch (error: any) {
             throw new Error(`Error fetching ad: ${error.message}`);
         }

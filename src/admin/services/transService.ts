@@ -11,14 +11,35 @@ const transService = {
             const currentPageNum = Number(query.page) || 1
             const skip = resPerPage * (currentPageNum - 1)
 
-            // Check if the email alrepaymenty exists
-            const existingPay = await Payment.find().limit(resPerPage).skip(skip)
+            const existingRecords = await Payment.find()
+            .sort({ createdAt: -1 })
+            .limit(resPerPage)
+            .skip(skip)
 
-            if (!existingPay) {
-                return { data: 'No payment found', statusCode: 404, msg: "Failure" };
-            }            
+            if (!existingRecords || existingRecords.length === 0) {
+                return { data: 'No records found', statusCode: 404, msg: "Failure" }
+            }           
 
-            return { data: { existingPay }, statusCode: 201, msg: "Success" };
+            // Count the total number of documents
+            const totalDocuments = await Payment.countDocuments({ active: true });
+
+            // Calculate the total number of pages
+            const totalPages = Math.ceil(totalDocuments / resPerPage);
+
+            // Determine if there are previous and next pages
+            const hasPreviousPage = currentPageNum > 1;
+            const hasNextPage = currentPageNum < totalPages
+
+            // Calculate the number of previous and next pages available
+            const previousPages = currentPageNum - 1;
+            const nextPages = totalPages - currentPageNum;
+               
+
+            return { 
+                data: { existingRecords, hasPreviousPage, previousPages, hasNextPage, nextPages }, 
+                statusCode: 201, 
+                msg: "Success" 
+            }
         } catch (error: any) {
             throw new Error(`Error fetching payment: ${error.message}`);
         }
@@ -59,14 +80,35 @@ const transService = {
             const currentPageNum = Number(query.page) || 1
             const skip = resPerPage * (currentPageNum - 1)
 
-            // Check if the email alrepaymenty exists
-            const existingPay = await Payment.find({ userid: id }).limit(resPerPage).skip(skip)
+            const existingRecords = await Payment.find({ userId: id })
+            .sort({ createdAt: -1 })
+            .limit(resPerPage)
+            .skip(skip)
 
-            if (!existingPay) {
-                return { data: 'No user payment found', statusCode: 404, msg: "Failure" };
-            }            
+            if (!existingRecords || existingRecords.length === 0) {
+                return { data: 'No records found', statusCode: 404, msg: "Failure" }
+            }           
 
-            return { data: { existingPay }, statusCode: 201, msg: "Success" };
+            // Count the total number of documents
+            const totalDocuments = await Payment.countDocuments({ userId: id, active: true });
+
+            // Calculate the total number of pages
+            const totalPages = Math.ceil(totalDocuments / resPerPage);
+
+            // Determine if there are previous and next pages
+            const hasPreviousPage = currentPageNum > 1;
+            const hasNextPage = currentPageNum < totalPages
+
+            // Calculate the number of previous and next pages available
+            const previousPages = currentPageNum - 1;
+            const nextPages = totalPages - currentPageNum;
+               
+
+            return { 
+                data: { existingRecords, hasPreviousPage, previousPages, hasNextPage, nextPages }, 
+                statusCode: 201, 
+                msg: "Success" 
+            }
         } catch (error: any) {
             throw new Error(`Error fetching payment: ${error.message}`);
         }
