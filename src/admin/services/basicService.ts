@@ -145,7 +145,7 @@ const BasicService = {
                         }
                     },
                     
-                    outro: 'Need help, or have questions? Just reply to this email, we\'d love to help.\n\n Team Hardware Mall.'
+                    outro: 'Need help, or have questions? Just reply to this email, we\'d love to help.\n\n Team Kraftkollectors.'
                 }
             };
 
@@ -186,7 +186,7 @@ const BasicService = {
                         }
                     },
                     
-                    outro: 'Need help, or have questions? Just reply to this email, we\'d love to help.\n\n Team Hardware Mall.'
+                    outro: 'Need help, or have questions? Just reply to this email, we\'d love to help.\n\n Team Kraftkollectors.'
                 }
             };
 
