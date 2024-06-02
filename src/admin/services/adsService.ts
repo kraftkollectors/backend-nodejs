@@ -13,8 +13,16 @@ const AdsService = {
             const currentPageNum = Number(query.page) || 1
             const skip = resPerPage * (currentPageNum - 1)
 
+            const search = query.keyword ? {
+                title: {
+                    $regex: query.keyword,
+                    $options: 'i'
+                },
+                active: true
+            } : { active: true }
+
             // Check if the email already exists
-            const existingAd = await Ads.find({ active: true })
+            const existingAd = await Ads.find(search, { active: true })
             .limit(resPerPage)
             .skip(skip)
 
