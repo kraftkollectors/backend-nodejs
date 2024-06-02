@@ -29,7 +29,7 @@ const PayService = {
             .skip(skip)
 
             if (!existingRecords || existingRecords.length === 0) {
-                return { data: 'No records found', statusCode: 404, msg: "Failure" }
+                return { data: [], statusCode: 404, msg: "Failure" }
             }           
 
             // Count the total number of documents
@@ -70,7 +70,7 @@ const PayService = {
             const existingRecord = await Certificate.findOne({ _id: id })
 
             if (!existingRecord) {
-                return { data: 'No record found', statusCode: 404, msg: "Failure" };
+                return { data: [], statusCode: 404, msg: "Failure" };
             }            
 
             return { data: { existingRecord }, statusCode: 201, msg: "Success" };
@@ -91,7 +91,7 @@ const PayService = {
             const existingRecord = await Education.findOne({ _id: id })
 
             if (!existingRecord) {
-                return { data: 'No record found', statusCode: 404, msg: "Failure" };
+                return { data: [], statusCode: 404, msg: "Failure" };
             }            
 
             return { data: { existingRecord }, statusCode: 201, msg: "Success" };
@@ -118,7 +118,7 @@ const PayService = {
             skip(skip)
 
             if (!existingRecords || existingRecords.length === 0) {
-                return { data: 'No records found', statusCode: 404, msg: "Failure" }
+                return { data: [], statusCode: 404, msg: "Failure" }
             }           
 
             // Count the total number of documents
@@ -164,7 +164,7 @@ const PayService = {
             .skip(skip)
 
             if (!existingRecords || existingRecords.length === 0) {
-                return { data: 'No records found', statusCode: 404, msg: "Failure" }
+                return { data: [], statusCode: 404, msg: "Failure" }
             }           
 
             // Count the total number of documents
@@ -205,7 +205,7 @@ const PayService = {
             const existingRecord = await Artisan.findOne({ userId: id })
 
             if (!existingRecord) {
-                return { data: 'No record found', statusCode: 404, msg: "Failure" };
+                return { data: [], statusCode: 404, msg: "Failure" };
             }            
 
             return { data: { existingRecord }, statusCode: 201, msg: "Success" };

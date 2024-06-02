@@ -54,7 +54,7 @@ router.post("/artisan", verifyToken, PayController.becomeArtisan);
 router.get("/artisan/:userid", verifyToken, PayController.getAccount);
 
 router.post("/certificate", verifyToken, PayController.createCert);
-router.get("/certificate/:userid", verifyToken, PayController.getUserCert);
+router.get("/certificate/user/:userid", verifyToken, PayController.getUserCert);
 router.get("/certificate/single/:id", verifyToken, PayController.getSingleCert);
 router.patch("/certificate/:id", verifyToken, PayController.editCert);
 router.delete("/certificate/:id", verifyToken, PayController.deleteCert);
