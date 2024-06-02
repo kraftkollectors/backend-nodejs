@@ -60,7 +60,7 @@ router.patch("/certificate/:id", verifyToken, PayController.editCert);
 router.delete("/certificate/:id", verifyToken, PayController.deleteCert);
 
 router.post("/education", verifyToken, PayController.createEdu);
-router.get("/education/:userid", verifyToken, PayController.getUserEdu);
+router.get("/education/user/:userid", verifyToken, PayController.getUserEdu);
 router.get("/education/single/:id", verifyToken, PayController.getSingleEdu);
 router.patch("/education/:id", verifyToken, PayController.editEdu);
 router.delete("/education/:id", verifyToken, PayController.deleteEdu);
