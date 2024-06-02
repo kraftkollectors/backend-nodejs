@@ -268,7 +268,7 @@ const PayService = {
 
             if(data !== null){
 
-                await User.updateOne({ email: userData.userId }, 
+                await User.updateOne({ _id: userData.userId }, 
                     {
                         $set:{
                             isArtisan: true
