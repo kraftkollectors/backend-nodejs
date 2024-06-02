@@ -64,6 +64,10 @@ const ArtisanSchema = new Schema({
         type: String,
         required: true
     },
+    showContact: {
+        type: Boolean,
+        required: true
+    },
     nin: {
         type: String,
         required: true
