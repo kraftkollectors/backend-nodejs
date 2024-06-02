@@ -27,7 +27,7 @@ const BasicService = {
                 active: true
             } : { active: true }
 
-            const user = await User.find(search)
+            const user = await User.find(search, { password: 0 })
             .limit(resPerPage)
             .skip(skip)
 
