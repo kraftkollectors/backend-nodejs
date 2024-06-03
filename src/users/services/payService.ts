@@ -386,7 +386,7 @@ const PayService = {
                 return { data: 'Please enter a correct id', statusCode: 404, msg: "Failure" };
             }
 
-            let data = await Artisan.findByIdAndUpdate(id, userData, {
+            let data = await Artisan.findOneAndUpdate({ userId: id }, userData, {
                 new: true,
                 runValidators: true
             })
