@@ -29,7 +29,11 @@ const PayService = {
             .skip(skip)
 
             if (!existingRecords || existingRecords.length === 0) {
-                return { data: [], statusCode: 404, msg: "Failure" }
+                return { 
+                    data: { existingRecords, hasPreviousPage: false, previousPages: 0, hasNextPage: false, nextPages: 0 },  
+                    statusCode: 404, 
+                    msg: "Failure" 
+                }
             }           
 
             // Count the total number of documents
@@ -118,7 +122,11 @@ const PayService = {
             skip(skip)
 
             if (!existingRecords || existingRecords.length === 0) {
-                return { data: [], statusCode: 404, msg: "Failure" }
+                return { 
+                    data: { existingRecords, hasPreviousPage: false, previousPages: 0, hasNextPage: false, nextPages: 0 },  
+                    statusCode: 404, 
+                    msg: "Failure" 
+                }
             }           
 
             // Count the total number of documents
@@ -164,7 +172,11 @@ const PayService = {
             .skip(skip)
 
             if (!existingRecords || existingRecords.length === 0) {
-                return { data: [], statusCode: 404, msg: "Failure" }
+                return { 
+                    data: { existingRecords, hasPreviousPage: false, previousPages: 0, hasNextPage: false, nextPages: 0 },  
+                    statusCode: 404, 
+                    msg: "Failure" 
+                }
             }           
 
             // Count the total number of documents

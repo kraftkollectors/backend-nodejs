@@ -32,7 +32,11 @@ const BasicService = {
             .skip(skip)
 
             if (!user || user.length === 0) {
-                return { data: 'No records found', statusCode: 404, msg: "Failure" }
+                return { 
+                    data: { user, hasPreviousPage: false, previousPages: 0, hasNextPage: false, nextPages: 0 },  
+                    statusCode: 404, 
+                    msg: "Failure" 
+                }
             }
 
             // Count the total number of documents

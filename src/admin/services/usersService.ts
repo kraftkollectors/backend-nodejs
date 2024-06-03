@@ -29,7 +29,11 @@ const UsersService = {
             .skip(skip)
 
             if (!existingUser || existingUser.length === 0) {
-                return { data: 'No user found', statusCode: 404, msg: "Failure" }
+                return { 
+                    data: { existingUser, hasPreviousPage: false, previousPages: 0, hasNextPage: false, nextPages: 0 },  
+                    statusCode: 404, 
+                    msg: "Failure" 
+                }
             }
             
             // Count the total number of documents
