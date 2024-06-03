@@ -27,7 +27,7 @@ export interface UserDataArtisan {
     instagram: string,
     twitter: string,
     facebook: string,
-    linkedln: string,
+    linkedin: string,
     phoneNumber: string,
     description: string,
     businessName: string,

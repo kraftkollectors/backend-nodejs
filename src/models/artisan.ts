@@ -34,7 +34,7 @@ const ArtisanSchema = new Schema({
         required: false,
         default: ''
     },
-    linkedln: {
+    linkedin: {
         type: String,
         required: false,
         default: ''
