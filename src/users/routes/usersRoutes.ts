@@ -44,7 +44,7 @@ router.delete("/ads/:id", verifyToken, AdsController.deleteAd);
 router.get("/ads", verifyToken, AdsController.getAllAd);
 router.get("/ads/:id", verifyToken, AdsController.getSingleAd);
 router.get("/myads/:userid", verifyToken, AdsController.getMyAd);
-router.get("/myads/getcategory", verifyToken, AdsController.getcategory);
+router.get("/myads/cat/getcategory", verifyToken, AdsController.getcategory);
 router.post("/reportad", verifyToken, AdsController.createReport);
 router.post("/rateads", verifyToken, AdsController.rateAd);
 
