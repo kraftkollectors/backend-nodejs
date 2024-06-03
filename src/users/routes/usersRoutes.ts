@@ -47,11 +47,15 @@ router.get("/myads/:userid", verifyToken, AdsController.getMyAd);
 router.get("/myads/cat/getcategory", verifyToken, AdsController.getcategory);
 router.post("/reportad", verifyToken, AdsController.createReport);
 router.post("/rateads", verifyToken, AdsController.rateAd);
+router.post("/savead", verifyToken, AdsController.saveAd);
+router.get("/getsavead/:userid", verifyToken, AdsController.getsavedAd);
+router.delete("/savead/:id", verifyToken, AdsController.deleteSavedAd);
 
 
 // become an artisan
 router.post("/artisan", verifyToken, PayController.becomeArtisan);
 router.get("/artisan/:userid", verifyToken, PayController.getAccount);
+router.patch("/artisan/:userid", verifyToken, PayController.editArtisan);
 
 router.post("/certificate", verifyToken, PayController.createCert);
 router.get("/certificate/user/:userid", verifyToken, PayController.getUserCert);

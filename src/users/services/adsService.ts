@@ -4,8 +4,8 @@ import Ad from '../../models/ads'
 import Category from '../../models/category'
 import SubCategory from '../../models/subcategory'
 import Report from '../../models/report'
+import savedAd from '../../models/saveAds'
 import mongoose from 'mongoose';
-import veriNIN from '../../middlewares/nin'
 import { UserDataAds, UserDataReport } from '../../types/user/defaultTypes';
 import Review from '../../models/reviews';
 
@@ -73,6 +73,65 @@ const AdsService = {
             return { data: { existingRecord }, statusCode: 201, msg: "Success" };
         } catch (error: any) {
             throw new Error(`Error getting record: ${error.message}`);
+        }
+    },
+
+    getsavedAd: async (query: any, userid: string) => {
+        try {
+            const isValidId = mongoose.isValidObjectId(userid)
+
+            if(!isValidId){
+                return { data: 'Please enter a valid id', statusCode: 404, msg: "Failure" };
+            }
+
+            const resPerPage = 10
+            const currentPageNum = Number(query.page) || 1
+            const skip = resPerPage * (currentPageNum - 1)
+
+            
+            const existingRecords = await savedAd.find({ userid }).lean()
+            .limit(resPerPage)
+            .skip(skip)
+
+
+            if (!existingRecords || existingRecords.length === 0) {
+                return { 
+                    data: { existingRecords, hasPreviousPage: false, previousPages: 0, hasNextPage: false, nextPages: 0 },  
+                    statusCode: 201, 
+                    msg: "Success" 
+                }
+            }
+
+            // Extract serviceIds from savedAds
+            const serviceIds: any = existingRecords.map((saveAds: any) => saveAds.serviceId);
+
+            // Fetch product details for each productId
+            const saved: any = await Ad.find({ _id: { $in: serviceIds } }).lean();
+
+
+            // Count the total number of documents
+            const totalDocuments = await Ad.countDocuments({ userid, active: true });
+
+            // Calculate the total number of pages
+            const totalPages = Math.ceil(totalDocuments / resPerPage);
+
+            // Determine if there are previous and next pages
+            const hasPreviousPage = currentPageNum > 1;
+            const hasNextPage = currentPageNum < totalPages
+
+            // Calculate the number of previous and next pages available
+            const previousPages = currentPageNum - 1;
+            const nextPages = totalPages - currentPageNum;
+               
+
+            return { 
+                data: { saved, hasPreviousPage, previousPages, hasNextPage, nextPages }, 
+                statusCode: 201, 
+                msg: "Success" 
+            }
+
+        } catch (error: any) {
+            throw new Error(`Error getting records: ${error.message}`);
         }
     },
 
@@ -144,6 +203,23 @@ const AdsService = {
                 })
             );
             return { data: { categoriesWithSubcategories }, statusCode: 201, msg: "Success" };
+        } catch (error: any) {
+            throw new Error(`Error getting records: ${error.message}`);
+        }
+    },
+
+    deleteSavedAd: async (id: string) => {
+        try {
+            const isValidId = mongoose.isValidObjectId(id)
+
+            if(!isValidId){
+                return { data: 'Please enter a valid id', statusCode: 404, msg: "Failure" };
+            }
+
+            // Check if the email already exists
+            await savedAd.findByIdAndDelete(id)          
+
+            return { data: 'Record deleted', statusCode: 201, msg: "Success" };
         } catch (error: any) {
             throw new Error(`Error getting records: ${error.message}`);
         }
@@ -228,6 +304,20 @@ const AdsService = {
             
         } catch (error: any) {
             throw new Error(`Error adding post: ${error.message}`);
+        }
+    },
+
+    saveAd: async (userData: any) => {
+        try {
+            const saved = await new savedAd({ ...userData }).save();
+            if(saved !== null){
+                return { data: { saved }, statusCode: 201, msg: "Success" };
+            }else{
+                return { data: 'Error creating savedads', statusCode: 401, msg: "Failure" };
+            }
+            
+        } catch (error: any) {
+            throw new Error(`Error adding savedads: ${error.message}`);
         }
     },
 

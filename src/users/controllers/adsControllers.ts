@@ -43,9 +43,38 @@ const AdsController = {
         }
     },
 
+    getsavedAd: async (req: any, res: Response) => {
+        try {
+            const userid = req.params.userid;
+            const query = req.query
+            const data = await AdsService.getsavedAd(query, userid);
+            return res.status(data.statusCode).json(data);
+
+        } catch (error: any) {
+            console.log(error.message)
+            return res.status(500).json({ data: error.message, statusCode: 400, msg: "Failure" });
+        }
+    },
+
     getcategory: async (req: any, res: Response) => {
         try {
             const data = await AdsService.getcategory();
+            return res.status(data.statusCode).json(data);
+
+        } catch (error: any) {
+            console.log(error.message)
+            return res.status(500).json({ data: error.message, statusCode: 400, msg: "Failure" });
+        }
+    },
+
+    deleteSavedAd: async (req: Request, res: Response) => {
+        try {
+            if(!checkIfArtisan(req.body.userEmail)){
+                res.status(400).json({ data: 'Not an artisan', statusCode: 400, msg: "Failure" });
+            }
+
+            const id = req.params.id;
+            const data = await AdsService.deleteSavedAd(id);
             return res.status(data.statusCode).json(data);
 
         } catch (error: any) {
@@ -124,6 +153,22 @@ const AdsController = {
 
             const sendData = req.body;
             const data = await AdsService.postAd(sendData);
+            return res.status(data.statusCode).json(data);
+
+        } catch (error: any) {
+            console.log(error.message)
+            return res.status(500).json({ data: error.message, statusCode: 400, msg: "Failure" });
+        }
+    },
+
+    saveAd: async (req: any, res: Response) => {
+        try {
+            if(req.body.userEmail != req.user.email){
+                res.status(400).json({ data: 'Authentication error', statusCode: 400, msg: "Failure" });
+            }
+
+            const sendData = req.body;
+            const data = await AdsService.saveAd(sendData);
             return res.status(data.statusCode).json(data);
 
         } catch (error: any) {

@@ -260,6 +260,13 @@ const PayService = {
 
     becomeArtisan: async (userData: UserDataArtisan) => {
         try {
+
+            const check = await Artisan.findOne({ userId: userData.userId })
+
+            if (check) {
+                return { data: 'account already an artisan', statusCode: 401, msg: "Failure" };
+            }
+
             let nin = await veriNIN(userData.nin)
             let lastNineCharacters = userData.phoneNumber.slice(-9);
 
@@ -367,6 +374,31 @@ const PayService = {
             
         } catch (error: any) {
             throw new Error(`Error editing education: ${error.message}`);
+        }
+    },
+
+    editArtisan: async (id: string, userData: any) => {
+        try {
+            // check if id is a valid mongoose id
+            const isValidId = mongoose.isValidObjectId(id)
+
+            if(!isValidId){
+                return { data: 'Please enter a correct id', statusCode: 404, msg: "Failure" };
+            }
+
+            let data = await Artisan.findByIdAndUpdate(id, userData, {
+                new: true,
+                runValidators: true
+            })
+
+            if(data !== null){
+                return { data: { data }, statusCode: 201, msg: "Success" };
+            }else{
+                return { data: 'Error updating artisan account', statusCode: 401, msg: "Failure" };
+            }
+            
+        } catch (error: any) {
+            throw new Error(`Error editing artisan account: ${error.message}`);
         }
     },
 

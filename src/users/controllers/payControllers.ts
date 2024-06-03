@@ -195,6 +195,27 @@ const PayController = {
         }
     },
 
+    editArtisan: async (req: any, res: Response) => {
+        try {
+            if(req.body.userEmail != req.user.email){
+                res.status(400).json({ data: 'Authentication error', statusCode: 400, msg: "Failure" });
+            }
+
+            if(!checkIfArtisan(req.body.userEmail)){
+                res.status(400).json({ data: 'Not an artisan', statusCode: 400, msg: "Failure" });
+            }
+
+            const id = req.params.id;
+            const sendData = req.body;
+            const data = await PayService.editArtisan(id, sendData);
+            return res.status(data.statusCode).json(data);
+
+        } catch (error: any) {
+            console.log(error.message)
+            return res.status(500).json({ data: error.message, statusCode: 404, msg: "Failure" });
+        }
+    },
+
     deleteEdu: async (req: any, res: Response) => {
         try {
             if(!checkIfArtisan(req.body.userEmail)){
