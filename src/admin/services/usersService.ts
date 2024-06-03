@@ -31,8 +31,8 @@ const UsersService = {
             if (!existingUser || existingUser.length === 0) {
                 return { 
                     data: { existingUser, hasPreviousPage: false, previousPages: 0, hasNextPage: false, nextPages: 0 },  
-                    statusCode: 404, 
-                    msg: "Failure" 
+                    statusCode: 201, 
+                    msg: "Success"  
                 }
             }
             

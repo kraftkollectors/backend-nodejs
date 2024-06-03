@@ -29,8 +29,8 @@ const AdsService = {
             if (!existingAd || existingAd.length === 0) {
                 return { 
                     data: { existingAd, hasPreviousPage: false, previousPages: 0, hasNextPage: false, nextPages: 0 },  
-                    statusCode: 404, 
-                    msg: "Failure" 
+                    statusCode: 201, 
+                    msg: "Success"  
                 }
             }           
 
@@ -73,8 +73,8 @@ const AdsService = {
             if (!reports || reports.length === 0) {
                 return { 
                     data: { reports, hasPreviousPage: false, previousPages: 0, hasNextPage: false, nextPages: 0 },  
-                    statusCode: 404, 
-                    msg: "Failure" 
+                    statusCode: 201, 
+                    msg: "Success" 
                 }
             }           
 
@@ -160,8 +160,8 @@ const AdsService = {
             if (!existingAd || existingAd.length === 0) {
                 return { 
                     data: { existingAd, hasPreviousPage: false, previousPages: 0, hasNextPage: false, nextPages: 0 },  
-                    statusCode: 404, 
-                    msg: "Failure" 
+                    statusCode: 201, 
+                    msg: "Success"  
                 }
             }           
 

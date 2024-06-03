@@ -24,8 +24,8 @@ const AdsService = {
             if (!existingRecords || existingRecords.length === 0) {
                 return { 
                     data: { existingRecords, hasPreviousPage: false, previousPages: 0, hasNextPage: false, nextPages: 0 },  
-                    statusCode: 404, 
-                    msg: "Failure" 
+                    statusCode: 201, 
+                    msg: "Success" 
                 }
             }
 
@@ -96,8 +96,8 @@ const AdsService = {
             if (!existingRecords || existingRecords.length === 0) {
                 return { 
                     data: { existingRecords, hasPreviousPage: false, previousPages: 0, hasNextPage: false, nextPages: 0 },  
-                    statusCode: 404, 
-                    msg: "Failure" 
+                    statusCode: 201, 
+                    msg: "Success" 
                 }
             }
 
