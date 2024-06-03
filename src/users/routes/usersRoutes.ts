@@ -47,6 +47,7 @@ router.get("/myads/:userid", verifyToken, AdsController.getMyAd);
 router.get("/myads/cat/getcategory", verifyToken, AdsController.getcategory);
 router.post("/reportad", verifyToken, AdsController.createReport);
 router.post("/rateads", verifyToken, AdsController.rateAd);
+
 router.post("/savead", verifyToken, AdsController.saveAd);
 router.get("/getsavead/:userid", verifyToken, AdsController.getsavedAd);
 router.delete("/savead/:id", verifyToken, AdsController.deleteSavedAd);

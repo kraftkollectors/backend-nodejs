@@ -205,9 +205,9 @@ const PayController = {
                 res.status(400).json({ data: 'Not an artisan', statusCode: 400, msg: "Failure" });
             }
 
-            const id = req.params.id;
+            const userid = req.params.userid;
             const sendData = req.body;
-            const data = await PayService.editArtisan(id, sendData);
+            const data = await PayService.editArtisan(userid, sendData);
             return res.status(data.statusCode).json(data);
 
         } catch (error: any) {
