@@ -68,6 +68,10 @@ const ArtisanSchema = new Schema({
         type: Boolean,
         required: true
     },
+    awayMessage: {
+        type: Boolean,
+        required: true
+    },
     nin: {
         type: String,
         required: true

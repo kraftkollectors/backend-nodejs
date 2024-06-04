@@ -34,6 +34,7 @@ export interface UserDataArtisan {
     state: string,
     lga: string,
     areaOfSpecialization: string,
+    awayMessage: string,
     showContact: boolean,
     nin: string,
 }
