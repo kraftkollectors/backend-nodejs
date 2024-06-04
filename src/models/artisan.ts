@@ -56,7 +56,7 @@ const ArtisanSchema = new Schema({
         type: String,
         required: true
     },
-    lga: {
+    location: {
         type: String,
         required: true
     },

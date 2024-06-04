@@ -65,7 +65,7 @@ export interface UserDataAds {
     estimatedPrice: number,
     charge: string,
     state: string,
-    lga: string,
+    location: string,
     coverPhoto: string,
     category: string,
     subCategory: string,
