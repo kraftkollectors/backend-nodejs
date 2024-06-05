@@ -89,7 +89,7 @@ const AdsService = {
             const skip = resPerPage * (currentPageNum - 1)
 
             
-            const existingRecords = await savedAd.find({ userid }).lean()
+            const existingRecords = await savedAd.find({ userId: userid }).lean()
             .limit(resPerPage)
             .skip(skip)
 
@@ -148,7 +148,7 @@ const AdsService = {
             const skip = resPerPage * (currentPageNum - 1)
 
             
-            const existingRecords = await Ad.find({ userid, active: true })
+            const existingRecords = await Ad.find({ userId: userid, active: true })
             .limit(resPerPage)
             .skip(skip)
 
@@ -161,7 +161,7 @@ const AdsService = {
             }
 
             // Count the total number of documents
-            const totalDocuments = await Ad.countDocuments({ userid, active: true });
+            const totalDocuments = await Ad.countDocuments({ userId: userid, active: true });
 
             // Calculate the total number of pages
             const totalPages = Math.ceil(totalDocuments / resPerPage);
