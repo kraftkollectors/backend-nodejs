@@ -53,7 +53,7 @@ export function generateUploadURLs(files: Express.Multer.File[]): Promise<any[]>
                     console.error('Upload error:', error);
                     reject(error);
                 } else {
-                    resolve({ uploadUrl: result.secure_url, publicId: result.public_id });
+                    resolve({ uploadUrl: result.secure_url });
                 }
             });
 
