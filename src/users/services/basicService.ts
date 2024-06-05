@@ -33,7 +33,15 @@ const BasicService = {
 
             if (!user || user.length === 0) {
                 return { 
-                    data: { user, hasPreviousPage: false, previousPages: 0, hasNextPage: false, nextPages: 0 },  
+                    data: { 
+                        user, 
+                        hasPreviousPage: false, 
+                        previousPages: 0, 
+                        hasNextPage: false,      
+                        nextPages: 0,
+                        totalPages: 0,
+                        currentPage: currentPageNum
+                    },  
                     statusCode: 201, 
                     msg: "Success" 
                 }
@@ -55,7 +63,15 @@ const BasicService = {
                
 
             return { 
-                data: { user, hasPreviousPage, previousPages, hasNextPage, nextPages }, 
+                data: { 
+                    user, 
+                    hasPreviousPage, 
+                    previousPages, 
+                    hasNextPage, 
+                    nextPages,                    
+                    totalPages,
+                    currentPage: currentPageNum
+                }, 
                 statusCode: 201, 
                 msg: "Success" 
             }

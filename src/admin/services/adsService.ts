@@ -28,9 +28,17 @@ const AdsService = {
 
             if (!existingAd || existingAd.length === 0) {
                 return { 
-                    data: { existingAd, hasPreviousPage: false, previousPages: 0, hasNextPage: false, nextPages: 0 },  
+                    data: { 
+                        existingAd, 
+                        hasPreviousPage: false, 
+                        previousPages: 0, 
+                        hasNextPage: false,      
+                        nextPages: 0,
+                        totalPages: 0,
+                        currentPage: currentPageNum
+                    },  
                     statusCode: 201, 
-                    msg: "Success"  
+                    msg: "Success" 
                 }
             }           
 
@@ -50,7 +58,15 @@ const AdsService = {
                
 
             return { 
-                data: { existingAd, hasPreviousPage, previousPages, hasNextPage, nextPages }, 
+                data: { 
+                    existingAd, 
+                    hasPreviousPage, 
+                    previousPages, 
+                    hasNextPage, 
+                    nextPages,                    
+                    totalPages,
+                    currentPage: currentPageNum
+                }, 
                 statusCode: 201, 
                 msg: "Success" 
             }
@@ -72,7 +88,15 @@ const AdsService = {
 
             if (!reports || reports.length === 0) {
                 return { 
-                    data: { reports, hasPreviousPage: false, previousPages: 0, hasNextPage: false, nextPages: 0 },  
+                    data: { 
+                        reports, 
+                        hasPreviousPage: false, 
+                        previousPages: 0, 
+                        hasNextPage: false,      
+                        nextPages: 0,
+                        totalPages: 0,
+                        currentPage: currentPageNum
+                    },  
                     statusCode: 201, 
                     msg: "Success" 
                 }
@@ -107,7 +131,15 @@ const AdsService = {
             );                        
 
             return { 
-                data: { reportDetails, hasPreviousPage, previousPages, hasNextPage, nextPages }, 
+                data: { 
+                    reports, 
+                    hasPreviousPage, 
+                    previousPages, 
+                    hasNextPage, 
+                    nextPages,                    
+                    totalPages,
+                    currentPage: currentPageNum
+                }, 
                 statusCode: 201, 
                 msg: "Success" 
             }
@@ -159,9 +191,17 @@ const AdsService = {
 
             if (!existingAd || existingAd.length === 0) {
                 return { 
-                    data: { existingAd, hasPreviousPage: false, previousPages: 0, hasNextPage: false, nextPages: 0 },  
+                    data: { 
+                        existingAd, 
+                        hasPreviousPage: false, 
+                        previousPages: 0, 
+                        hasNextPage: false,      
+                        nextPages: 0,
+                        totalPages: 0,
+                        currentPage: currentPageNum
+                    },  
                     statusCode: 201, 
-                    msg: "Success"  
+                    msg: "Success" 
                 }
             }           
 
@@ -180,7 +220,15 @@ const AdsService = {
             const nextPages = totalPages - currentPageNum;
 
             return { 
-                data: { existingAd, hasPreviousPage, previousPages, hasNextPage, nextPages }, 
+                data: { 
+                    existingAd, 
+                    hasPreviousPage, 
+                    previousPages, 
+                    hasNextPage, 
+                    nextPages,                    
+                    totalPages,
+                    currentPage: currentPageNum
+                }, 
                 statusCode: 201, 
                 msg: "Success" 
             }

@@ -23,7 +23,15 @@ const AdsService = {
 
             if (!existingRecords || existingRecords.length === 0) {
                 return { 
-                    data: { existingRecords, hasPreviousPage: false, previousPages: 0, hasNextPage: false, nextPages: 0 },  
+                    data: { 
+                        existingRecords, 
+                        hasPreviousPage: false, 
+                        previousPages: 0, 
+                        hasNextPage: false,      
+                        nextPages: 0,
+                        totalPages: 0,
+                        currentPage: currentPageNum
+                    },  
                     statusCode: 201, 
                     msg: "Success" 
                 }
@@ -42,10 +50,19 @@ const AdsService = {
             // Calculate the number of previous and next pages available
             const previousPages = currentPageNum - 1;
             const nextPages = totalPages - currentPageNum;
-               
+            
+            
 
             return { 
-                data: { existingRecords, hasPreviousPage, previousPages, hasNextPage, nextPages }, 
+                data: { 
+                    existingRecords, 
+                    hasPreviousPage, 
+                    previousPages, 
+                    hasNextPage, 
+                    nextPages,                    
+                    totalPages,
+                    currentPage: currentPageNum
+                }, 
                 statusCode: 201, 
                 msg: "Success" 
             }
@@ -96,7 +113,15 @@ const AdsService = {
 
             if (!existingRecords || existingRecords.length === 0) {
                 return { 
-                    data: { existingRecords, hasPreviousPage: false, previousPages: 0, hasNextPage: false, nextPages: 0 },  
+                    data: { 
+                        existingRecords, 
+                        hasPreviousPage: false, 
+                        previousPages: 0, 
+                        hasNextPage: false,      
+                        nextPages: 0,
+                        totalPages: 0,
+                        currentPage: currentPageNum
+                    },  
                     statusCode: 201, 
                     msg: "Success" 
                 }
@@ -125,7 +150,15 @@ const AdsService = {
                
 
             return { 
-                data: { saved, hasPreviousPage, previousPages, hasNextPage, nextPages }, 
+                data: { 
+                    saved, 
+                    hasPreviousPage, 
+                    previousPages, 
+                    hasNextPage, 
+                    nextPages,                    
+                    totalPages,
+                    currentPage: currentPageNum
+                }, 
                 statusCode: 201, 
                 msg: "Success" 
             }
@@ -154,7 +187,15 @@ const AdsService = {
 
             if (!existingRecords || existingRecords.length === 0) {
                 return { 
-                    data: { existingRecords, hasPreviousPage: false, previousPages: 0, hasNextPage: false, nextPages: 0 },  
+                    data: { 
+                        existingRecords, 
+                        hasPreviousPage: false, 
+                        previousPages: 0, 
+                        hasNextPage: false,      
+                        nextPages: 0,
+                        totalPages: 0,
+                        currentPage: currentPageNum
+                    },  
                     statusCode: 201, 
                     msg: "Success" 
                 }
@@ -176,7 +217,15 @@ const AdsService = {
                
 
             return { 
-                data: { existingRecords, hasPreviousPage, previousPages, hasNextPage, nextPages }, 
+                data: { 
+                    existingRecords, 
+                    hasPreviousPage, 
+                    previousPages, 
+                    hasNextPage, 
+                    nextPages,                    
+                    totalPages,
+                    currentPage: currentPageNum
+                }, 
                 statusCode: 201, 
                 msg: "Success" 
             }
