@@ -58,11 +58,7 @@ const AdSchema = new Schema({
         default: ''
     },
     portfolio: {
-        type: [
-            'https:/',
-            'https:/',
-            'https:/'
-        ],
+        type: [],
         required: true
     },
     active: {
