@@ -27,7 +27,7 @@ const AdSchema = new Schema({
         required: true
     },
     charge: {
-        type: Number,
+        type: String,
         required: true
     },
     state: {
