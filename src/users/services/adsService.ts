@@ -85,9 +85,24 @@ const AdsService = {
 
             if (!existingRecord) {
                 return { data: 'No record found', statusCode: 404, msg: "Failure" };
-            }            
+            }
+            
+            // Extract the category and subcategory of the existing ad
+            const { category, subcategory } = existingRecord;
 
-            return { data: { existingRecord }, statusCode: 201, msg: "Success" };
+            // Create a query object to find similar ads
+            const query = {
+                $or: [
+                    { category: category },
+                    { subcategory: subcategory }
+                ],
+                _id: { $ne: id }
+            };
+
+            // Find 10 similar ads in the same category or subcategory, excluding the current ad
+            const similarAds = await Ad.find(query).limit(10);
+
+            return { data: { existingRecord, similarAds }, statusCode: 201, msg: "Success" };
         } catch (error: any) {
             throw new Error(`Error getting record: ${error.message}`);
         }
