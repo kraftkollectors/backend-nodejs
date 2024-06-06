@@ -24,7 +24,15 @@ const BasicService = {
 
             if (!admin || admin.length === 0) {
                 return { 
-                    data: { admin, hasPreviousPage: false, previousPages: 0, hasNextPage: false, nextPages: 0 },  
+                    data: { 
+                        admin, 
+                        hasPreviousPage: false, 
+                        previousPages: 0, 
+                        hasNextPage: false,      
+                        nextPages: 0,
+                        totalPages: 0,
+                        currentPage: currentPageNum
+                    },  
                     statusCode: 201, 
                     msg: "Success" 
                 }
@@ -46,7 +54,15 @@ const BasicService = {
                
 
             return { 
-                data: { admin, hasPreviousPage, previousPages, hasNextPage, nextPages }, 
+                data: { 
+                    admin, 
+                    hasPreviousPage, 
+                    previousPages, 
+                    hasNextPage, 
+                    nextPages,                    
+                    totalPages,
+                    currentPage: currentPageNum
+                }, 
                 statusCode: 201, 
                 msg: "Success" 
             }

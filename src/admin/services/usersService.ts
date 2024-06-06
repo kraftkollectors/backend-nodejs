@@ -30,9 +30,17 @@ const UsersService = {
 
             if (!existingUser || existingUser.length === 0) {
                 return { 
-                    data: { existingUser, hasPreviousPage: false, previousPages: 0, hasNextPage: false, nextPages: 0 },  
+                    data: { 
+                        existingUser, 
+                        hasPreviousPage: false, 
+                        previousPages: 0, 
+                        hasNextPage: false,      
+                        nextPages: 0,
+                        totalPages: 0,
+                        currentPage: currentPageNum
+                    },  
                     statusCode: 201, 
-                    msg: "Success"  
+                    msg: "Success" 
                 }
             }
             
@@ -52,7 +60,15 @@ const UsersService = {
                
 
             return { 
-                data: { existingUser, hasPreviousPage, previousPages, hasNextPage, nextPages }, 
+                data: { 
+                    existingUser, 
+                    hasPreviousPage, 
+                    previousPages, 
+                    hasNextPage, 
+                    nextPages,                    
+                    totalPages,
+                    currentPage: currentPageNum
+                }, 
                 statusCode: 201, 
                 msg: "Success" 
             }
