@@ -183,6 +183,73 @@ const AdsService = {
         }
     },
 
+    getrateAd: async (query: any, serviceId: string) => {
+        try {
+            const isValidId = mongoose.isValidObjectId(serviceId)
+
+            if(!isValidId){
+                return { data: 'Please enter a valid id', statusCode: 404, msg: "Failure" };
+            }
+
+            const resPerPage = 10
+            const currentPageNum = Number(query.page) || 1
+            const skip = resPerPage * (currentPageNum - 1)
+
+            
+            const existingRecords = await Review.find({ serviceId })
+            .limit(resPerPage)
+            .skip(skip)
+
+            if (!existingRecords || existingRecords.length === 0) {
+                return { 
+                    data: { 
+                        existingRecords, 
+                        hasPreviousPage: false, 
+                        previousPages: 0, 
+                        hasNextPage: false,      
+                        nextPages: 0,
+                        totalPages: 0,
+                        currentPage: currentPageNum
+                    },  
+                    statusCode: 201, 
+                    msg: "Success" 
+                }
+            }
+
+            // Count the total number of documents
+            const totalDocuments = await Ad.countDocuments({ serviceId });
+
+            // Calculate the total number of pages
+            const totalPages = Math.ceil(totalDocuments / resPerPage);
+
+            // Determine if there are previous and next pages
+            const hasPreviousPage = currentPageNum > 1;
+            const hasNextPage = currentPageNum < totalPages
+
+            // Calculate the number of previous and next pages available
+            const previousPages = currentPageNum - 1;
+            const nextPages = totalPages - currentPageNum;
+               
+
+            return { 
+                data: { 
+                    existingRecords, 
+                    hasPreviousPage, 
+                    previousPages, 
+                    hasNextPage, 
+                    nextPages,                    
+                    totalPages,
+                    currentPage: currentPageNum
+                }, 
+                statusCode: 201, 
+                msg: "Success" 
+            }
+
+        } catch (error: any) {
+            throw new Error(`Error getting records: ${error.message}`);
+        }
+    },
+
     getMyAd: async (query: any, userid: string) => {
         try {
             const isValidId = mongoose.isValidObjectId(userid)

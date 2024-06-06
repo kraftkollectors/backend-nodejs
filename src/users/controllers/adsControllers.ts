@@ -30,6 +30,19 @@ const AdsController = {
         }
     },
 
+    getrateAd: async (req: Request, res: Response) => {
+        try {
+            const serviceId = req.params.serviceid;
+            const query = req.query
+            const data = await AdsService.getrateAd(query, serviceId);
+            return res.status(data.statusCode).json(data);
+
+        } catch (error: any) {
+            console.log(error.message)
+            return res.status(500).json({ data: error.message, statusCode: 400, msg: "Failure" });
+        }
+    },
+
     getMyAd: async (req: any, res: Response) => {
         try {
             const userid = req.params.userid;
