@@ -139,10 +139,7 @@ const BasicController = {
                 return res.status(400).json({ error: 'Please portfolio files', statusCode: 401, msg: 'Failure' });
             }
     
-            const data: any = await generateUploadURLs(req.files);
-
-            console.log(data);
-            
+            const data: any = await generateUploadURLs(req.files);           
     
             if(!data){
                 return res.status(500).json({ error: 'error creating links', statusCode: 401, msg: 'Failure'})

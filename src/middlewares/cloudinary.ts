@@ -20,7 +20,9 @@ export function generateUploadURL(image: Express.Multer.File) {
         // Create a promise to resolve the upload result
         return new Promise((resolve, reject) => {
             // Create a stream from the buffer
-            const stream = cloudinaryV2.uploader.upload_stream((error: any, result: any) => {
+            const stream = cloudinaryV2.uploader.upload_stream(
+                { resource_type: 'auto' },
+                (error: any, result: any) => {
                 if (error) {
                     console.error('Upload error:', error);
                     reject(error); // Reject the promise if there's an error
@@ -48,7 +50,9 @@ export function generateUploadURLs(files: Express.Multer.File[]): Promise<any[]>
         return new Promise((resolve, reject) => {
             const bufferStream = streamifier.createReadStream(file.buffer);
 
-            const uploadStream = cloudinaryV2.uploader.upload_stream((error: any, result: any) => {
+            const uploadStream = cloudinaryV2.uploader.upload_stream(
+                { resource_type: 'auto' },
+                (error: any, result: any) => {
                 if (error) {
                     console.error('Upload error:', error);
                     reject(error);
