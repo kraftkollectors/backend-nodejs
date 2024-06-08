@@ -106,7 +106,7 @@ const AdsService = {
                 }
             ];
 
-            const result = await Rating.aggregate(pipeline).toArray();
+            const result = await Rating.aggregate(pipeline);
             if (result.length > 0) {
                 cummulativeRating = {
                     averageRating: result[0].averageRating,
@@ -132,7 +132,7 @@ const AdsService = {
 
             
 
-            return { data: { existingRecord: { ...existingRecord, similarAds, cummulativeRating } }, statusCode: 201, msg: "Success" };
+            return { data: { existingRecord: { ...existingRecord.toObject(), similarAds, cummulativeRating } }, statusCode: 201, msg: "Success" };
         } catch (error: any) {
             throw new Error(`Error getting record: ${error.message}`);
         }
