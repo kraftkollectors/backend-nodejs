@@ -29,7 +29,8 @@ const AdsService = {
             if (!existingAd || existingAd.length === 0) {
                 return { 
                     data: { 
-                        existingAd, 
+                        existingAd,
+                        totalDocuments: 0,
                         hasPreviousPage: false, 
                         previousPages: 0, 
                         hasNextPage: false,      
@@ -59,7 +60,8 @@ const AdsService = {
 
             return { 
                 data: { 
-                    existingAd, 
+                    existingAd,
+                    totalDocuments, 
                     hasPreviousPage, 
                     previousPages, 
                     hasNextPage, 
@@ -89,7 +91,8 @@ const AdsService = {
             if (!reports || reports.length === 0) {
                 return { 
                     data: { 
-                        reports, 
+                        reports,
+                        totalDocuments: 0, 
                         hasPreviousPage: false, 
                         previousPages: 0, 
                         hasNextPage: false,      
@@ -132,7 +135,8 @@ const AdsService = {
 
             return { 
                 data: { 
-                    reports, 
+                    reports,
+                    totalDocuments, 
                     hasPreviousPage, 
                     previousPages, 
                     hasNextPage, 
@@ -192,7 +196,8 @@ const AdsService = {
             if (!existingAd || existingAd.length === 0) {
                 return { 
                     data: { 
-                        existingAd, 
+                        existingAd,
+                        totalDocuments: 0, 
                         hasPreviousPage: false, 
                         previousPages: 0, 
                         hasNextPage: false,      
@@ -221,7 +226,8 @@ const AdsService = {
 
             return { 
                 data: { 
-                    existingAd, 
+                    existingAd,
+                    totalDocuments, 
                     hasPreviousPage, 
                     previousPages, 
                     hasNextPage, 

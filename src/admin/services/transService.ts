@@ -19,7 +19,8 @@ const transService = {
             if (!existingRecords || existingRecords.length === 0) {
                 return { 
                     data: { 
-                        existingRecords, 
+                        existingRecords,
+                        totalDocuments: 0, 
                         hasPreviousPage: false, 
                         previousPages: 0, 
                         hasNextPage: false,      
@@ -49,7 +50,8 @@ const transService = {
 
             return { 
                 data: { 
-                    existingRecords, 
+                    existingRecords,
+                    totalDocuments, 
                     hasPreviousPage, 
                     previousPages, 
                     hasNextPage, 
@@ -108,7 +110,8 @@ const transService = {
             if (!existingRecords || existingRecords.length === 0) {
                 return { 
                     data: { 
-                        existingRecords, 
+                        existingRecords,
+                        totalDocuments: 0, 
                         hasPreviousPage: false, 
                         previousPages: 0, 
                         hasNextPage: false,      
@@ -138,7 +141,8 @@ const transService = {
 
             return { 
                 data: { 
-                    existingRecords, 
+                    existingRecords,
+                    totalDocuments, 
                     hasPreviousPage, 
                     previousPages, 
                     hasNextPage, 

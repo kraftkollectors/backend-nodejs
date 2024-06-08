@@ -25,7 +25,8 @@ const BasicService = {
             if (!admin || admin.length === 0) {
                 return { 
                     data: { 
-                        admin, 
+                        admin,
+                        totalDocuments: 0, 
                         hasPreviousPage: false, 
                         previousPages: 0, 
                         hasNextPage: false,      
@@ -55,7 +56,8 @@ const BasicService = {
 
             return { 
                 data: { 
-                    admin, 
+                    admin,
+                    totalDocuments, 
                     hasPreviousPage, 
                     previousPages, 
                     hasNextPage, 

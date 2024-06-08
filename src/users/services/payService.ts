@@ -31,7 +31,8 @@ const PayService = {
             if (!existingRecords || existingRecords.length === 0) {
                 return { 
                     data: { 
-                        existingRecords, 
+                        existingRecords,
+                        totalDocuments: 0, 
                         hasPreviousPage: false, 
                         previousPages: 0, 
                         hasNextPage: false,      
@@ -61,7 +62,8 @@ const PayService = {
 
             return { 
                 data: { 
-                    existingRecords, 
+                    existingRecords,
+                    totalDocuments, 
                     hasPreviousPage, 
                     previousPages, 
                     hasNextPage, 
@@ -140,7 +142,8 @@ const PayService = {
             if (!existingRecords || existingRecords.length === 0) {
                 return { 
                     data: { 
-                        existingRecords, 
+                        existingRecords,
+                        totalDocuments: 0, 
                         hasPreviousPage: false, 
                         previousPages: 0, 
                         hasNextPage: false,      
@@ -170,7 +173,8 @@ const PayService = {
 
             return { 
                 data: { 
-                    existingRecords, 
+                    existingRecords,
+                    totalDocuments, 
                     hasPreviousPage, 
                     previousPages, 
                     hasNextPage, 
@@ -206,7 +210,8 @@ const PayService = {
             if (!existingRecords || existingRecords.length === 0) {
                 return { 
                     data: { 
-                        existingRecords, 
+                        existingRecords,
+                        totalDocuments: 0, 
                         hasPreviousPage: false, 
                         previousPages: 0, 
                         hasNextPage: false,      
@@ -236,7 +241,8 @@ const PayService = {
 
             return { 
                 data: { 
-                    existingRecords, 
+                    existingRecords,
+                    totalDocuments, 
                     hasPreviousPage, 
                     previousPages, 
                     hasNextPage, 

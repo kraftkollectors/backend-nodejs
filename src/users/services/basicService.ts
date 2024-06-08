@@ -35,6 +35,7 @@ const BasicService = {
                 return { 
                     data: { 
                         user, 
+                        totalDocuments: 0,
                         hasPreviousPage: false, 
                         previousPages: 0, 
                         hasNextPage: false,      
@@ -65,6 +66,7 @@ const BasicService = {
             return { 
                 data: { 
                     user, 
+                    totalDocuments,
                     hasPreviousPage, 
                     previousPages, 
                     hasNextPage, 

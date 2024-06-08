@@ -3,6 +3,7 @@ dotenv.config();
 import Ad from '../../models/ads'
 import Category from '../../models/category'
 import SubCategory from '../../models/subcategory'
+import Rating from '../../models/reviews'
 import Report from '../../models/report'
 import savedAd from '../../models/saveAds'
 import mongoose from 'mongoose';
@@ -25,6 +26,7 @@ const AdsService = {
                 return { 
                     data: { 
                         existingRecords, 
+                        totalDocuments: 0,
                         hasPreviousPage: false, 
                         previousPages: 0, 
                         hasNextPage: false,      
@@ -55,7 +57,8 @@ const AdsService = {
 
             return { 
                 data: { 
-                    existingRecords, 
+                    existingRecords,
+                    totalDocuments, 
                     hasPreviousPage, 
                     previousPages, 
                     hasNextPage, 
@@ -75,6 +78,10 @@ const AdsService = {
     getSingleAd: async (id: string) => {
         try {
             const isValidId = mongoose.isValidObjectId(id)
+            let cummulativeRating = {
+                averageRating: 0,
+                totalRatings: 0
+            }
 
             if(!isValidId){
                 return { data: 'Please enter a correct id', statusCode: 404, msg: "Failure" };
@@ -86,6 +93,27 @@ const AdsService = {
             if (!existingRecord) {
                 return { data: 'No record found', statusCode: 404, msg: "Failure" };
             }
+
+            // get the cummulative number of rating
+            const pipeline = [
+                { $match: { serviceId: id } },
+                {
+                  $group: {
+                    _id: "$serviceId",
+                    averageRating: { $avg: "$rating" },
+                    totalRatings: { $sum: 1 }
+                  }
+                }
+            ];
+
+            const result = await Rating.aggregate(pipeline).toArray();
+            if (result.length > 0) {
+                cummulativeRating = {
+                    averageRating: result[0].averageRating,
+                    totalRatings: result[0].totalRatings
+                }
+            }
+            
             
             // Extract the category and subcategory of the existing ad
             const { category, subcategory } = existingRecord;
@@ -102,7 +130,9 @@ const AdsService = {
             // Find 10 similar ads in the same category or subcategory, excluding the current ad
             const similarAds = await Ad.find(query).limit(10);
 
-            return { data: { existingRecord, similarAds }, statusCode: 201, msg: "Success" };
+            
+
+            return { data: { existingRecord: { ...existingRecord, similarAds, cummulativeRating } }, statusCode: 201, msg: "Success" };
         } catch (error: any) {
             throw new Error(`Error getting record: ${error.message}`);
         }
@@ -130,6 +160,7 @@ const AdsService = {
                 return { 
                     data: { 
                         existingRecords, 
+                        totalDocuments: 0,
                         hasPreviousPage: false, 
                         previousPages: 0, 
                         hasNextPage: false,      
@@ -167,6 +198,7 @@ const AdsService = {
             return { 
                 data: { 
                     saved, 
+                    totalDocuments,
                     hasPreviousPage, 
                     previousPages, 
                     hasNextPage, 
@@ -204,6 +236,7 @@ const AdsService = {
                 return { 
                     data: { 
                         existingRecords, 
+                        totalDocuments: 0,
                         hasPreviousPage: false, 
                         previousPages: 0, 
                         hasNextPage: false,      
@@ -233,7 +266,8 @@ const AdsService = {
 
             return { 
                 data: { 
-                    existingRecords, 
+                    existingRecords,
+                    totalDocuments, 
                     hasPreviousPage, 
                     previousPages, 
                     hasNextPage, 
@@ -270,7 +304,8 @@ const AdsService = {
             if (!existingRecords || existingRecords.length === 0) {
                 return { 
                     data: { 
-                        existingRecords, 
+                        existingRecords,
+                        totalDocuments: 0, 
                         hasPreviousPage: false, 
                         previousPages: 0, 
                         hasNextPage: false,      
@@ -300,7 +335,8 @@ const AdsService = {
 
             return { 
                 data: { 
-                    existingRecords, 
+                    existingRecords,
+                    totalDocuments, 
                     hasPreviousPage, 
                     previousPages, 
                     hasNextPage, 

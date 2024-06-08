@@ -31,7 +31,8 @@ const UsersService = {
             if (!existingUser || existingUser.length === 0) {
                 return { 
                     data: { 
-                        existingUser, 
+                        existingUser,
+                        totalDocuments: 0, 
                         hasPreviousPage: false, 
                         previousPages: 0, 
                         hasNextPage: false,      
@@ -61,7 +62,8 @@ const UsersService = {
 
             return { 
                 data: { 
-                    existingUser, 
+                    existingUser,
+                    totalDocuments, 
                     hasPreviousPage, 
                     previousPages, 
                     hasNextPage, 
