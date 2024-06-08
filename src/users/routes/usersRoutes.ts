@@ -44,7 +44,7 @@ router.post("/geturls", upload.array('files', 5), BasicController.getURLS);
 
 // Authenticated Routes
 // users
-router.get("/dashboard/:userid", verifyToken, DashController.getUser);
+router.get("/dashboard/:userid", DashController.getUser);
 router.patch("/dashboard/profile/:userid", verifyToken, DashController.editUser);
 router.patch("/dashboard/password/:userid", verifyToken, DashController.editUserPassword);
 
@@ -53,40 +53,40 @@ router.post("/ads", verifyToken, AdsController.postAd);
 router.patch("/ads/:id", verifyToken, AdsController.editAd);
 router.patch("/ads/edit/:id", verifyToken, AdsController.enableDisableAd);
 router.delete("/ads/:id", verifyToken, AdsController.deleteAd);
-router.get("/ads", verifyToken, AdsController.getAllAd);
-router.get("/ads/:id", verifyToken, AdsController.getSingleAd);
-router.get("/myads/:userid", verifyToken, AdsController.getMyAd);
-router.get("/myads/cat/getcategory", verifyToken, AdsController.getcategory);
+router.get("/ads", AdsController.getAllAd);
+router.get("/ads/:id", AdsController.getSingleAd);
+router.get("/myads/:userid", AdsController.getMyAd);
+router.get("/myads/cat/getcategory", AdsController.getcategory);
 router.post("/reportad", verifyToken, AdsController.createReport);
 router.post("/rateads", verifyToken, AdsController.rateAd);
-router.get("/rateads/:serviceid", verifyToken, AdsController.getrateAd);
+router.get("/rateads/:serviceid", AdsController.getrateAd);
 
 router.post("/savead", verifyToken, AdsController.saveAd);
-router.get("/getsavead/:userid", verifyToken, AdsController.getsavedAd);
+router.get("/getsavead/:userid", AdsController.getsavedAd);
 router.delete("/savead/:id", verifyToken, AdsController.deleteSavedAd);
 
 
 // become an artisan
 router.post("/artisan", verifyToken, PayController.becomeArtisan);
-router.get("/artisan/:userid", verifyToken, PayController.getAccount);
+router.get("/artisan/:userid", PayController.getAccount);
 router.patch("/artisan/:userid", verifyToken, PayController.editArtisan);
 
 router.post("/certificate", verifyToken, PayController.createCert);
-router.get("/certificate/user/:userid", verifyToken, PayController.getUserCert);
-router.get("/certificate/single/:id", verifyToken, PayController.getSingleCert);
+router.get("/certificate/user/:userid", PayController.getUserCert);
+router.get("/certificate/single/:id", PayController.getSingleCert);
 router.patch("/certificate/:id", verifyToken, PayController.editCert);
 router.delete("/certificate/:id", verifyToken, PayController.deleteCert);
 
 router.post("/education", verifyToken, PayController.createEdu);
-router.get("/education/user/:userid", verifyToken, PayController.getUserEdu);
-router.get("/education/single/:id", verifyToken, PayController.getSingleEdu);
+router.get("/education/user/:userid", PayController.getUserEdu);
+router.get("/education/single/:id", PayController.getSingleEdu);
 router.patch("/education/:id", verifyToken, PayController.editEdu);
 router.delete("/education/:id", verifyToken, PayController.deleteEdu);
 
 
 // payment and transaction history
 router.post("/pay", verifyToken, PayController.makePayment);
-router.get("/pay/:userid", verifyToken, PayController.getAllUserPayment);
+router.get("/pay/:userid", PayController.getAllUserPayment);
 
 
 export default router;
