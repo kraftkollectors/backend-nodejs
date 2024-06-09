@@ -138,6 +138,30 @@ const AdsService = {
         }
     },
 
+    checkSavedAd: async (query: any) => {
+        try {
+            const existingRecords = await savedAd.find({ userId: query.userid, serviceId: query.serviceId })
+
+            if (!existingRecords || existingRecords.length === 0) {
+                return { 
+                    data: false,  
+                    statusCode: 201, 
+                    msg: "Success" 
+                }
+            }else{
+                return { 
+                    data: true,  
+                    statusCode: 201, 
+                    msg: "Success" 
+                }
+            }
+
+        } catch (error: any) {
+            throw new Error(`Error checking records: ${error.message}`);
+        }
+    },
+
+
     getsavedAd: async (query: any, userid: string) => {
         try {
             const isValidId = mongoose.isValidObjectId(userid)

@@ -63,6 +63,7 @@ router.get("/rateads/:serviceid", AdsController.getrateAd);
 
 router.post("/savead", verifyToken, AdsController.saveAd);
 router.get("/getsavead/:userid", AdsController.getsavedAd);
+router.get("/checksavead", AdsController.checkSavedAd);
 router.delete("/savead/:id", verifyToken, AdsController.deleteSavedAd);
 
 

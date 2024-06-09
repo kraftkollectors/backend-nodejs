@@ -69,6 +69,18 @@ const AdsController = {
         }
     },
 
+    checkSavedAd: async (req: any, res: Response) => {
+        try {
+            const query = req.query
+            const data = await AdsService.checkSavedAd(query);
+            return res.status(data.statusCode).json(data);
+
+        } catch (error: any) {
+            console.log(error.message)
+            return res.status(500).json({ data: error.message, statusCode: 400, msg: "Failure" });
+        }
+    },
+
     getcategory: async (req: any, res: Response) => {
         try {
             const data = await AdsService.getcategory();
