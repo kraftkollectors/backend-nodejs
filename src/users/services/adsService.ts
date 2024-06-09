@@ -140,6 +140,11 @@ const AdsService = {
 
     checkSavedAd: async (query: any) => {
         try {
+
+            if(!query.userId && !query.serviceIdId){
+                return { data: 'Please enter valid user and service id', statusCode: 404, msg: "Failure" };
+            }
+
             const existingRecords = await savedAd.find({ userId: query.userid, serviceId: query.serviceId })
 
             if (!existingRecords || existingRecords.length === 0) {
