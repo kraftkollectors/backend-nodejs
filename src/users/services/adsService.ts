@@ -141,6 +141,9 @@ const AdsService = {
     checkSavedAd: async (query: any) => {
         try {
 
+            console.log(query);
+            
+
             if(!query.userid && !query.serviceid){
                 return { data: 'Please enter valid user and service id', statusCode: 404, msg: "Failure" };
             }
