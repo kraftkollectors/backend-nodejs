@@ -229,7 +229,7 @@ const AdsService = {
 
             return { 
                 data: { 
-                    saved, 
+                    existingRecords: saved, 
                     totalDocuments,
                     hasPreviousPage, 
                     previousPages, 
