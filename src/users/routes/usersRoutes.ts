@@ -65,7 +65,7 @@ router.get("/userreviews/:userid", AdsController.getUserReviews);
 router.post("/savead", verifyToken, AdsController.saveAd);
 router.get("/getsavead/:userid", AdsController.getsavedAd);
 router.get("/checksavead", AdsController.checkSavedAd);
-router.delete("/savead/:id", verifyToken, AdsController.deleteSavedAd);
+router.delete("/savead", verifyToken, AdsController.deleteSavedAd);
 
 
 // become an artisan

@@ -111,8 +111,8 @@ const AdsController = {
                 res.status(400).json({ data: 'Not an artisan', statusCode: 400, msg: "Failure" });
             }
 
-            const id = req.params.id;
-            const data = await AdsService.deleteSavedAd(id);
+            const query = req.query
+            const data = await AdsService.deleteSavedAd(query);
             return res.status(data.statusCode).json(data);
 
         } catch (error: any) {

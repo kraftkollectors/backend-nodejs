@@ -141,9 +141,6 @@ const AdsService = {
     checkSavedAd: async (query: any) => {
         try {
 
-            console.log(query);
-            
-
             if(!query.userid && !query.serviceid){
                 return { data: 'Please enter valid user and service id', statusCode: 404, msg: "Failure" };
             }
@@ -476,16 +473,14 @@ const AdsService = {
         }
     },
 
-    deleteSavedAd: async (id: string) => {
+    deleteSavedAd: async (query: any) => {
         try {
-            const isValidId = mongoose.isValidObjectId(id)
-
-            if(!isValidId){
-                return { data: 'Please enter a valid id', statusCode: 404, msg: "Failure" };
+            if(!query.userid && !query.serviceid){
+                return { data: 'Please enter valid user and service id', statusCode: 404, msg: "Failure" };
             }
 
             // Check if the email already exists
-            await savedAd.findByIdAndDelete(id)          
+            await savedAd.deleteOne({ userId: query.userid, serviceId: query.serviceid })          
 
             return { data: 'Record deleted', statusCode: 201, msg: "Success" };
         } catch (error: any) {
