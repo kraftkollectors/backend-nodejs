@@ -9,66 +9,13 @@ import savedAd from '../../models/saveAds'
 import mongoose from 'mongoose';
 import { UserDataAds, UserDataReport } from '../../types/user/defaultTypes';
 import Review from '../../models/reviews';
+import { getFilteredAds } from '../../middlewares/calculateBound';
 
 
 const AdsService = {
     getAllAd: async (query: any) => {
         try {
-            const resPerPage = 10
-            const currentPageNum = Number(query.page) || 1
-            const skip = resPerPage * (currentPageNum - 1)
-
-            const existingRecords = await Ad.find({ active: true })
-            .limit(resPerPage)
-            .skip(skip)
-
-            if (!existingRecords || existingRecords.length === 0) {
-                return { 
-                    data: { 
-                        existingRecords, 
-                        totalDocuments: 0,
-                        hasPreviousPage: false, 
-                        previousPages: 0, 
-                        hasNextPage: false,      
-                        nextPages: 0,
-                        totalPages: 0,
-                        currentPage: currentPageNum
-                    },  
-                    statusCode: 201, 
-                    msg: "Success" 
-                }
-            }
-
-            // Count the total number of documents
-            const totalDocuments = await Ad.countDocuments({ active: true });
-
-            // Calculate the total number of pages
-            const totalPages = Math.ceil(totalDocuments / resPerPage);
-
-            // Determine if there are previous and next pages
-            const hasPreviousPage = currentPageNum > 1;
-            const hasNextPage = currentPageNum < totalPages
-
-            // Calculate the number of previous and next pages available
-            const previousPages = currentPageNum - 1;
-            const nextPages = (totalPages - currentPageNum) < 0 ? 0 : totalPages - currentPageNum;
-            
-            
-
-            return { 
-                data: { 
-                    existingRecords,
-                    totalDocuments, 
-                    hasPreviousPage, 
-                    previousPages, 
-                    hasNextPage, 
-                    nextPages,                    
-                    totalPages,
-                    currentPage: currentPageNum
-                }, 
-                statusCode: 201, 
-                msg: "Success" 
-            }
+            return await getFilteredAds(query)
 
         } catch (error: any) {
             throw new Error(`Error getting records: ${error.message}`);
@@ -608,6 +555,17 @@ const AdsService = {
         try {
             const review = await new Review({ ...userData }).save();
             if(review !== null){
+                const data = await Ad.find({ _id: userData.serviceId })
+                let newRating: Number = data.rating
+
+                await Ad.updateOne({ _id: data._id }, 
+                    {
+                        $set:{
+                            rating: newRating
+                        }
+                    }
+                )
+
                 return { data: { review }, statusCode: 201, msg: "Success" };
             }else{
                 return { data: 'Error creating review', statusCode: 401, msg: "Failure" };

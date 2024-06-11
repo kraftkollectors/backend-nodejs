@@ -66,6 +66,11 @@ const AdSchema = new Schema({
         type: Boolean,
         required: true
     },
+    rating: {
+        default: 0,
+        type: Number,
+        required: false
+    },
 }, { timestamps: true })
 
 
