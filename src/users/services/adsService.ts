@@ -260,7 +260,7 @@ const AdsService = {
             const skip = resPerPage * (currentPageNum - 1)
 
             
-            const existingRecords = await Review.find({ userId })
+            const existingRecords = await Review.find({ ownerId: userId })
             .limit(resPerPage)
             .skip(skip)
 
@@ -282,7 +282,7 @@ const AdsService = {
             }
 
             // Count the total number of documents
-            const totalDocuments = await Review.countDocuments({ userId });
+            const totalDocuments = await Review.countDocuments({ ownerId: userId });
 
             // Calculate the total number of pages
             const totalPages = Math.ceil(totalDocuments / resPerPage);
