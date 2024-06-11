@@ -61,6 +61,7 @@ router.post("/reportad", verifyToken, AdsController.createReport);
 router.post("/rateads", verifyToken, AdsController.rateAd);
 router.get("/rateads/:serviceid", AdsController.getrateAd);
 router.get("/userreviews/:userid", AdsController.getUserReviews);
+router.get("/userreviewscount/:userid", AdsController.getUserReviewsCount);
 
 router.post("/savead", verifyToken, AdsController.saveAd);
 router.get("/getsavead/:userid", AdsController.getsavedAd);
