@@ -152,7 +152,7 @@ const AdsService = {
 
             if (!existingRecords || existingRecords.length === 0) {
                 return { 
-                    data: [],  
+                    data: false,  
                     statusCode: 201, 
                     msg: "Success" 
                 }
@@ -191,7 +191,7 @@ const AdsService = {
             if (!existingRecords || existingRecords.length === 0) {
                 return { 
                     data: { 
-                        existingRecords, 
+                        existingRecords: [], 
                         totalDocuments: 0,
                         hasPreviousPage: false, 
                         previousPages: 0, 
