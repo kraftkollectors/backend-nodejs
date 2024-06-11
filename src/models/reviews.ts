@@ -2,11 +2,15 @@ import mongoose from "mongoose"
 const Schema: any = mongoose.Schema
 
 const ReviewSchema = new Schema({
+    ownerId: {
+        type: String,
+        required: true
+    },
     serviceId: {
         type: String,
         required: true
     },
-    userId: {
+    reviewerId: {
         type: String,
         required: true
     },
