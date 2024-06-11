@@ -55,7 +55,7 @@ const AdsService = {
 
             // Calculate the number of previous and next pages available
             const previousPages = currentPageNum - 1;
-            const nextPages = totalPages - currentPageNum;
+            const nextPages = (totalPages - currentPageNum) < 0 ? 0 : totalPages - currentPageNum;
                
 
             return { 
@@ -117,7 +117,7 @@ const AdsService = {
 
             // Calculate the number of previous and next pages available
             const previousPages = currentPageNum - 1;
-            const nextPages = totalPages - currentPageNum;
+            const nextPages = (totalPages - currentPageNum) < 0 ? 0 : totalPages - currentPageNum;
 
             // Fetch user details for each report
             const reportDetails = await Promise.all(
@@ -222,7 +222,7 @@ const AdsService = {
             
             // Calculate the number of previous and next pages available
             const previousPages = currentPageNum - 1;
-            const nextPages = totalPages - currentPageNum;
+            const nextPages = (totalPages - currentPageNum) < 0 ? 0 : totalPages - currentPageNum;
 
             return { 
                 data: { 

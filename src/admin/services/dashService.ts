@@ -74,7 +74,7 @@ const DashService = {
 
             // Calculate the number of previous and next pages available
             const previousPages = currentPageNum - 1;
-            const nextPages = totalPages - currentPageNum;
+            const nextPages = (totalPages - currentPageNum) < 0 ? 0 : totalPages - currentPageNum;
                
 
             return { 
@@ -158,7 +158,7 @@ const DashService = {
 
             // Calculate the number of previous and next pages available
             const previousPages = currentPageNum - 1;
-            const nextPages = totalPages - currentPageNum;
+            const nextPages = (totalPages - currentPageNum) < 0 ? 0 : totalPages - currentPageNum;
                
 
             return { 

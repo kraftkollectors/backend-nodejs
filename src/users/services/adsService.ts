@@ -51,7 +51,7 @@ const AdsService = {
 
             // Calculate the number of previous and next pages available
             const previousPages = currentPageNum - 1;
-            const nextPages = totalPages - currentPageNum;
+            const nextPages = (totalPages - currentPageNum) < 0 ? 0 : totalPages - currentPageNum;
             
             
 
@@ -152,12 +152,12 @@ const AdsService = {
 
             if (!existingRecords || existingRecords.length === 0) {
                 return { 
-                    data: false,  
+                    data: [],  
                     statusCode: 201, 
                     msg: "Success" 
                 }
             }else{
-                return { 
+                return {
                     data: true,  
                     statusCode: 201, 
                     msg: "Success" 
@@ -213,7 +213,7 @@ const AdsService = {
 
 
             // Count the total number of documents
-            const totalDocuments = await Ad.countDocuments({ userid, active: true });
+            const totalDocuments = await savedAd.countDocuments({ userId: userid });
 
             // Calculate the total number of pages
             const totalPages = Math.ceil(totalDocuments / resPerPage);
@@ -224,7 +224,7 @@ const AdsService = {
 
             // Calculate the number of previous and next pages available
             const previousPages = currentPageNum - 1;
-            const nextPages = totalPages - currentPageNum;
+            const nextPages = (totalPages - currentPageNum) < 0 ? 0 : totalPages - currentPageNum;
                
 
             return { 
@@ -293,7 +293,7 @@ const AdsService = {
 
             // Calculate the number of previous and next pages available
             const previousPages = currentPageNum - 1;
-            const nextPages = totalPages - currentPageNum;
+            const nextPages = (totalPages - currentPageNum) < 0 ? 0 : totalPages - currentPageNum;
                
 
             return { 
@@ -362,7 +362,7 @@ const AdsService = {
 
             // Calculate the number of previous and next pages available
             const previousPages = currentPageNum - 1;
-            const nextPages = totalPages - currentPageNum;
+            const nextPages = (totalPages - currentPageNum) < 0 ? 0 : totalPages - currentPageNum;
                
 
             return { 
