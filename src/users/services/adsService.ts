@@ -508,6 +508,12 @@ const AdsService = {
 
     saveAd: async (userData: any) => {
         try {
+            const checkAd = await savedAd.find({ userId: userData.userId, serviceId: userData.serviceId })
+
+            if (checkAd || checkAd.length !== 0) {
+                return { data: 'Ad already saved', statusCode: 401, msg: "Failure" };
+            }
+
             const saved = await new savedAd({ ...userData }).save();
             if(saved !== null){
                 return { data: { saved }, statusCode: 201, msg: "Success" };
