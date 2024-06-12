@@ -29,8 +29,8 @@ export async function getFilteredAds(data: any) {
       query.category = data.category;
     }
   
-    if (data.subcategory) {
-      query.subcategory = data.subcategory;
+    if (data.subCategory) {
+      query.subCategory = data.subCategory;
     }
   
     if (data.minPrice) {

@@ -76,6 +76,11 @@ const ArtisanSchema = new Schema({
         type: String,
         required: true
     },
+    available: {
+        type: Boolean,
+        required: false,
+        default: true
+    },
 }, { timestamps: true })
 
 
