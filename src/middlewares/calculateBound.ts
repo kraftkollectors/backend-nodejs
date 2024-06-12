@@ -24,12 +24,8 @@ function getBoundingBox(latitude: any, longitude: any, radiusInKm: any) {
 export async function getFilteredAds(data: any) {
     const query: any = { active: true };
     let page: any = data.page ? data.page : 1
-
-    console.log('data', data);
   
-    if (data.q) {
-      console.log('searched', data.q);
-      
+    if (data.q) {      
       query.title = { $regex: data.q, $options: 'i' };
     }
 
