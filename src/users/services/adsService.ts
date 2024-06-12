@@ -193,47 +193,57 @@ const AdsService = {
 
     getUserReviewsCount: async (userId: string) => {
         try {
-            const isValidId = mongoose.isValidObjectId(userId)
-
-            if(!isValidId){
+            const isValidId = mongoose.isValidObjectId(userId);
+    
+            if (!isValidId) {
                 return { data: 'Please enter a valid id', statusCode: 404, msg: "Failure" };
             }
-
-            // Aggregate ratings count for the specified serviceId
-            const ratingCounts = await Review.aggregate([
+    
+            // Aggregate ratings count and sum of ratings for the specified userId
+            const ratingData = await Review.aggregate([
                 { $match: { ownerId: userId } },
-                { $group: { _id: "$rating", count: { $sum: 1 } } }
+                {
+                    $group: {
+                        _id: "$rating",
+                        count: { $sum: 1 },
+                        sumRating: { $sum: "$rating" }
+                    }
+                }
             ]);
-
+    
             // Convert the aggregation result to a more readable format
             const ratingCountsMap: any = {};
-            ratingCounts.forEach((item: any) => {
+            let totalSumRating = 0;
+            ratingData.forEach((item: any) => {
                 ratingCountsMap[item._id] = item.count;
+                totalSumRating += item.sumRating;
             });
-
+    
             // Ensure all rating values (1-5) are present in the map, even if the count is 0
             for (let i = 1; i <= 5; i++) {
                 if (!ratingCountsMap[i]) {
                     ratingCountsMap[i] = 0;
                 }
             }
-
+    
             // Get cumulative count of ratings
-            const totalRatings = await Rating.countDocuments({ ownerId: userId });
-
-            return { 
-                data: { 
-                    totalRatings, 
+            const totalRatings = await Review.countDocuments({ ownerId: userId });
+    
+            return {
+                data: {
+                    totalRatings,
                     ratingCounts: ratingCountsMap,
-                },  
-                statusCode: 201, 
-                msg: "Success" 
+                    sumRating: totalSumRating
+                },
+                statusCode: 201,
+                msg: "Success"
             }
-
+    
         } catch (error: any) {
             throw new Error(`Error getting records: ${error.message}`);
         }
     },
+   
 
     getUserReviews: async (query: any, userId: string) => {
         try {
