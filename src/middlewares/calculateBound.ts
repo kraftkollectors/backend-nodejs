@@ -24,9 +24,13 @@ function getBoundingBox(latitude: any, longitude: any, radiusInKm: any) {
 export async function getFilteredAds(data: any) {
     const query: any = { active: true };
     let page: any = data.page ? data.page : 1
+
+    console.log('data', data);
   
     if (data.q) {
-      query.q = { title: { $regex: data.q, $options: 'i' }  }
+      console.log('searched', data.q);
+      
+      query.title = { $regex: data.q, $options: 'i' };
     }
 
     if (data.category) {
@@ -107,4 +111,4 @@ export async function getFilteredAds(data: any) {
         statusCode: 201, 
         msg: "Success" 
     };
-  }
+}
