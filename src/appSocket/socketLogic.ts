@@ -6,6 +6,8 @@ const userRooms = new Map();
 const mySocket = (io: any) => {
     // run when a client connects
     io.on('connection', (socket: any) => {
+        console.log('connected');
+        
 
         // Listen for room joining request
         socket.on('joinRoom', (data: { userId: string, roomId: string }) => {
