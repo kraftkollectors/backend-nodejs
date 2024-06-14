@@ -317,9 +317,9 @@ const PayService = {
 
             const check = await Artisan.findOne({ userId: userData.userId })
 
-            if (check) {
-                return { data: 'account already an artisan', statusCode: 401, msg: "Failure" };
-            }
+            // if (check) {
+            //     return { data: 'account already an artisan', statusCode: 401, msg: "Failure" };
+            // }
 
             let nin = await veriNIN(userData.nin)
             let lastNineCharacters = userData.phoneNumber.slice(-9);
