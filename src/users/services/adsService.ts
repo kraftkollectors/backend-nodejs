@@ -89,6 +89,14 @@ const AdsService = {
         try {
 
             if(!query.userid && !query.serviceid){
+                return { data: 'Please enter user and service id', statusCode: 404, msg: "Failure" };
+            }
+
+            // Validate the user IDs
+            const isValidUserId = mongoose.isValidObjectId(query.userid);
+            const isValidServiceId = mongoose.isValidObjectId(query.serviceid);
+
+            if (!isValidUserId || !isValidServiceId) {
                 return { data: 'Please enter valid user and service id', statusCode: 404, msg: "Failure" };
             }
 

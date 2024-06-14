@@ -3,6 +3,7 @@ import BasicController from '../controllers/basicControllers';
 import DashController from '../controllers/dashControllers';
 import AdsController from '../controllers/adsControllers';
 import PayController from '../controllers/payControllers';
+import ChatController from '../controllers/chatControllers';
 import multer from 'multer'
 import verifyToken from '../../middlewares/auth'
 
@@ -90,6 +91,10 @@ router.delete("/education/:id", verifyToken, PayController.deleteEdu);
 // payment and transaction history
 router.post("/pay", verifyToken, PayController.makePayment);
 router.get("/pay/:userid", PayController.getAllUserPayment);
+
+// chats
+router.get("/chatheads/:userid", verifyToken, ChatController.getAllUserChatHeads);
+router.get("/chat", verifyToken, ChatController.getMessage);
 
 
 export default router;
