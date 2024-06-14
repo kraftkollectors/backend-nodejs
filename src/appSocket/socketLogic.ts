@@ -7,7 +7,7 @@ const mySocket = (io: any) => {
     // run when a client connects
     io.on('connection', (socket: any) => {
         console.log('connected');
-        
+        socket.emit('connected', { message: 'Welcome! You are connected.' });       
 
         // Listen for room joining request
         socket.on('joinRoom', (data: { userId: string, roomId: string }) => {
