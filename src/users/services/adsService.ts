@@ -583,7 +583,8 @@ const AdsService = {
         try {
             const checkAd = await savedAd.find({ userId: userData.userId, serviceId: userData.serviceId })
 
-            if (checkAd || checkAd.length !== 0) {
+            // Check if any ads were found
+            if (checkAd.length !== 0) {
                 return { data: 'Ad already saved', statusCode: 401, msg: "Failure" };
             }
 
