@@ -49,8 +49,14 @@ const startServer = async () => {
     })
 
     // get socket connection and send to socket file
-    const io = socket(server)
-    mySocket(io)
+    // Initialize socket.io with CORS settings
+    const io = socket(server, {
+        cors: {
+            origin: '*',
+            methods: ['GET', 'POST']
+        }
+    });
+    mySocket(io);
 
     app.use('/users', usersRoutes)
     app.use('/admin', adminRoutes)
