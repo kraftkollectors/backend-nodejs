@@ -7,9 +7,8 @@ const ChatController = {
 
     getAllUserChatHeads: async (req: Request, res: Response) => {
         try {
-            const query = req.query
             const userid = req.params.userid;
-            const data = await ChatService.getAllUserChatHeads(userid, query);
+            const data = await ChatService.getAllUserChatHeads(userid);
             return res.status(data.statusCode).json(data);
 
         } catch (error: any) {

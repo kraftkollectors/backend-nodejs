@@ -6,7 +6,7 @@ import mongoose from 'mongoose';
 
 
 const ChatService = {
-    getAllUserChatHeads: async (userid: string, query: any) => {
+    getAllUserChatHeads: async (userid: string) => {
         try {
             // check if id is a valid mongoose id
             const isValidId = mongoose.isValidObjectId(userid)
@@ -15,30 +15,19 @@ const ChatService = {
                 return { data: 'Please enter a correct id', statusCode: 404, msg: "Failure" };
             }
 
-            const resPerPage = 15
-            const currentPageNum = Number(query.page) || 1
-            const skip = resPerPage * (currentPageNum - 1)
-
             // Load chats involving the user
             const loadchats = await Chat.find({
                 $or: [
                     { sender_id: userid },
                     { receiver_id: userid }
                 ]
-            }).sort({ timestamp: -1 }).limit(resPerPage).skip(skip)
+            }).sort({ timestamp: -1 })
 
 
             if (!loadchats || loadchats.length === 0) {
                 return { 
                     data: { 
-                        existingRecords: loadchats, 
-                        totalDocuments: 0,
-                        hasPreviousPage: false, 
-                        previousPages: 0, 
-                        hasNextPage: false,      
-                        nextPages: 0,
-                        totalPages: 0,
-                        currentPage: currentPageNum
+                        existingRecords: loadchats
                     },  
                     statusCode: 201, 
                     msg: "Success" 
@@ -72,40 +61,11 @@ const ChatService = {
                 lastMessage: userMessages[user._id.toString()].lastMessage,
                 lastMessageTime: userMessages[user._id.toString()].lastMessageTime
             }));
-            
-            
-            // Count the total number of documents
-            const totalDocuments = await Chat.countDocuments(
-                {
-                    $or: [
-                        { sender_id: userid },
-                        { receiver_id: userid }
-                    ]
-                }
-            );
-
-            // Calculate the total number of pages
-            const totalPages = Math.ceil(totalDocuments / resPerPage);
-
-            // Determine if there are previous and next pages
-            const hasPreviousPage = currentPageNum > 1;
-            const hasNextPage = currentPageNum < totalPages
-
-            // Calculate the number of previous and next pages available
-            const previousPages = currentPageNum - 1;
-            const nextPages = (totalPages - currentPageNum) < 0 ? 0 : totalPages - currentPageNum;
-               
+                         
 
             return { 
                 data: { 
-                    existingRecords: usersWithLastMessage,
-                    totalDocuments, 
-                    hasPreviousPage, 
-                    previousPages, 
-                    hasNextPage, 
-                    nextPages,                    
-                    totalPages,
-                    currentPage: currentPageNum
+                    existingRecords: usersWithLastMessage
                 }, 
                 statusCode: 201, 
                 msg: "Success" 
