@@ -1,53 +1,81 @@
-import { saveChat } from './userChat'
+import { saveChat } from './userChat';
 
-// Map to store driver's room association
-const userRooms = new Map();
+// Map to store user's room association
+const userRooms = new Map<string, string>();
+// Map to store room association with sender and receiver
+const userPairs = new Map<string, string>();
+
+// Function to generate consistent user pair key
+const getUserPairKey = (senderId: string, receiverId: string) => {
+    return [senderId, receiverId].sort().join('_');
+};
 
 const mySocket = (io: any) => {
     // run when a client connects
     io.on('connection', (socket: any) => {
         console.log('connected');
-        socket.emit('connected', { message: 'Welcome! You are connected.' });       
+        socket.emit('connected', { message: 'Welcome! You are connected.' });
 
         // Listen for room joining request
-        socket.on('joinRoom', (data: { userId: string, roomId: string }) => {
-            socket.join(data.roomId);
-            userRooms.set(socket.id, data.roomId);
-            socket.broadcast.to(data.roomId).emit('userJoined', { userId: data.userId, message: 'has joined the chat' });
+        socket.on('joinRoom', (data: { senderId: string, receiverId: string }) => {
+            const pairKey = getUserPairKey(data.senderId, data.receiverId);
+            let roomId = userPairs.get(pairKey);
+
+            if (!roomId) {
+                // Room doesn't exist, create a new one
+                roomId = `room_${pairKey}`;
+                userPairs.set(pairKey, roomId);
+            }
+
+            socket.join(roomId);
+            userRooms.set(socket.id, roomId);
+            socket.broadcast.to(roomId).emit('userJoined', { userId: data.senderId, message: 'has joined the chat' });
         });
 
-        // listen for details (userid and roomid) sent from front end
-        socket.on('userWelcome', (data: { userId: string, roomId: string }) => {
-            const roomId = data.roomId;
-            socket.broadcast.to(roomId).emit('userWelcome', data);
-        });
+        // Listen for typing start event
+        socket.on('onTypingStart', (data: { senderId: string, receiverId: string }) => {
+            const pairKey = getUserPairKey(data.senderId, data.receiverId);
+            const roomId = userPairs.get(pairKey);
 
-        // listen for details (userid and roomid) sent from front end
-        socket.on('onTypingStart', (data: { userId: string, roomId: string }) => {
-            const roomId = data.roomId;
-            socket.broadcast.to(roomId).emit('typingStart', data);
-        });
-
-        // listen for details (userid and roomid) sent from front end
-        socket.on('onTypingStop', (data: { userId: string, roomId: string }) => {
-            const roomId = data.roomId;
-            socket.broadcast.to(roomId).emit('typingStop', data);
-        });
-
-        // listen for user message sent from front end
-        socket.on('chatMessage', async (msg: { userId: string, roomId: string, message: string }) => {
-            const roomId = msg.roomId;
-            // save to database
-            const res = await saveChat(msg);
-            if (res === true) {
-                // this is for everyone in the room
-                io.to(roomId).emit('message', msg);
+            if (roomId && userRooms.get(socket.id) === roomId) {
+                socket.broadcast.to(roomId).emit('typingStart', data);
             } else {
-                io.to(roomId).emit('message', msg);
+                socket.emit('error', { message: 'You are not part of this room' });
             }
         });
 
-        // runs when client disconnects
+        // Listen for typing stop event
+        socket.on('onTypingStop', (data: { senderId: string, receiverId: string }) => {
+            const pairKey = getUserPairKey(data.senderId, data.receiverId);
+            const roomId = userPairs.get(pairKey);
+
+            if (roomId && userRooms.get(socket.id) === roomId) {
+                socket.broadcast.to(roomId).emit('typingStop', data);
+            } else {
+                socket.emit('error', { message: 'You are not part of this room' });
+            }
+        });
+
+        // Listen for user message event
+        socket.on('chatMessage', async (msg: { senderId: string, receiverId: string, message: string }) => {
+            const pairKey = getUserPairKey(msg.senderId, msg.receiverId);
+            const roomId = userPairs.get(pairKey);
+
+            if (roomId && userRooms.get(socket.id) === roomId) {
+                // Save to database
+                const res = await saveChat(msg);
+                if (res === true) {
+                    // Emit message to everyone in the room
+                    io.to(roomId).emit('message', msg);
+                } else {
+                    socket.emit('error', { message: 'Failed to save message' });
+                }
+            } else {
+                socket.emit('error', { message: 'You are not part of this room' });
+            }
+        });
+
+        // Handle client disconnect
         socket.on('disconnect', () => {
             const roomId = userRooms.get(socket.id);
             if (roomId) {
@@ -56,6 +84,6 @@ const mySocket = (io: any) => {
             }
         });
     });
-}
+};
 
 export default mySocket;

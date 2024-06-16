@@ -29,6 +29,18 @@ const ChatController = {
             return res.status(500).json({ data: error.message, statusCode: 400, msg: "Failure" });
         }
     },
+
+    deleteChat: async (req: any, res: Response) => {
+        try {
+            const id = req.params.id;
+            const data = await ChatService.deleteChat(id);
+            return res.status(data.statusCode).json(data);
+
+        } catch (error: any) {
+            console.log(error.message)
+            return res.status(500).json({ data: error.message, statusCode: 404, msg: "Failure" });
+        }
+    },
 }
 
 

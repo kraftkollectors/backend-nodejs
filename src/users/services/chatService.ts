@@ -136,7 +136,7 @@ const ChatService = {
                 return { data: 'Please enter valid user and receiver id', statusCode: 404, msg: "Failure" };
             }
 
-            const resPerPage = 15
+            const resPerPage = 20
             const currentPageNum = Number(query.page) || 1
             const skip = resPerPage * (currentPageNum - 1)
 
@@ -240,6 +240,26 @@ const ChatService = {
             throw new Error(`Error fetching account: ${error.message}`);
         }
     },
+    
+    deleteChat: async (id: string) => {
+        try {
+            // check if id is a valid mongoose id
+            const isValidId = mongoose.isValidObjectId(id)
+
+            if(!isValidId){
+                return { data: 'Please enter a correct id', statusCode: 404, msg: "Failure" };
+            }
+
+            // Check if the email already exists
+            await Chat.findByIdAndDelete(id)          
+
+            return { data: 'chat deleted', statusCode: 201, msg: "Success" };
+            
+        } catch (error: any) {
+            throw new Error(`Error deleting Chat: ${error.message}`);
+        }
+    },
+
 
 }
 

@@ -1,5 +1,22 @@
 const mongoose = require('mongoose');
 
+enum Status{
+    SEEN = 'seen',
+    DELIVERED = 'delivered',
+    SENT = 'sent'
+}
+
+enum Type{
+    TEXT = 'text',
+    FILE = 'file'
+}
+
+// enum Data{
+//     SEEN = 'seen',
+//     DELIVERED = 'delivered',
+//     SENT = 'sent'
+// }
+
 const ChatSchema = new mongoose.Schema({
     sender_id: {
         type: mongoose.Schema.Types.ObjectId,
@@ -12,7 +29,22 @@ const ChatSchema = new mongoose.Schema({
     message: {
         type: String,
         required: true
+    },
+    status: {
+        type: String,
+        enum: Object.values(Status),
+        default: Status.SENT
+    },
+    type: {
+        type: String,
+        enum: Object.values(Type),
+        required: true
+    },
+    data: {
+        type: [String, Array],
+        required: true
     }
+
 },
 { timestamps: true }
 );
