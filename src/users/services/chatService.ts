@@ -19,8 +19,8 @@ const ChatService = {
             // Load chats involving the user
             const loadchats = await Chat.find({
                 $or: [
-                    { sender_id: userid },
-                    { receiver_id: userid }
+                    { senderId: userid },
+                    { receiverId: userid }
                 ]
             }).sort({ timestamp: -1 })
 
@@ -38,12 +38,12 @@ const ChatService = {
             // Extract unique user IDs and find the last message for each user
             const userMessages: any = {};
             loadchats.forEach((chat: any) => {
-                const otherUserId = chat.sender_id.toString() === userid ? chat.receiver_id.toString() : chat.sender_id.toString();
+                const otherUserId = chat.senderId.toString() === userid ? chat.receiverId.toString() : chat.senderId.toString();
                 
                 if (!userMessages[otherUserId]) {
                     userMessages[otherUserId] = {
                         lastMessage: chat.message,
-                        lastMessageTime: chat.timestamp
+                        lastMessageTime: chat.createdAt
                     };
                 }
             });
@@ -104,8 +104,8 @@ const ChatService = {
             // Load chats involving the user
             const loadchats = await Chat.find({
                 $or: [
-                    { sender_id: userid, receiver_id: receiverid },
-                    { receiver_id: userid, sender_id: receiverid }
+                    { senderId: userid, receiverId: receiverid },
+                    { receiverId: userid, senderId: receiverid }
                 ]
             }).sort({ timestamp: 1 }).limit(resPerPage).skip(skip)
 
@@ -146,16 +146,19 @@ const ChatService = {
             const formattedChats = loadchats.map((chat: any) => ({
                 _id: chat._id,
                 message: chat.message,
-                timestamp: chat.timestamp,
+                status: chat.status,
+                type: chat.type,
+                data: chat.data,
+                timestamp: chat.createdAt,
                 sender: {
-                    _id: chat.sender_id,
-                    userName: userDetailsMap[chat.sender_id.toString()].userName,
-                    image: userDetailsMap[chat.sender_id.toString()].image
+                    _id: chat.senderId,
+                    userName: userDetailsMap[chat.senderId.toString()].userName,
+                    image: userDetailsMap[chat.senderId.toString()].image
                 },
                 receiver: {
-                    _id: chat.receiver_id,
-                    userName: userDetailsMap[chat.receiver_id.toString()].userName,
-                    image: userDetailsMap[chat.receiver_id.toString()].image
+                    _id: chat.receiverId,
+                    userName: userDetailsMap[chat.receiverId.toString()].userName,
+                    image: userDetailsMap[chat.receiverId.toString()].image
                 }
             }));
             
@@ -164,8 +167,8 @@ const ChatService = {
             const totalDocuments = await Chat.countDocuments(
                 {
                     $or: [
-                        { sender_id: userid, receiver_id: receiverid },
-                        { receiver_id: userid, sender_id: receiverid }
+                        { senderId: userid, receiverId: receiverid },
+                        { receiverId: userid, senderId: receiverid }
                     ]
                 }
             );

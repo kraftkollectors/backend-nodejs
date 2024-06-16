@@ -19,4 +19,25 @@ const saveChat = async (data: any) => {
 }
 
 
-export { saveChat } 
+// history create
+const editChat = async (chatId: string, status: string) => {
+    try{
+        let chat = await Chat.findByIdAndUpdate(chatId, { status }, {
+            new: true,
+            runValidators: true
+        })
+
+        if(chat !== null){
+            return true
+        }else{
+            return false
+        }
+       
+    }
+    catch(err: any){
+        console.log(err.message); 
+    }
+}
+
+
+export { saveChat, editChat } 

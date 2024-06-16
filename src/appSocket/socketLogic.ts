@@ -1,4 +1,4 @@
-import { saveChat } from './userChat';
+import { saveChat, editChat } from './userChat';
 
 // Map to store user's room association
 const userRooms = new Map<string, string>();
@@ -56,6 +56,48 @@ const mySocket = (io: any) => {
             }
         });
 
+        // Listen for typing stop event
+        socket.on('markSeen', async (data: { senderId: string, receiverId: string, chatId: string, status: string }) => {
+            const pairKey = getUserPairKey(data.senderId, data.receiverId);
+            const roomId = userPairs.get(pairKey);
+
+            if (roomId && userRooms.get(socket.id) === roomId) {
+
+                // Save to database
+                const res = await editChat(data.chatId, data.status);
+                if (res === true) {
+                    // Emit message to everyone in the room
+                    io.to(roomId).emit('markSeen', data);
+                } else {
+                    socket.emit('error', { message: 'Failed to save message' });
+                }
+
+            } else {
+                socket.emit('error', { message: 'You are not part of this room' });
+            }
+        });
+
+        // Listen for typing stop event
+        socket.on('Deliverd', async (data: { senderId: string, receiverId: string, chatId: string, status: string }) => {
+            const pairKey = getUserPairKey(data.senderId, data.receiverId);
+            const roomId = userPairs.get(pairKey);
+
+            if (roomId && userRooms.get(socket.id) === roomId) {
+                
+                // Save to database
+                const res = await editChat(data.chatId, data.status);
+                if (res === true) {
+                    // Emit message to everyone in the room
+                    io.to(roomId).emit('markSeen', data);
+                } else {
+                    socket.emit('error', { message: 'Failed to save message' });
+                }
+
+            } else {
+                socket.emit('error', { message: 'You are not part of this room' });
+            }
+        });
+
         // Listen for user message event
         socket.on('chatMessage', async (msg: any) => {
             const pairKey = getUserPairKey(msg.senderId, msg.receiverId);
@@ -66,7 +108,7 @@ const mySocket = (io: any) => {
                 const res = await saveChat(msg);
                 if (res === true) {
                     // Emit message to everyone in the room
-                    io.to(roomId).emit('message', msg);
+                    io.to(roomId).emit('message', { dataSentToServer: msg, dataReturnedFromServer: res });
                 } else {
                     socket.emit('error', { message: 'Failed to save message' });
                 }

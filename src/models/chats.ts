@@ -11,18 +11,12 @@ enum Type{
     FILE = 'file'
 }
 
-// enum Data{
-//     SEEN = 'seen',
-//     DELIVERED = 'delivered',
-//     SENT = 'sent'
-// }
-
 const ChatSchema = new mongoose.Schema({
-    sender_id: {
+    senderId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },
-    receiver_id: {
+    receiverId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },
