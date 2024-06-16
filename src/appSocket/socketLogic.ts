@@ -57,7 +57,7 @@ const mySocket = (io: any) => {
         });
 
         // Listen for user message event
-        socket.on('chatMessage', async (msg: { senderId: string, receiverId: string, message: string }) => {
+        socket.on('chatMessage', async (msg: any) => {
             const pairKey = getUserPairKey(msg.senderId, msg.receiverId);
             const roomId = userPairs.get(pairKey);
 

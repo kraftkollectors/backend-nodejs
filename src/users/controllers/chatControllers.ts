@@ -40,6 +40,18 @@ const ChatController = {
             return res.status(500).json({ data: error.message, statusCode: 404, msg: "Failure" });
         }
     },
+
+    lastSeen: async (req: any, res: Response) => {
+        try {
+            const userid = req.params.userid;
+            const data = await ChatService.lastSeen(userid);
+            return res.status(data.statusCode).json(data);
+
+        } catch (error: any) {
+            console.log(error.message)
+            return res.status(500).json({ data: error.message, statusCode: 404, msg: "Failure" });
+        }
+    },
 }
 
 

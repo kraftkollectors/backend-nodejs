@@ -3,6 +3,7 @@ dotenv.config();
 import User from '../../models/users'
 import Chat from '../../models/chats'
 import mongoose from 'mongoose';
+import { generatDate } from '../../middlewares/genDate';
 
 
 const ChatService = {
@@ -214,6 +215,33 @@ const ChatService = {
             await Chat.findByIdAndDelete(id)          
 
             return { data: 'chat deleted', statusCode: 201, msg: "Success" };
+            
+        } catch (error: any) {
+            throw new Error(`Error deleting Chat: ${error.message}`);
+        }
+    },
+    
+    lastSeen: async (id: string) => {
+        try {
+            // check if id is a valid mongoose id
+            const isValidId = mongoose.isValidObjectId(id)
+
+            if(!isValidId){
+                return { data: 'Please enter a correct id', statusCode: 404, msg: "Failure" };
+            }
+
+            const lastSeen = generatDate()
+
+            let data = await User.findByIdAndUpdate(id, { lastSeen }, {
+                new: true,
+                runValidators: true
+            })
+
+            if(data !== null){
+                return { data: { data }, statusCode: 201, msg: "Success" };
+            }else{
+                return { data: 'Error updating lastseen', statusCode: 401, msg: "Failure" };
+            }
             
         } catch (error: any) {
             throw new Error(`Error deleting Chat: ${error.message}`);

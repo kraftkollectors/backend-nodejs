@@ -7,6 +7,7 @@ import { UserData, UserDataLogin, UserDataForgot, UserDataContact } from '../../
 import generateToken from '../../utils/tokenUtils';
 import Contact from '../../models/contact';
 import { generateOtp } from '../../middlewares/generate';
+import { generatDate } from '../../middlewares/genDate';
 
 
 
@@ -97,7 +98,10 @@ const BasicService = {
 
             // Hash the password before creating the user
             const hashedPassword = await bcrypt.hash(userData.password, SALT);
-            const user = await new User({ ...userData, password: hashedPassword }).save();
+ 
+            const lastSeen = generatDate()
+
+            const user = await new User({ ...userData, password: hashedPassword, lastSeen }).save();
 
 
             let num: string = generateOtp()
@@ -129,9 +133,7 @@ const BasicService = {
             // Generate a token with user information
             const token = generateToken(user);
             
-
-            let fakePassword = '';
-            user.password = fakePassword
+            user.password = ''
 
             return { data: { user, token, otp: num }, statusCode: 201, msg: "Success" };
         } catch (error: any) {
@@ -187,12 +189,16 @@ const BasicService = {
                 return { data: { user: existingUser, token }, statusCode: 201, msg: "Success" };
             }
 
-            const user = await new User({ ...userData, emailVerify: true }).save();
+            const lastSeen = generatDate()
+
+            const user = await new User({ ...userData, emailVerify: true, lastSeen }).save();
 
             user.type = 'user'
 
             // Generate a token with user information
             const token = generateToken(user);
+
+            user.password = ''
             
             return { data: { user, token }, statusCode: 201, msg: "Success" };
         } catch (error: any) {
@@ -229,8 +235,17 @@ const BasicService = {
             // Generate a token with user information
             const token = generateToken(user);
 
-            let fakePassword = '';
-            user.password = fakePassword
+            user.password = ''
+
+            const lastSeen = generatDate()
+
+            const res = await User.updateOne({ email: userData.email }, 
+                {
+                    $set:{
+                        lastSeen: lastSeen
+                    }
+                }
+            )
 
             return { data: { user, token }, statusCode: 201, msg: "Success" };
         } catch (error: any) {
@@ -258,8 +273,17 @@ const BasicService = {
             // Generate a token with user information
             const token = generateToken(user);
 
-            let fakePassword = '';
-            user.password = fakePassword
+            user.password = ''
+
+            const lastSeen = generatDate()
+
+            const res = await User.updateOne({ email: userData.email }, 
+                {
+                    $set:{
+                        lastSeen: lastSeen
+                    }
+                }
+            )
 
             return { data: { user, token }, statusCode: 201, msg: "Success" };
         } catch (error: any) {

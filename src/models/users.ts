@@ -56,6 +56,11 @@ const UserSchema = new Schema({
         required: false,
         default: ''
     },
+    lastSeen: {
+        type: String,
+        required: false,
+        default: ''
+    },
 }, { timestamps: true })
 
 

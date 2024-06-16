@@ -96,6 +96,7 @@ router.get("/pay/:userid", PayController.getAllUserPayment);
 router.get("/chatheads/:userid", verifyToken, ChatController.getAllUserChatHeads);
 router.get("/chat", verifyToken, ChatController.getMessage);
 router.delete("/chat/:id", verifyToken, ChatController.deleteChat);
+router.get("/lastseen/:userid", verifyToken, ChatController.lastSeen);
 
 
 export default router;
