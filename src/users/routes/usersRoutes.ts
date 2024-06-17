@@ -6,6 +6,7 @@ import PayController from '../controllers/payControllers';
 import ChatController from '../controllers/chatControllers';
 import multer from 'multer'
 import verifyToken from '../../middlewares/auth'
+import { saveChat2 }  from '../../appSocket/userChat'
 
 let storage = multer.memoryStorage()
 
@@ -97,6 +98,9 @@ router.get("/chatheads/:userid", verifyToken, ChatController.getAllUserChatHeads
 router.get("/chat", verifyToken, ChatController.getMessage);
 router.delete("/chat/:id", verifyToken, ChatController.deleteChat);
 router.get("/lastseen/:userid", verifyToken, ChatController.lastSeen);
+
+
+router.post("/chat", saveChat2);
 
 
 export default router;

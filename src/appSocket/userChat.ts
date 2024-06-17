@@ -1,9 +1,20 @@
 import Chat from '../models/chats'
 
 
-// history create
+// create chat
 const saveChat = async (data: any) => {
     try{
+        return await new Chat({ ...data }).save()       
+    }
+    catch(err: any){
+        console.log(err.message); 
+    }
+}
+
+// test create chat
+const saveChat2 = async (req: any, res: any) => {
+    try{
+        let data = req.body
         return await new Chat({ ...data }).save()       
     }
     catch(err: any){
@@ -33,4 +44,4 @@ const editChat = async (chatId: string, status: string) => {
 }
 
 
-export { saveChat, editChat } 
+export { saveChat, editChat, saveChat2 } 
