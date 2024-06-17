@@ -11,18 +11,6 @@ const saveChat = async (data: any) => {
     }
 }
 
-// test create chat
-const saveChat2 = async (req: any, res: any) => {
-    try{
-        let data = req.body
-        let newData = await new Chat({ ...data }).save()       
-        return res.json({ newData })
-    }
-    catch(err: any){
-        console.log(err.message); 
-    }
-}
-
 
 // history create
 const editChat = async (chatId: string, status: string) => {
@@ -45,4 +33,4 @@ const editChat = async (chatId: string, status: string) => {
 }
 
 
-export { saveChat, editChat, saveChat2 } 
+export { saveChat, editChat } 
