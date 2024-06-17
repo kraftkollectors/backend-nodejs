@@ -108,7 +108,7 @@ const mySocket = (io: any) => {
                 const res = await saveChat(msg);
                 if (res !== null) {
                     // Emit message to everyone in the room
-                    io.to(roomId).emit('message', { dataSentToServer: msg, dataReturnedFromServer: res });
+                    io.to(roomId).emit('message', { data: res });
                 } else {
                     socket.emit('error', { message: 'Failed to save message' });
                 }
