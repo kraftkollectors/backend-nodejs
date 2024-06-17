@@ -15,7 +15,8 @@ const saveChat = async (data: any) => {
 const saveChat2 = async (req: any, res: any) => {
     try{
         let data = req.body
-        return await new Chat({ ...data }).save()       
+        let newData = await new Chat({ ...data }).save()       
+        return res.json({ newData })
     }
     catch(err: any){
         console.log(err.message); 
