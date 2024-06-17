@@ -106,7 +106,7 @@ const mySocket = (io: any) => {
             if (roomId && userRooms.get(socket.id) === roomId) {
                 // Save to database
                 const res = await saveChat(msg);
-                if (res === true) {
+                if (res !== null) {
                     // Emit message to everyone in the room
                     io.to(roomId).emit('message', { dataSentToServer: msg, dataReturnedFromServer: res });
                 } else {
