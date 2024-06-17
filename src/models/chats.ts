@@ -35,7 +35,7 @@ const ChatSchema = new mongoose.Schema({
         required: true
     },
     data: {
-        type: [String, Array],
+        type: mongoose.Schema.Types.Mixed,
         required: true
     }
 
