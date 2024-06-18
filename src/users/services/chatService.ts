@@ -81,8 +81,7 @@ const ChatService = {
     getMessage: async (query: any) => {
         try {
 
-            let userid: any = query.userid
-            let receiverid: any = query.receiverid
+            const { userid, receiverid, time } = query;
 
             // check if id's were sent over
             if(!userid && !receiverid){
@@ -97,34 +96,46 @@ const ChatService = {
                 return { data: 'Please enter valid user and receiver id', statusCode: 404, msg: "Failure" };
             }
 
-            const resPerPage = 20
-            const currentPageNum = Number(query.page) || 1
-            const skip = resPerPage * (currentPageNum - 1)
+            const limit = 10
 
             // Load chats involving the user
-            const loadchats = await Chat.find({
+            const chatQuery: any = {
                 $or: [
                     { senderId: userid, receiverId: receiverid },
                     { receiverId: userid, senderId: receiverid }
                 ]
-            }).sort({ timestamp: 1 }).limit(resPerPage).skip(skip)
+            };
 
-
-            if (!loadchats || loadchats.length === 0) {
-                return { 
-                    data: { 
-                        existingRecords: loadchats, 
-                        totalDocuments: 0,
-                        hasPreviousPage: false, 
-                        previousPages: 0, 
-                        hasNextPage: false,      
-                        nextPages: 0,
-                        totalPages: 0,
-                        currentPage: currentPageNum
-                    },  
-                    statusCode: 201, 
-                    msg: "Success" 
+            // If time is provided, add it to the query
+            if (time) {
+                const timeDate: any = new Date(time);
+                if (!isNaN(timeDate)) {
+                    chatQuery.createdAt = { $lt: timeDate };
+                } else {
+                    return { data: 'Invalid time format', statusCode: 400, msg: "Failure" };
                 }
+            }
+
+            // Load chats involving the user
+            const loadChats = await Chat.find(chatQuery)
+            .sort({ createdAt: -1 }) // Sort by createdAt in descending order to get the latest chats first
+            .limit(limit);
+
+            if (!loadChats || loadChats.length === 0) {
+            return {
+                data: {
+                    existingRecords: loadChats,
+                    totalDocuments: 0,
+                    hasPreviousPage: false,
+                    previousPages: 0,
+                    hasNextPage: false,
+                    nextPages: 0,
+                    totalPages: 0,
+                    currentPage: 1
+                },
+                statusCode: 201,
+                msg: "Success"
+            };
             }
 
             // Query the User model to get the usernames and profile pictures
@@ -143,7 +154,7 @@ const ChatService = {
             });
 
             // Format the chat data with user details
-            const formattedChats = loadchats.map((chat: any) => ({
+            const formattedChats = loadChats.map((chat: any) => ({
                 _id: chat._id,
                 message: chat.message,
                 status: chat.status,
@@ -162,43 +173,31 @@ const ChatService = {
                 }
             }));
             
-            
             // Count the total number of documents
-            const totalDocuments = await Chat.countDocuments(
-                {
-                    $or: [
-                        { senderId: userid, receiverId: receiverid },
-                        { receiverId: userid, senderId: receiverid }
-                    ]
-                }
-            );
+            const totalDocuments = await Chat.countDocuments(chatQuery);
 
             // Calculate the total number of pages
-            const totalPages = Math.ceil(totalDocuments / resPerPage);
+            const totalPages = Math.ceil(totalDocuments / limit);
 
             // Determine if there are previous and next pages
-            const hasPreviousPage = currentPageNum > 1;
-            const hasNextPage = currentPageNum < totalPages
+            const hasPreviousPage = loadChats.length === limit && loadChats[0].createdAt < new Date();
+            const hasNextPage = loadChats.length === limit;
 
-            // Calculate the number of previous and next pages available
-            const previousPages = currentPageNum - 1;
-            const nextPages = (totalPages - currentPageNum) < 0 ? 0 : totalPages - currentPageNum;
-               
-
-            return { 
-                data: { 
+            // Return the response with pagination info
+            return {
+                data: {
                     existingRecords: formattedChats,
-                    totalDocuments, 
-                    hasPreviousPage, 
-                    previousPages, 
-                    hasNextPage, 
-                    nextPages,                    
+                    totalDocuments,
+                    hasPreviousPage,
+                    previousPages: hasPreviousPage ? 1 : 0,
+                    hasNextPage,
+                    nextPages: hasNextPage ? 1 : 0,
                     totalPages,
-                    currentPage: currentPageNum
-                }, 
-                statusCode: 201, 
-                msg: "Success" 
-            }
+                    currentPage: 1
+                },
+                statusCode: 201,
+                msg: "Success"
+            };
 
         } catch (error: any) {
             throw new Error(`Error fetching account: ${error.message}`);
