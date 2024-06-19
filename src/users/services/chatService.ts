@@ -22,7 +22,7 @@ const ChatService = {
                     { senderId: userid },
                     { receiverId: userid }
                 ]
-            }).sort({ timestamp: -1 })
+            }).sort({ createdAt: -1 })
 
 
             if (!loadchats || loadchats.length === 0) {

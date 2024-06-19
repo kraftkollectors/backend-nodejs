@@ -1,9 +1,14 @@
 import { saveChat, editChat } from './userChat';
 
-// Map to store user's room association
+// Map to store single user's room association
+const singleRooms = new Map<string, string>();
+// Map to store single room association so chathead can arrange
+const singleUser = new Map<string, string>();
+
+// Map to store double user's room association so the can chat
 const userRooms = new Map<string, string>();
-// Map to store room association with sender and receiver
-const userPairs = new Map<string, string>();
+// Map to store room association with sender and receiver for chat
+const usersPairs = new Map<string, string>();
 
 // Function to generate consistent user pair key
 const getUserPairKey = (senderId: string, receiverId: string) => {
@@ -13,18 +18,32 @@ const getUserPairKey = (senderId: string, receiverId: string) => {
 const mySocket = (io: any) => {
     // run when a client connects
     io.on('connection', (socket: any) => {
-        console.log('connected');
         socket.emit('connected', { message: 'Welcome! You are connected.' });
+
+        // Listen for single room joining after login request
+        socket.on('loginRoom', (data: { userId: string }) => {
+            let privateId = singleUser.get(data.userId);
+
+            if (!privateId) {
+                // Room doesn't exist, create a new one
+                privateId = `room_${data.userId}`;
+                singleUser.set(data.userId, privateId);
+            }
+
+            socket.join(privateId);
+            singleRooms.set(socket.id, privateId);
+            socket.broadcast.to(privateId).emit('userLogged', { message: 'user logged' });
+        });
 
         // Listen for room joining request
         socket.on('joinRoom', (data: { senderId: string, receiverId: string }) => {
             const pairKey = getUserPairKey(data.senderId, data.receiverId);
-            let roomId = userPairs.get(pairKey);
+            let roomId = usersPairs.get(pairKey);
 
             if (!roomId) {
                 // Room doesn't exist, create a new one
                 roomId = `room_${pairKey}`;
-                userPairs.set(pairKey, roomId);
+                usersPairs.set(pairKey, roomId);
             }
 
             socket.join(roomId);
@@ -35,7 +54,7 @@ const mySocket = (io: any) => {
         // Listen for typing start event
         socket.on('onTypingStart', (data: { senderId: string, receiverId: string }) => {
             const pairKey = getUserPairKey(data.senderId, data.receiverId);
-            const roomId = userPairs.get(pairKey);
+            const roomId = usersPairs.get(pairKey);
 
             if (roomId && userRooms.get(socket.id) === roomId) {
                 socket.broadcast.to(roomId).emit('typingStart', data);
@@ -47,7 +66,7 @@ const mySocket = (io: any) => {
         // Listen for typing stop event
         socket.on('onTypingStop', (data: { senderId: string, receiverId: string }) => {
             const pairKey = getUserPairKey(data.senderId, data.receiverId);
-            const roomId = userPairs.get(pairKey);
+            const roomId = usersPairs.get(pairKey);
 
             if (roomId && userRooms.get(socket.id) === roomId) {
                 socket.broadcast.to(roomId).emit('typingStop', data);
@@ -59,7 +78,7 @@ const mySocket = (io: any) => {
         // Listen for typing stop event
         socket.on('markSeen', async (data: { senderId: string, receiverId: string, chatId: string, status: string }) => {
             const pairKey = getUserPairKey(data.senderId, data.receiverId);
-            const roomId = userPairs.get(pairKey);
+            const roomId = usersPairs.get(pairKey);
 
             if (roomId && userRooms.get(socket.id) === roomId) {
 
@@ -80,7 +99,7 @@ const mySocket = (io: any) => {
         // Listen for typing stop event
         socket.on('Deliverd', async (data: { senderId: string, receiverId: string, chatId: string, status: string }) => {
             const pairKey = getUserPairKey(data.senderId, data.receiverId);
-            const roomId = userPairs.get(pairKey);
+            const roomId = usersPairs.get(pairKey);
 
             if (roomId && userRooms.get(socket.id) === roomId) {
                 
@@ -101,7 +120,10 @@ const mySocket = (io: any) => {
         // Listen for user message event
         socket.on('chatMessage', async (msg: any) => {
             const pairKey = getUserPairKey(msg.senderId, msg.receiverId);
-            const roomId = userPairs.get(pairKey);
+            const roomId = usersPairs.get(pairKey);
+
+            const sender = singleUser.get(msg.senderId)
+            const receiver = singleUser.get(msg.receiverId)
 
             if (roomId && userRooms.get(socket.id) === roomId) {
                 // Save to database
@@ -109,6 +131,8 @@ const mySocket = (io: any) => {
                 if (res !== null) {
                     // Emit message to everyone in the room
                     io.to(roomId).emit('message', { data: res });
+                    io.to(sender).emit('senderMessage', { data: res });
+                    io.to(receiver).emit('receiverMessage', { data: res });
                 } else {
                     socket.emit('error', { message: 'Failed to save message' });
                 }
