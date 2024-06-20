@@ -24,15 +24,22 @@ const mySocket = (io: any) => {
         socket.on('loginRoom', (data: { userId: string }) => {
             let privateId = singleUser.get(data.userId);
 
+            console.log('pid', privateId);
+            
+
             if (!privateId) {
                 // Room doesn't exist, create a new one
                 privateId = `room_${data.userId}`;
                 singleUser.set(data.userId, privateId);
+
+                console.log('psid', privateId);
             }
 
             socket.join(privateId);
             singleRooms.set(socket.id, privateId);
+            console.log('www', privateId);
             socket.broadcast.to(privateId).emit('userLogged', { message: 'user logged' });
+            console.log('jjjj', privateId);
         });
 
         // Listen for room joining request
@@ -97,7 +104,7 @@ const mySocket = (io: any) => {
         });
 
         // Listen for typing stop event
-        socket.on('Deliverd', async (data: { senderId: string, receiverId: string, chatId: string, status: string }) => {
+        socket.on('delivered', async (data: { senderId: string, receiverId: string, chatId: string, status: string }) => {
             const pairKey = getUserPairKey(data.senderId, data.receiverId);
             const roomId = usersPairs.get(pairKey);
 
@@ -107,7 +114,7 @@ const mySocket = (io: any) => {
                 const res = await editChat(data.chatId, data.status);
                 if (res === true) {
                     // Emit message to everyone in the room
-                    io.to(roomId).emit('markSeen', data);
+                    io.to(roomId).emit('markDelivered', data);
                 } else {
                     socket.emit('error', { message: 'Failed to save message' });
                 }
