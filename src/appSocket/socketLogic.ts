@@ -24,22 +24,15 @@ const mySocket = (io: any) => {
         socket.on('loginRoom', (data: { userId: string }) => {
             let privateId = singleUser.get(data.userId);
 
-            console.log('pid', privateId);
-            
-
             if (!privateId) {
                 // Room doesn't exist, create a new one
                 privateId = `room_${data.userId}`;
                 singleUser.set(data.userId, privateId);
-
-                console.log('psid', privateId);
             }
 
             socket.join(privateId);
             singleRooms.set(socket.id, privateId);
-            console.log('www', privateId);
-            socket.broadcast.to(privateId).emit('userLogged', { message: 'user logged' });
-            console.log('jjjj', privateId);
+            io.to(privateId).emit('userLogged', { message: 'user logged' });
         });
 
         // Listen for room joining request
