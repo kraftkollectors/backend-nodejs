@@ -125,7 +125,7 @@ const mySocket = (io: any) => {
             const sender = singleUser.get(msg.senderId)
             const receiver = singleUser.get(msg.receiverId)
 
-            if (roomId && userRooms.get(socket.id) === roomId) {
+            // if (roomId && userRooms.get(socket.id) === roomId) {
                 // Save to database
                 const res = await saveChat(msg);
                 if (res !== null) {
@@ -134,11 +134,11 @@ const mySocket = (io: any) => {
                     io.to(sender).emit('senderMessage', { data: res });
                     io.to(receiver).emit('receiverMessage', { data: res });
                 } else {
-                    socket.emit('error', { message: 'Failed to save message' });
+                    socket.emit('error', { message: 'Failed to save message', msg });
                 }
-            } else {
-                socket.emit('error', { message: 'You are not part of this room' });
-            }
+            // } else {
+            //     socket.emit('error', { message: 'You are not part of this room' });
+            // }
         });
 
         // Handle client disconnect
