@@ -158,11 +158,6 @@ const mySocket = (io: any) => {
                 singleRooms.set(socket.id, receiver);
             }
             
-
-            console.log('sender', sender);
-            console.log('receiver', receiver);
-            
-
             // Emit event to process and send message
             io.to(sender).emit('senderMessage', { message: 'sent to sender', data: res });
             io.to(receiver).emit('receiverMessage', { message: 'sent to receiver', data: res });
