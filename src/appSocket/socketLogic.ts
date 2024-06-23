@@ -140,8 +140,26 @@ const mySocket = (io: any) => {
                 socket.emit('error', { message: 'You are not part of this room' });
             }
 
+            // Emit event to process and send message
+            socket.emit('processAndSendMessage', msg, res);
+            console.log('sent');
+            
+        });
+
+        // event to send to individual rooms
+        socket.on('processAndSendMessage', (msg: any, res: any) => {
+            const sender = singleUser.get(msg.senderId);
+            const receiver = singleUser.get(msg.receiverId);
+
+            console.log('msg', msg);
+            console.log('\nres', res);
+            
+        
             io.to(sender).emit('senderMessage', { data: res });
             io.to(receiver).emit('receiverMessage', { data: res });
+
+            console.log('done');
+            
         });
 
         // Handle client disconnect
