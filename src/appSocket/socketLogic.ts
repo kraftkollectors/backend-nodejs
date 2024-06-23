@@ -57,7 +57,7 @@ const mySocket = (io: any) => {
             const roomId = usersPairs.get(pairKey);
 
             if (roomId && userRooms.get(socket.id) === roomId) {
-                socket.broadcast.to(roomId).emit('typingStart', data);
+                io.to(roomId).emit('typingStart', data);
             } else {
                 socket.emit('error', { message: 'You are not part of this room' });
             }
@@ -69,7 +69,7 @@ const mySocket = (io: any) => {
             const roomId = usersPairs.get(pairKey);
 
             if (roomId && userRooms.get(socket.id) === roomId) {
-                socket.broadcast.to(roomId).emit('typingStop', data);
+                io.to(roomId).emit('typingStop', data);
             } else {
                 socket.emit('error', { message: 'You are not part of this room' });
             }
