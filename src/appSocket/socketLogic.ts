@@ -48,7 +48,7 @@ const mySocket = (io: any) => {
 
             socket.join(roomId);
             userRooms.set(socket.id, roomId);
-            socket.broadcast.to(roomId).emit('userJoined', { userId: data.senderId, message: 'has joined the chat' });
+            io.to(roomId).emit('userJoined', { userId: data.senderId, message: 'has joined the chat' });
         });
 
         // Listen for typing start event
