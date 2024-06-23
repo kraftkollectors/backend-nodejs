@@ -122,6 +122,9 @@ const mySocket = (io: any) => {
             const pairKey = getUserPairKey(msg.senderId, msg.receiverId);
             const roomId = usersPairs.get(pairKey);
 
+            const sender = singleUser.get(msg.senderId);
+            const receiver = singleUser.get(msg.receiverId);
+
             let res = null;
 
             if (roomId && userRooms.get(socket.id) === roomId) {
@@ -137,27 +140,15 @@ const mySocket = (io: any) => {
                 socket.emit('error', { message: 'You are not part of this room' });
             }
 
+            console.log('sender', sender);
+            console.log('receiver', receiver);
+            
+
             // Emit event to process and send message
-            console.log('res val', res);
-            
-            io.emit('processAndSendMessage', msg, res);
+            io.to(sender).emit('senderMessage', { message: 'sent to sender', data: res });
+            io.to(receiver).emit('receiverMessage', { message: 'sent to receiver', data: res });
+
             console.log('sent');
-            
-        });
-
-        // event to send to individual rooms
-        socket.on('processAndSendMessage', (msg: any, res: any) => {
-            const sender = singleUser.get(msg.senderId);
-            const receiver = singleUser.get(msg.receiverId);
-
-            console.log('msg', msg);
-            console.log('\nres', res);
-            
-        
-            io.to(sender).emit('senderMessage', { data: res });
-            io.to(receiver).emit('receiverMessage', { data: res });
-
-            console.log('done');
             
         });
 
