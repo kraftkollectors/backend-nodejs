@@ -125,11 +125,11 @@ const mySocket = (io: any) => {
             const sender = singleUser.get(msg.senderId)
             const receiver = singleUser.get(msg.receiverId)
 
-            let res;
+            let res = null;
 
             if (roomId && userRooms.get(socket.id) === roomId) {
                 // Save to database
-                const res = await saveChat(msg);
+                res = await saveChat(msg);
                 if (res !== null) {
                     // Emit message to everyone in the room
                     io.to(roomId).emit('message', { data: res });
