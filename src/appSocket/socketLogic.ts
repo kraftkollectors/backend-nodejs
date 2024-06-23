@@ -122,8 +122,8 @@ const mySocket = (io: any) => {
             const pairKey = getUserPairKey(msg.senderId, msg.receiverId);
             const roomId = usersPairs.get(pairKey);
 
-            const sender = singleUser.get(msg.senderId);
-            const receiver = singleUser.get(msg.receiverId);
+            let sender = singleUser.get(msg.senderId);
+            let receiver = singleUser.get(msg.receiverId);
 
             let res = null;
 
@@ -139,6 +139,25 @@ const mySocket = (io: any) => {
             } else {
                 socket.emit('error', { message: 'You are not part of this room' });
             }
+
+            if(!sender){
+                // Room doesn't exist, create a new one
+                sender = `room_${msg.senderId}`;
+                singleUser.set(msg.senderId, sender);
+
+                socket.join(sender);
+                singleRooms.set(socket.id, sender);
+            }
+
+            if(!receiver){
+                // Room doesn't exist, create a new one
+                receiver = `room_${msg.receiverId}`;
+                singleUser.set(msg.receiverId, receiver);
+
+                socket.join(receiver);
+                singleRooms.set(socket.id, receiver);
+            }
+            
 
             console.log('sender', sender);
             console.log('receiver', receiver);
