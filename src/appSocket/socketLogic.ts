@@ -122,9 +122,6 @@ const mySocket = (io: any) => {
             const pairKey = getUserPairKey(msg.senderId, msg.receiverId);
             const roomId = usersPairs.get(pairKey);
 
-            const sender = singleUser.get(msg.senderId)
-            const receiver = singleUser.get(msg.receiverId)
-
             let res = null;
 
             if (roomId && userRooms.get(socket.id) === roomId) {
@@ -141,7 +138,9 @@ const mySocket = (io: any) => {
             }
 
             // Emit event to process and send message
-            socket.emit('processAndSendMessage', msg, res);
+            console.log('res val', res);
+            
+            io.emit('processAndSendMessage', msg, res);
             console.log('sent');
             
         });
