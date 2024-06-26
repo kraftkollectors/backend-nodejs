@@ -26,7 +26,10 @@ export async function getFilteredAds(data: any) {
     let page: any = data.page ? data.page : 1
   
     if (data.q) {      
-      query.title = { $regex: data.q, $options: 'i' };
+      query.$or = [
+        { title: { $regex: data.q, $options: 'i' } },
+        { description: { $regex: data.q, $options: 'i' } }
+      ]
     }
 
     if (data.category) {
