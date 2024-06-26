@@ -5,6 +5,9 @@ const singleRooms = new Map<string, string>();
 // Map to store single room association so chathead can arrange
 const singleUser = new Map<string, string>();
 
+// Map to store socket ID association with user ID
+const userSockets = new Map<string, string>();
+
 // Map to store double user's room association so the can chat
 const userRooms = new Map<string, string>();
 // Map to store room association with sender and receiver for chat
@@ -32,6 +35,7 @@ const mySocket = (io: any) => {
 
             socket.join(privateId);
             singleRooms.set(socket.id, privateId);
+            userSockets.set(data.userId, socket.id);
             io.to(privateId).emit('userLogged', { message: 'user logged' });
         });
 
@@ -48,6 +52,7 @@ const mySocket = (io: any) => {
 
             socket.join(roomId);
             userRooms.set(socket.id, roomId);
+            userSockets.set(data.senderId, socket.id);
             io.to(roomId).emit('userJoined', { userId: data.senderId, message: 'has joined the chat' });
         });
 
@@ -122,8 +127,8 @@ const mySocket = (io: any) => {
             const pairKey = getUserPairKey(msg.senderId, msg.receiverId);
             const roomId = usersPairs.get(pairKey);
 
-            let sender = singleUser.get(msg.senderId);
-            let receiver = singleUser.get(msg.receiverId);
+            let senderSocketId = userSockets.get(msg.senderId);
+            let receiverSocketId = userSockets.get(msg.receiverId);
 
             let res = null;
 
@@ -140,29 +145,31 @@ const mySocket = (io: any) => {
                 socket.emit('error', { message: 'You are not part of this room' });
             }
 
-            if(!sender){
+            if (!senderSocketId) {
                 // Room doesn't exist, create a new one
-                sender = `room_${msg.senderId}`;
-                singleUser.set(msg.senderId, sender);
-
-                socket.join(sender);
-                singleRooms.set(socket.id, sender);
+                senderSocketId = socket.id;
+                singleUser.set(msg.senderId, `room_${msg.senderId}`);
+                socket.join(`room_${msg.senderId}`);
+                singleRooms.set(socket.id, `room_${msg.senderId}`);
+                userSockets.set(msg.senderId, socket.id);
             }
-
-            if(!receiver){
+        
+            if (!receiverSocketId) {
                 // Room doesn't exist, create a new one
-                receiver = `room_${msg.receiverId}`;
-                singleUser.set(msg.receiverId, receiver);
-
-                socket.join(receiver);
-                singleRooms.set(socket.id, receiver);
+                receiverSocketId = socket.id;
+                singleUser.set(msg.receiverId, `room_${msg.receiverId}`);
+                socket.join(`room_${msg.receiverId}`);
+                singleRooms.set(socket.id, `room_${msg.receiverId}`);
+                userSockets.set(msg.receiverId, socket.id);
             }
             
             // Emit event to process and send message
-            io.to(sender).emit('senderMessage', { message: 'sent to sender', data: res });
-            io.to(receiver).emit('receiverMessage', { message: 'sent to receiver', data: res });
-
-            console.log('sent');
+            if (senderSocketId) {
+                io.to(senderSocketId).emit('senderMessage', { message: 'sent to sender', data: res });
+            }
+            if (receiverSocketId) {
+                io.to(receiverSocketId).emit('receiverMessage', { message: 'sent to receiver', data: res });
+            }
             
         });
 
