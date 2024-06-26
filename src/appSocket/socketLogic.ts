@@ -48,7 +48,7 @@ const mySocket = (io: any) => {
 
             socket.join(roomId);
             userRooms.set(socket.id, roomId);
-            socket.broadcast.to(roomId).emit('userJoined', { userId: data.senderId, message: 'has joined the chat' });
+            io.to(roomId).emit('userJoined', { userId: data.senderId, message: 'has joined the chat' });
         });
 
         // Listen for typing start event
@@ -57,7 +57,7 @@ const mySocket = (io: any) => {
             const roomId = usersPairs.get(pairKey);
 
             if (roomId && userRooms.get(socket.id) === roomId) {
-                socket.broadcast.to(roomId).emit('typingStart', data);
+                io.to(roomId).emit('typingStart', data);
             } else {
                 socket.emit('error', { message: 'You are not part of this room' });
             }
@@ -69,7 +69,7 @@ const mySocket = (io: any) => {
             const roomId = usersPairs.get(pairKey);
 
             if (roomId && userRooms.get(socket.id) === roomId) {
-                socket.broadcast.to(roomId).emit('typingStop', data);
+                io.to(roomId).emit('typingStop', data);
             } else {
                 socket.emit('error', { message: 'You are not part of this room' });
             }
@@ -122,23 +122,48 @@ const mySocket = (io: any) => {
             const pairKey = getUserPairKey(msg.senderId, msg.receiverId);
             const roomId = usersPairs.get(pairKey);
 
-            const sender = singleUser.get(msg.senderId)
-            const receiver = singleUser.get(msg.receiverId)
+            let sender = singleUser.get(msg.senderId);
+            let receiver = singleUser.get(msg.receiverId);
+
+            let res = null;
 
             if (roomId && userRooms.get(socket.id) === roomId) {
                 // Save to database
-                const res = await saveChat(msg);
+                res = await saveChat(msg);
                 if (res !== null) {
                     // Emit message to everyone in the room
                     io.to(roomId).emit('message', { data: res });
-                    io.to(sender).emit('senderMessage', { data: res });
-                    io.to(receiver).emit('receiverMessage', { data: res });
                 } else {
-                    socket.emit('error', { message: 'Failed to save message' });
+                    socket.emit('error', { message: 'Failed to save message', msg });
                 }
             } else {
                 socket.emit('error', { message: 'You are not part of this room' });
             }
+
+            if(!sender){
+                // Room doesn't exist, create a new one
+                sender = `room_${msg.senderId}`;
+                singleUser.set(msg.senderId, sender);
+
+                socket.join(sender);
+                singleRooms.set(socket.id, sender);
+            }
+
+            if(!receiver){
+                // Room doesn't exist, create a new one
+                receiver = `room_${msg.receiverId}`;
+                singleUser.set(msg.receiverId, receiver);
+
+                socket.join(receiver);
+                singleRooms.set(socket.id, receiver);
+            }
+            
+            // Emit event to process and send message
+            io.to(sender).emit('senderMessage', { message: 'sent to sender', data: res });
+            io.to(receiver).emit('receiverMessage', { message: 'sent to receiver', data: res });
+
+            console.log('sent');
+            
         });
 
         // Handle client disconnect
