@@ -61,6 +61,11 @@ const UserSchema = new Schema({
         required: false,
         default: ''
     },
+    paymentPlan: {
+        type: String,
+        required: false,
+        default: 'None'
+    },
 }, { timestamps: true })
 
 
