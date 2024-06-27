@@ -89,6 +89,62 @@ const BasicService = {
             throw new Error(`Error logging in: ${error.message}`);
         }
     },
+    
+    getContactById: async (id: string) => {
+        try {
+            // check if id is a valid mongoose id
+            const isValidId = mongoose.isValidObjectId(id)
+
+            if(!isValidId){
+                return { data: 'Please enter a correct id', statusCode: 404, msg: "Failure" };
+            }
+
+            // Check if the email already exists
+            const existingAd = await Contact.findOne({ _id: id })
+
+            if (!existingAd) {
+                return { data: 'No contact found', statusCode: 404, msg: "Failure" };
+            }
+            
+            const res = await Contact.updateOne({ _id: id }, 
+                {
+                    $set:{
+                        read: true
+                    }
+                }
+            )
+
+            return { data: { existingAd }, statusCode: 201, msg: "Success" };
+        } catch (error: any) {
+            console.log(error);
+            throw new Error(`Error logging in: ${error.message}`);
+        }
+    },
+    
+    editContact: async (id: string, body: any) => {
+        try {
+            // check if id is a valid mongoose id
+            const isValidId = mongoose.isValidObjectId(id)
+
+            if(!isValidId){
+                return { data: 'Please enter a correct id', statusCode: 404, msg: "Failure" };
+            }
+
+            let data = await Contact.findByIdAndUpdate(id, body, {
+                new: true,
+                runValidators: true
+            })
+
+            if(data !== null){
+                return { data: { data }, statusCode: 201, msg: "Success" };
+            }else{
+                return { data: 'Error updating ads', statusCode: 401, msg: "Failure" };
+            }
+        } catch (error: any) {
+            console.log(error);
+            throw new Error(`Error logging in: ${error.message}`);
+        }
+    },
 
     createAdmin: async (adminData: AdminData) => {
         try {

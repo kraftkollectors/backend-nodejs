@@ -21,7 +21,17 @@ const ContactSchema = new Schema({
     message: {
         type: String,
         required: true
-    }
+    },
+    read: {
+        type: Boolean,
+        default: false,
+        required: false,
+    },
+    status: {
+        type: String,
+        default: 'unresolved',
+        required: false
+    },
 }, { timestamps: true })
 
 

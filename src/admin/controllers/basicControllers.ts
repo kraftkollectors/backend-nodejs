@@ -78,6 +78,29 @@ const BasicController = {
         }
     },
 
+    getContactById: async (req: Request, res: Response) => {
+        try {
+            const id = req.params.id
+            const data = await BasicService.getContactById(id);
+            res.status(data.statusCode).json(data);
+        } catch (error: any) {
+            console.log(error.message)
+            res.status(500).json({ data: error.message, statusCode: 400, msg: "Failure" });
+        }
+    },
+
+    editContact: async (req: Request, res: Response) => {
+        try {
+            const id = req.params.id
+            const body = req.body
+            const data = await BasicService.editContact(id, body);
+            res.status(data.statusCode).json(data);
+        } catch (error: any) {
+            console.log(error.message)
+            res.status(500).json({ data: error.message, statusCode: 400, msg: "Failure" });
+        }
+    },
+
     deleteContact: async (req: Request, res: Response) => {
         try {
             const id = req.params.id;

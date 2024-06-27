@@ -17,6 +17,8 @@ router.post("/reset", BasicController.adminReset);
 router.post("/otpagain", BasicController.createOTP);
 
 router.get("/contact", BasicController.getContact);
+router.get("/contact/:id", BasicController.getContactById);
+router.patch("/contact/:id", verifyToken, BasicController.editContact);
 router.delete("/contact/:id", BasicController.deleteContact);
 
 
