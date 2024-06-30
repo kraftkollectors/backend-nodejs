@@ -279,7 +279,7 @@ const AdsService = {
         }
     },
 
-    editAd: async (id: string, userData: any) => {
+    editAd: async (id: string, adData: any) => {
         try {
             // check if id is a valid mongoose id
             const isValidId = mongoose.isValidObjectId(id)
@@ -288,7 +288,7 @@ const AdsService = {
                 return { data: 'Please enter a correct id', statusCode: 404, msg: "Failure" };
             }
 
-            let data = await Ads.findByIdAndUpdate(id, userData, {
+            let data = await Ads.findByIdAndUpdate(id, adData, {
                 new: true,
                 runValidators: true
             })

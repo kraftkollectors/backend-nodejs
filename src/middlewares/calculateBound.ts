@@ -1,4 +1,5 @@
 import Ad from '../models/ads'
+import PaidAd from '../models/paidAd'
 
 
 // Function to calculate the bounding box for geo queries
@@ -77,6 +78,70 @@ export async function getFilteredAds(data: any) {
     // Fetch the filtered and sorted ads with pagination
     const existingRecords = await Ad.find(query).sort(sortOption).skip(skip).limit(10);
     const totalDocuments = await Ad.countDocuments(query);
+    const totalPages = Math.ceil(totalDocuments / 10);
+
+    if (!existingRecords || existingRecords.length === 0) {
+        return { 
+            data: { 
+                existingRecords, 
+                totalDocuments: 0,
+                hasPreviousPage: false, 
+                previousPages: 0, 
+                hasNextPage: false,      
+                nextPages: 0,
+                totalPages: 0,
+                currentPage: page
+            },  
+            statusCode: 201, 
+            msg: "Success" 
+        }
+    }
+  
+    return {
+        data: {
+            existingRecords,
+            totalDocuments,
+            hasPreviousPage: page > 1,
+            previousPages: page > 1 ? page - 1 : 0,
+            hasNextPage: page < totalPages,
+            nextPages: page < totalPages ? page + 1 : 0,
+            totalPages,
+            currentPage: page,
+        },  
+        statusCode: 201, 
+        msg: "Success" 
+    };
+}
+
+export async function getFilteredPaidAds(data: any) {
+    const query: any = {};
+    let page: any = data.page ? data.page : 1
+  
+    if (data.q) {      
+      query.$or = [
+        { title: { $regex: data.q, $options: 'i' } },
+      ]
+    }
+
+    if (data.only) {
+      query.isActive = data.only;
+    }
+  
+    // Default sorting
+    let sortOption: any = { createdAt: -1 };
+  
+    if (data.sort === 'date') {
+      sortOption = { createdAt: -1 };
+    } else if (data.sort === 'a-z') {
+      sortOption = { title: 1 };
+    }
+  
+    // Calculate the skip value for pagination
+    const skip = (page - 1) * 10;
+  
+    // Fetch the filtered and sorted ads with pagination
+    const existingRecords = await PaidAd.find(query).sort(sortOption).skip(skip).limit(10);
+    const totalDocuments = await PaidAd.countDocuments(query);
     const totalPages = Math.ceil(totalDocuments / 10);
 
     if (!existingRecords || existingRecords.length === 0) {

@@ -5,6 +5,7 @@ import DashController from '../controllers/dashControllers';
 import UsersController from '../controllers/usersControllers';
 import AdsController from '../controllers/adsControllers';
 import TransController from '../controllers/transControllers';
+import PaidAdsController from '../controllers/paidAdsController';
 
 const router: Router = express.Router();
 
@@ -48,6 +49,12 @@ router.patch("/users/:id", verifyToken, UsersController.enableDisableUser);
 router.delete("/users/:id", verifyToken, UsersController.deleteUser);
 
 // ads
+router.get("/paidads", verifyToken, PaidAdsController.getPaidAds);
+router.get("/paidads/:id", verifyToken, PaidAdsController.getSinglePaidAd);
+router.patch("/paidads/:id", verifyToken, PaidAdsController.editPaidAd);
+router.delete("/paidads/:id", verifyToken, PaidAdsController.deletePaidAd);
+
+// paid ads
 router.get("/ads", verifyToken, AdsController.getAds);
 router.get("/ads/:id", verifyToken, AdsController.getSingleAd);
 router.get("/ads/users/:userid", verifyToken, AdsController.getUserAds);
