@@ -3,6 +3,7 @@ dotenv.config();
 import PaidAd from '../../models/paidAd'
 import mongoose from 'mongoose';
 import { getFilteredPaidAds } from '../../middlewares/calculateBound';
+import { AdminDataPaidAds } from '../../types/admin/defaultTypes';
 
 
 const AdsService = {
@@ -33,6 +34,20 @@ const AdsService = {
             return { data: { existingAd }, statusCode: 201, msg: "Success" };
         } catch (error: any) {
             throw new Error(`Error fetching ad: ${error.message}`);
+        }
+    },
+
+    postPaidAd: async (adminData: AdminDataPaidAds) => {
+        try {
+            const ad = await new PaidAd({ ...adminData }).save();
+            if(ad !== null){
+                return { data: { ad }, statusCode: 201, msg: "Success" };
+            }else{
+                return { data: 'Error creating post', statusCode: 401, msg: "Failure" };
+            }
+            
+        } catch (error: any) {
+            throw new Error(`Error adding post: ${error.message}`);
         }
     },
     

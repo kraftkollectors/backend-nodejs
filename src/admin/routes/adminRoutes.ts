@@ -49,6 +49,7 @@ router.patch("/users/:id", verifyToken, UsersController.enableDisableUser);
 router.delete("/users/:id", verifyToken, UsersController.deleteUser);
 
 // paid ads
+router.post("/paidads", verifyToken, PaidAdsController.postPaidAd);
 router.get("/paidads", PaidAdsController.getPaidAds);
 router.get("/paidads/:id", PaidAdsController.getSinglePaidAd);
 router.patch("/paidads/:id", verifyToken, PaidAdsController.editPaidAd);
