@@ -48,13 +48,13 @@ router.get("/users/:id", verifyToken, UsersController.getSingleUser);
 router.patch("/users/:id", verifyToken, UsersController.enableDisableUser);
 router.delete("/users/:id", verifyToken, UsersController.deleteUser);
 
-// ads
+// paid ads
 router.get("/paidads", verifyToken, PaidAdsController.getPaidAds);
 router.get("/paidads/:id", verifyToken, PaidAdsController.getSinglePaidAd);
 router.patch("/paidads/:id", verifyToken, PaidAdsController.editPaidAd);
 router.delete("/paidads/:id", verifyToken, PaidAdsController.deletePaidAd);
 
-// paid ads
+// ads
 router.get("/ads", verifyToken, AdsController.getAds);
 router.get("/ads/:id", verifyToken, AdsController.getSingleAd);
 router.get("/ads/users/:userid", verifyToken, AdsController.getUserAds);

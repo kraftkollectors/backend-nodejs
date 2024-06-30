@@ -123,8 +123,12 @@ export async function getFilteredPaidAds(data: any) {
       ]
     }
 
-    if (data.only) {
-      query.isActive = data.only;
+    if(data.only){
+      if (data.only === 'active') {
+        query.isActive = true;
+      }else if (data.only === 'inactive') {
+        query.isActive = false;
+      }
     }
   
     // Default sorting
