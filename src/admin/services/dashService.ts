@@ -293,13 +293,19 @@ const DashService = {
         }
     },
 
-    addCategory: async (userData: { title: string }) => {
+    addCategory: async (userData: any) => {
         try {
-            
 
             let data = await new Category({ ...userData }).save();
 
             if(data !== null){
+                // Iterate over each subcategory and save it
+                for (let subcategory of userData.subCategories) {
+                    await new SubCategory({
+                        ...subcategory,
+                        categoryId: data._id // Assign the category _id to each subcategory
+                    }).save();
+                }
                 return { data: { data }, statusCode: 201, msg: "Success" };
             }else{
                 return { data: 'Error updating account password', statusCode: 401, msg: "Failure" };
@@ -311,16 +317,25 @@ const DashService = {
     },
 
     
-    addSubCategory: async (userData: { userId: string, title: string }) => {
+    addSubCategory: async (userData: any) => {
         try {
+            // Extract categoryId and subCategories from userData
+            const { categoryId, subCategories } = userData;
             
+            // Create an array of promises for saving each subcategory
+            const savePromises = subCategories.map(async (subCategory: any) => {
+                // Create a new SubCategory instance with categoryId and subCategory data
+                return await new SubCategory({ categoryId, ...subCategory }).save();
+            });
 
-            let data = await new SubCategory({ ...userData }).save();
+            // Wait for all subcategory save operations to complete
+            const savedSubCategories = await Promise.all(savePromises);
 
-            if(data !== null){
-                return { data: { data }, statusCode: 201, msg: "Success" };
-            }else{
-                return { data: 'Error updating account password', statusCode: 401, msg: "Failure" };
+            // Check if all subcategories were saved successfully
+            if (savedSubCategories.every(data => data !== null)) {
+                return { data: { savedSubCategories }, statusCode: 201, msg: "Success" };
+            } else {
+                return { data: 'Error saving one or more subcategories', statusCode: 401, msg: "Failure" };
             }
             
         } catch (error: any) {
