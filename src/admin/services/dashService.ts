@@ -5,6 +5,7 @@ import bcrypt from 'bcrypt';
 import mongoose from 'mongoose';
 import Category from '../../models/category';
 import SubCategory from '../../models/subcategory';
+import Ad from '../../models/ads';
 
 
 const SALT: any = process.env.SALT
@@ -75,11 +76,23 @@ const DashService = {
             // Calculate the number of previous and next pages available
             const previousPages = currentPageNum - 1;
             const nextPages = (totalPages - currentPageNum) < 0 ? 0 : totalPages - currentPageNum;
+
+            // Fetch subcategories and service counts for each category
+            const categoriesWithDetails = await Promise.all(existingRecords.map(async (category: any) => {
+                const subcategories = await SubCategory.find({ categoryId: category._id });
+                const serviceCount = await Ad.countDocuments({ categoryId: category._id });
+
+                return {
+                    ...category._doc,
+                    subcategories,
+                    serviceCount
+                };
+            }));
                
 
             return { 
                 data: { 
-                    existingRecords,
+                    existingRecords: categoriesWithDetails,
                     totalDocuments, 
                     hasPreviousPage, 
                     previousPages, 
