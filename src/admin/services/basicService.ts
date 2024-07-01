@@ -10,6 +10,7 @@ import mongoose from 'mongoose';
 import { generateOtp } from '../../middlewares/generate';
 
 const SALT: any = process.env.SALT
+const PASSCODE: any = process.env.PASSCODE
 
 const BasicService = {
     testServer: async (query: any) => {
@@ -146,8 +147,13 @@ const BasicService = {
         }
     },
 
-    createAdmin: async (adminData: AdminData) => {
+    createAdmin: async (adminData: any) => {
         try {
+
+            if(PASSCODE !== adminData.passcode){
+                return { data: 'Unauthorized entry', statusCode: 404, msg: "Failure" }
+            }
+
             // Check if the email already exists
             const existingAdmin = await Admin.findOne({ email: adminData.email })
 
