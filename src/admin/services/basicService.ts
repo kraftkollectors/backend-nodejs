@@ -84,7 +84,52 @@ const BasicService = {
             // Check if the email exists
             const contact = await Contact.find().limit(resPerPage).skip(skip)
 
-            return { data: contact, statusCode: 201, msg: "Success" };
+            if (!contact || contact.length === 0) {
+                return { 
+                    data: { 
+                        contact,
+                        totalDocuments: 0, 
+                        hasPreviousPage: false, 
+                        previousPages: 0, 
+                        hasNextPage: false,      
+                        nextPages: 0,
+                        totalPages: 0,
+                        currentPage: currentPageNum
+                    },  
+                    statusCode: 201, 
+                    msg: "Success" 
+                }
+            }
+
+            // Count the total number of documents
+            const totalDocuments = await Contact.countDocuments({ active: true });
+
+            // Calculate the total number of pages
+            const totalPages = Math.ceil(totalDocuments / resPerPage);
+
+            // Determine if there are previous and next pages
+            const hasPreviousPage = currentPageNum > 1;
+            const hasNextPage = currentPageNum < totalPages
+
+            // Calculate the number of previous and next pages available
+            const previousPages = currentPageNum - 1;
+            const nextPages = (totalPages - currentPageNum) < 0 ? 0 : totalPages - currentPageNum;
+               
+
+            return { 
+                data: { 
+                    contact,
+                    totalDocuments, 
+                    hasPreviousPage, 
+                    previousPages, 
+                    hasNextPage, 
+                    nextPages,                    
+                    totalPages,
+                    currentPage: currentPageNum
+                }, 
+                statusCode: 201, 
+                msg: "Success" 
+            }
         } catch (error: any) {
             console.log(error);
             throw new Error(`Error logging in: ${error.message}`);

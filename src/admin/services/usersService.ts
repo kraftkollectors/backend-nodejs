@@ -5,75 +5,13 @@ import Certificate from '../../models/certification'
 import Education from '../../models/education'
 import Artisan from '../../models/artisan'
 import mongoose from 'mongoose';
+import { getFilteredUsers } from '../../middlewares/calculateBound';
 
 
 const UsersService = {
     getUsers: async (query: any) => {
         try {
-
-            const resPerPage = 10
-            const currentPageNum = Number(query.page) || 1
-            const skip = resPerPage * (currentPageNum - 1)
-
-            const search = query.keyword ? {
-                userName: {
-                    $regex: query.keyword,
-                    $options: 'i'
-                },
-                active: true
-            } : { active: true }
-
-            // Check if the email already exists
-            const existingUser = await Users.find(search, { active: 0, password: 0 })
-            .limit(resPerPage)
-            .skip(skip)
-
-            if (!existingUser || existingUser.length === 0) {
-                return { 
-                    data: { 
-                        existingUser,
-                        totalDocuments: 0, 
-                        hasPreviousPage: false, 
-                        previousPages: 0, 
-                        hasNextPage: false,      
-                        nextPages: 0,
-                        totalPages: 0,
-                        currentPage: currentPageNum
-                    },  
-                    statusCode: 201, 
-                    msg: "Success" 
-                }
-            }
-            
-            // Count the total number of documents
-            const totalDocuments = await Users.countDocuments(search);
-
-            // Calculate the total number of pages
-            const totalPages = Math.ceil(totalDocuments / resPerPage);
-
-            // Determine if there are previous and next pages
-            const hasPreviousPage = currentPageNum > 1;
-            const hasNextPage = currentPageNum < totalPages
-
-            // Calculate the number of previous and next pages available
-            const previousPages = currentPageNum - 1;
-            const nextPages = (totalPages - currentPageNum) < 0 ? 0 : totalPages - currentPageNum;
-               
-
-            return { 
-                data: { 
-                    existingUser,
-                    totalDocuments, 
-                    hasPreviousPage, 
-                    previousPages, 
-                    hasNextPage, 
-                    nextPages,                    
-                    totalPages,
-                    currentPage: currentPageNum
-                }, 
-                statusCode: 201, 
-                msg: "Success" 
-            }
+            return await getFilteredUsers(query)
 
         } catch (error: any) {
             throw new Error(`Error fetching account: ${error.message}`);
