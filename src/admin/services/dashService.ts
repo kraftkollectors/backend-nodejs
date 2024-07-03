@@ -41,7 +41,15 @@ const DashService = {
             const currentPageNum = Number(query.page) || 1
             const skip = resPerPage * (currentPageNum - 1)
 
-            const existingRecords = await Category.find()
+            // adding search
+            const keyword = query.q ? {
+                title: {
+                    $regex: query.q,
+                    $options: 'i'
+                }
+            } : {}
+
+            const existingRecords = await Category.find({ ...keyword })
             .sort({ createdAt: -1 })
             .limit(resPerPage)
             .skip(skip)
@@ -64,7 +72,7 @@ const DashService = {
             }           
 
             // Count the total number of documents
-            const totalDocuments = await Category.countDocuments();
+            const totalDocuments = await Category.countDocuments({ ...keyword });
 
             // Calculate the total number of pages
             const totalPages = Math.ceil(totalDocuments / resPerPage);
@@ -137,7 +145,15 @@ const DashService = {
             const currentPageNum = Number(query.page) || 1
             const skip = resPerPage * (currentPageNum - 1)
 
-            const existingRecords = await SubCategory.find()
+            // adding search
+            const keyword = query.q ? {
+                title: {
+                    $regex: query.q,
+                    $options: 'i'
+                }
+            } : {}
+
+            const existingRecords = await SubCategory.find({ ...keyword })
             .sort({ createdAt: -1 })
             .limit(resPerPage)
             .skip(skip)
@@ -160,7 +176,7 @@ const DashService = {
             }           
 
             // Count the total number of documents
-            const totalDocuments = await SubCategory.countDocuments();
+            const totalDocuments = await SubCategory.countDocuments({ ...keyword });
 
             // Calculate the total number of pages
             const totalPages = Math.ceil(totalDocuments / resPerPage);
