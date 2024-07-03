@@ -64,7 +64,7 @@ const DashService = {
             }           
 
             // Count the total number of documents
-            const totalDocuments = await Category.countDocuments({ active: true });
+            const totalDocuments = await Category.countDocuments();
 
             // Calculate the total number of pages
             const totalPages = Math.ceil(totalDocuments / resPerPage);
@@ -160,7 +160,7 @@ const DashService = {
             }           
 
             // Count the total number of documents
-            const totalDocuments = await SubCategory.countDocuments({ active: true });
+            const totalDocuments = await SubCategory.countDocuments();
 
             // Calculate the total number of pages
             const totalPages = Math.ceil(totalDocuments / resPerPage);
