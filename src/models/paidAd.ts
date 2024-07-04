@@ -16,7 +16,8 @@ const PaidAdSchema = new Schema({
     },
     isActive: {
         type: Boolean,
-        required: true
+        default: false,
+        required: false
     },
     image: {
         type: String,
