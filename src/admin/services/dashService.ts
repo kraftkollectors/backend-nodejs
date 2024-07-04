@@ -41,7 +41,15 @@ const DashService = {
             const currentPageNum = Number(query.page) || 1
             const skip = resPerPage * (currentPageNum - 1)
 
-            const existingRecords = await Category.find()
+            // adding search
+            const keyword = query.q ? {
+                title: {
+                    $regex: query.q,
+                    $options: 'i'
+                }
+            } : {}
+
+            const existingRecords = await Category.find({ ...keyword })
             .sort({ createdAt: -1 })
             .limit(resPerPage)
             .skip(skip)
@@ -64,7 +72,7 @@ const DashService = {
             }           
 
             // Count the total number of documents
-            const totalDocuments = await Category.countDocuments({ active: true });
+            const totalDocuments = await Category.countDocuments({ ...keyword });
 
             // Calculate the total number of pages
             const totalPages = Math.ceil(totalDocuments / resPerPage);
@@ -80,7 +88,7 @@ const DashService = {
             // Fetch subcategories and service counts for each category
             const categoriesWithDetails = await Promise.all(existingRecords.map(async (category: any) => {
                 const subcategories = await SubCategory.find({ categoryId: category._id });
-                const serviceCount = await Ad.countDocuments({ categoryId: category._id });
+                const serviceCount = await Ad.countDocuments({ category: category.title });
 
                 return {
                     ...category._doc,
@@ -137,7 +145,15 @@ const DashService = {
             const currentPageNum = Number(query.page) || 1
             const skip = resPerPage * (currentPageNum - 1)
 
-            const existingRecords = await SubCategory.find()
+            // adding search
+            const keyword = query.q ? {
+                title: {
+                    $regex: query.q,
+                    $options: 'i'
+                }
+            } : {}
+
+            const existingRecords = await SubCategory.find({ ...keyword })
             .sort({ createdAt: -1 })
             .limit(resPerPage)
             .skip(skip)
@@ -160,7 +176,7 @@ const DashService = {
             }           
 
             // Count the total number of documents
-            const totalDocuments = await SubCategory.countDocuments({ active: true });
+            const totalDocuments = await SubCategory.countDocuments({ ...keyword });
 
             // Calculate the total number of pages
             const totalPages = Math.ceil(totalDocuments / resPerPage);
@@ -172,11 +188,22 @@ const DashService = {
             // Calculate the number of previous and next pages available
             const previousPages = currentPageNum - 1;
             const nextPages = (totalPages - currentPageNum) < 0 ? 0 : totalPages - currentPageNum;
+
+
+            // Fetch subcategories and service counts for each category
+            const subCategoriesWithDetails = await Promise.all(existingRecords.map(async (subCategory: any) => {
+                const serviceCount = await Ad.countDocuments({ subCategory: subCategory.title });
+
+                return {
+                    ...subCategory._doc,
+                    serviceCount
+                };
+            }));
                
 
             return { 
                 data: { 
-                    existingRecords,
+                    existingRecords: subCategoriesWithDetails,
                     totalDocuments, 
                     hasPreviousPage, 
                     previousPages, 
