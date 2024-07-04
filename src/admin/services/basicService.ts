@@ -82,12 +82,12 @@ const BasicService = {
             const skip = resPerPage * (currentPageNum - 1)
 
             // Check if the email exists
-            const contact = await Contact.find().limit(resPerPage).skip(skip)
+            const existingRecord = await Contact.find().limit(resPerPage).skip(skip)
 
-            if (!contact || contact.length === 0) {
+            if (!existingRecord || existingRecord.length === 0) {
                 return { 
                     data: { 
-                        contact,
+                        existingRecord,
                         totalDocuments: 0, 
                         hasPreviousPage: false, 
                         previousPages: 0, 
@@ -118,7 +118,7 @@ const BasicService = {
 
             return { 
                 data: { 
-                    contact,
+                    existingRecord,
                     totalDocuments, 
                     hasPreviousPage, 
                     previousPages, 

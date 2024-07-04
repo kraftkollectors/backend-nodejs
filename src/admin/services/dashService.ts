@@ -234,8 +234,11 @@ const DashService = {
 
             if (!existingRecord) {
                 return { data: 'No record found', statusCode: 404, msg: "Failure" };
-            } 
-            return { data: { existingRecord }, statusCode: 201, msg: "Success" };
+            }
+
+            const serviceCount = await Ad.countDocuments({ subCategory: existingRecord.title });
+
+            return { data: { existingRecord: { ...existingRecord, serviceCount } }, statusCode: 201, msg: "Success" };
         } catch (error: any) {
             throw new Error(`Error fetching account: ${error.message}`);
         }

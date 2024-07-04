@@ -25,6 +25,8 @@ const startServer = async () => {
     const PORT: any = process.env.PORT
 
     const server = app.listen(PORT, (req: any, res: any) => {
+        // cron job to run every 24 hrs
+        require('./utils/checker') 
         console.log(`listening on port ${PORT}`)
     })
     .on('error', (err: any) => {

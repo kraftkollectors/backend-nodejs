@@ -1,5 +1,3 @@
-import dotenv from 'dotenv';
-dotenv.config();
 import PaidAd from '../../models/paidAd'
 import mongoose from 'mongoose';
 import { getFilteredPaidAds } from '../../middlewares/calculateBound';
@@ -39,6 +37,19 @@ const AdsService = {
 
     postPaidAd: async (adminData: AdminDataPaidAds) => {
         try {
+            // Get current date
+            const currentDate = new Date();
+            currentDate.setHours(0, 0, 0, 0);
+
+            // Parse the startDate from adminData
+            const startDate = new Date(adminData.startDate);
+            startDate.setHours(0, 0, 0, 0);
+
+            // Check if startDate is equal to the current date
+            if (startDate.getTime() === currentDate.getTime()) {
+                adminData.isActive = true;
+            }
+
             const ad = await new PaidAd({ ...adminData }).save();
             if(ad !== null){
                 return { data: { ad }, statusCode: 201, msg: "Success" };
