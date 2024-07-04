@@ -334,18 +334,21 @@ const DashService = {
             let data = await new Category({ title }).save();
 
             if(data !== null){
+                // Transform subCategories array to array of objects with title property
+                const subCategoriesWithTitle = subCategories.map((subcategory: string) => ({
+                    title: subcategory,
+                    categoryId: data._id // Assign the category _id to each subcategory
+                }));
+
                 // Iterate over each subcategory and save it
-                for (let subcategory of subCategories) {
+                for (let subcategory of subCategoriesWithTitle) {
                     // Check if a subcategory with the same categoryId and title already exists
-                    let existingSubCategory = await SubCategory.findOne({ categoryId: data._id, title: subcategory.title });
+                    let existingSubCategory = await SubCategory.findOne({ categoryId: subcategory.categoryId, title: subcategory.title });
                     if (existingSubCategory) {
                         return { data: `Subcategory with title "${subcategory.title}" already exists for this category`, statusCode: 409, msg: "Failure" };
                     }
-    
-                    await new SubCategory({
-                        categoryId: data._id, // Assign the category _id to each subcategory
-                        ...subcategory
-                    }).save();
+
+                    await new SubCategory(subcategory).save();
                 }
                 return { data: { data }, statusCode: 201, msg: "Success" };
             }else{
@@ -362,17 +365,23 @@ const DashService = {
         try {
             // Extract categoryId and subCategories from userData
             const { categoryId, subCategories } = userData;
+
+            // Transform subCategories array to array of objects with title property
+            const subCategoriesWithTitle = subCategories.map((subCategory: string) => ({
+                title: subCategory,
+                categoryId: categoryId // Assign the categoryId to each subcategory
+            }));
             
             // Create an array of promises for saving each subcategory
-            const savePromises = subCategories.map(async (subCategory: any) => {
+            const savePromises = subCategoriesWithTitle.map(async (subCategory: any) => {
                 // Check if a subcategory with the same categoryId and title already exists
                 let existingSubCategory = await SubCategory.findOne({ categoryId, title: subCategory.title });
                 if (existingSubCategory) {
                     throw new Error(`Subcategory with title "${subCategory.title}" already exists for this category`);
                 }
-    
+
                 // Create a new SubCategory instance with categoryId and subCategory data
-                return await new SubCategory({ categoryId, ...subCategory }).save();
+                return await new SubCategory(subCategory).save();
             });
 
             // Wait for all subcategory save operations to complete
