@@ -324,11 +324,24 @@ const DashService = {
         try {
 
             const { title, subCategories } = userData
+
+            // Check if a category with the same title already exists
+            let existingCategory = await Category.findOne({ title });
+            if (existingCategory) {
+                return { data: 'Category with this title already exists', statusCode: 409, msg: "Failure" };
+            }
+
             let data = await new Category({ title }).save();
 
             if(data !== null){
                 // Iterate over each subcategory and save it
                 for (let subcategory of subCategories) {
+                    // Check if a subcategory with the same categoryId and title already exists
+                    let existingSubCategory = await SubCategory.findOne({ categoryId: data._id, title: subcategory.title });
+                    if (existingSubCategory) {
+                        return { data: `Subcategory with title "${subcategory.title}" already exists for this category`, statusCode: 409, msg: "Failure" };
+                    }
+    
                     await new SubCategory({
                         categoryId: data._id, // Assign the category _id to each subcategory
                         ...subcategory
@@ -352,6 +365,12 @@ const DashService = {
             
             // Create an array of promises for saving each subcategory
             const savePromises = subCategories.map(async (subCategory: any) => {
+                // Check if a subcategory with the same categoryId and title already exists
+                let existingSubCategory = await SubCategory.findOne({ categoryId, title: subCategory.title });
+                if (existingSubCategory) {
+                    throw new Error(`Subcategory with title "${subCategory.title}" already exists for this category`);
+                }
+    
                 // Create a new SubCategory instance with categoryId and subCategory data
                 return await new SubCategory({ categoryId, ...subCategory }).save();
             });
