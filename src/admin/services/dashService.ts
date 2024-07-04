@@ -296,14 +296,15 @@ const DashService = {
     addCategory: async (userData: any) => {
         try {
 
-            let data = await new Category({ ...userData }).save();
+            const { title, subCategories } = userData
+            let data = await new Category({ title }).save();
 
             if(data !== null){
                 // Iterate over each subcategory and save it
-                for (let subcategory of userData.subCategories) {
+                for (let subcategory of subCategories) {
                     await new SubCategory({
-                        ...subcategory,
-                        categoryId: data._id // Assign the category _id to each subcategory
+                        categoryId: data._id, // Assign the category _id to each subcategory
+                        ...subcategory
                     }).save();
                 }
                 return { data: { data }, statusCode: 201, msg: "Success" };
@@ -312,7 +313,7 @@ const DashService = {
             }
             
         } catch (error: any) {
-            throw new Error(`Error editing account password: ${error.message}`);
+            throw new Error(`error: ${error.message}`);
         }
     },
 
@@ -339,7 +340,7 @@ const DashService = {
             }
             
         } catch (error: any) {
-            throw new Error(`Error editing account password: ${error.message}`);
+            throw new Error(`error: ${error.message}`);
         }
     },
 
