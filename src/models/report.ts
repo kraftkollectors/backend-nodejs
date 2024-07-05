@@ -17,7 +17,17 @@ const ReportSchema = new Schema({
     text: {
         type: String,
         required: true
-    }
+    },
+    read: {
+        type: Boolean,
+        default: false,
+        required: false
+    },
+    resolved: {
+        type: Boolean,
+        default: false,
+        required: false
+    },
 }, { timestamps: true })
 
 

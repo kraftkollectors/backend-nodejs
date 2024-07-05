@@ -63,6 +63,8 @@ router.patch("/ads/:id", verifyToken, AdsController.editAd);
 router.delete("/ads/:id", verifyToken, AdsController.deleteAd);
 
 router.get("/report", AdsController.getReport);
+router.get("/report/:id", AdsController.getReportById);
+router.patch("/report/:id", verifyToken, AdsController.editReport);
 router.delete("/report/:id", verifyToken, AdsController.deleteReport);
 
 // transactions

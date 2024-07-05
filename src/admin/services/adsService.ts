@@ -152,6 +152,37 @@ const AdsService = {
             throw new Error(`Error fetching ad: ${error.message}`);
         }
     },
+
+    getReportById: async (id: string) => {
+        try {
+            // check if id is a valid mongoose id
+            const isValidId = mongoose.isValidObjectId(id)
+
+            if(!isValidId){
+                return { data: 'Please enter a correct id', statusCode: 404, msg: "Failure" };
+            }
+
+            // Check if the email already exists
+            const existingRecords = await Report.findOne({ _id: id })
+
+            if (!existingRecords) {
+                return { data: 'No report found', statusCode: 404, msg: "Failure" };
+            }
+            
+            await Report.updateOne({ _id: id }, 
+                {
+                    $set:{
+                        read: true
+                    }
+                }
+            )
+
+            return { data: { existingRecords }, statusCode: 201, msg: "Success" };
+        } catch (error: any) {
+            console.log(error);
+            throw new Error(`Error logging in: ${error.message}`);
+        }
+    },
     
     getSingleAd: async (id: string) => {
         try {
@@ -302,7 +333,32 @@ const AdsService = {
         } catch (error: any) {
             throw new Error(`Error editing ads: ${error.message}`);
         }
-    }
+    },
+    
+    editReport: async (id: string, body: any) => {
+        try {
+            // check if id is a valid mongoose id
+            const isValidId = mongoose.isValidObjectId(id)
+
+            if(!isValidId){
+                return { data: 'Please enter a correct id', statusCode: 404, msg: "Failure" };
+            }
+
+            let data = await Report.findByIdAndUpdate(id, body, {
+                new: true,
+                runValidators: true
+            })
+
+            if(data !== null){
+                return { data: { data }, statusCode: 201, msg: "Success" };
+            }else{
+                return { data: 'Error updating report', statusCode: 401, msg: "Failure" };
+            }
+        } catch (error: any) {
+            console.log(error);
+            throw new Error(`Error logging in: ${error.message}`);
+        }
+    },
 
 }
 

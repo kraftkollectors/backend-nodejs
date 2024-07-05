@@ -29,6 +29,29 @@ const AdsController = {
         }
     },
 
+    getReportById: async (req: Request, res: Response) => {
+        try {
+            const id = req.params.id
+            const data = await AdsService.getReportById(id);
+            res.status(data.statusCode).json(data);
+        } catch (error: any) {
+            console.log(error.message)
+            res.status(500).json({ data: error.message, statusCode: 400, msg: "Failure" });
+        }
+    },
+
+    editReport: async (req: Request, res: Response) => {
+        try {
+            const id = req.params.id
+            const body = req.body
+            const data = await AdsService.editReport(id, body);
+            res.status(data.statusCode).json(data);
+        } catch (error: any) {
+            console.log(error.message)
+            res.status(500).json({ data: error.message, statusCode: 400, msg: "Failure" });
+        }
+    },
+
     getSingleAd: async (req: Request, res: Response) => {
         try {
             const id = req.params.id;
