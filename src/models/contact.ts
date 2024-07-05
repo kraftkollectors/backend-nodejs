@@ -27,9 +27,9 @@ const ContactSchema = new Schema({
         default: false,
         required: false,
     },
-    status: {
-        type: String,
-        default: 'unresolved',
+    resolved: {
+        type: Boolean,
+        default: false,
         required: false
     },
 }, { timestamps: true })

@@ -8,6 +8,7 @@ import generateToken from '../../utils/tokenUtils';
 import Contact from '../../models/contact';
 import mongoose from 'mongoose';
 import { generateOtp } from '../../middlewares/generate';
+import { getFilteredContactAndReport } from '../../middlewares/calculateBound';
 
 const SALT: any = process.env.SALT
 const PASSCODE: any = process.env.PASSCODE
@@ -77,59 +78,8 @@ const BasicService = {
     
     getContact: async (query: any) => {
         try {
-            const resPerPage = 10
-            const currentPageNum = Number(query.page) || 1
-            const skip = resPerPage * (currentPageNum - 1)
-
-            // Check if the email exists
-            const existingRecords = await Contact.find().limit(resPerPage).skip(skip)
-
-            if (!existingRecords || existingRecords.length === 0) {
-                return { 
-                    data: { 
-                        existingRecords,
-                        totalDocuments: 0, 
-                        hasPreviousPage: false, 
-                        previousPages: 0, 
-                        hasNextPage: false,      
-                        nextPages: 0,
-                        totalPages: 0,
-                        currentPage: currentPageNum
-                    },  
-                    statusCode: 201, 
-                    msg: "Success" 
-                }
-            }
-
-            // Count the total number of documents
-            const totalDocuments = await Contact.countDocuments({ active: true });
-
-            // Calculate the total number of pages
-            const totalPages = Math.ceil(totalDocuments / resPerPage);
-
-            // Determine if there are previous and next pages
-            const hasPreviousPage = currentPageNum > 1;
-            const hasNextPage = currentPageNum < totalPages
-
-            // Calculate the number of previous and next pages available
-            const previousPages = currentPageNum - 1;
-            const nextPages = (totalPages - currentPageNum) < 0 ? 0 : totalPages - currentPageNum;
-               
-
-            return { 
-                data: { 
-                    existingRecords,
-                    totalDocuments, 
-                    hasPreviousPage, 
-                    previousPages, 
-                    hasNextPage, 
-                    nextPages,                    
-                    totalPages,
-                    currentPage: currentPageNum
-                }, 
-                statusCode: 201, 
-                msg: "Success" 
-            }
+            return await getFilteredContactAndReport(Contact, query)
+            
         } catch (error: any) {
             console.log(error);
             throw new Error(`Error logging in: ${error.message}`);

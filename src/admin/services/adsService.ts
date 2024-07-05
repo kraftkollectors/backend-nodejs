@@ -4,6 +4,7 @@ import Ads from '../../models/ads'
 import mongoose from 'mongoose';
 import Report from '../../models/report';
 import Users from '../../models/users';
+import { getFilteredContactAndReport } from '../../middlewares/calculateBound';
 
 
 const AdsService = {
@@ -79,74 +80,7 @@ const AdsService = {
 
     getReport: async (query: any) => {
         try {
-            const resPerPage = 10
-            const currentPageNum = Number(query.page) || 1
-            const skip = resPerPage * (currentPageNum - 1)
-
-            // Check if the email already exists
-            const existingRecords = await Report.find({ active: true })
-            .limit(resPerPage)
-            .skip(skip)
-
-            if (!existingRecords || existingRecords.length === 0) {
-                return { 
-                    data: { 
-                        existingRecords,
-                        totalDocuments: 0, 
-                        hasPreviousPage: false, 
-                        previousPages: 0, 
-                        hasNextPage: false,      
-                        nextPages: 0,
-                        totalPages: 0,
-                        currentPage: currentPageNum
-                    },  
-                    statusCode: 201, 
-                    msg: "Success" 
-                }
-            }           
-
-            // Count the total number of documents
-            const totalDocuments = await Report.countDocuments({ active: true });
-
-            // Calculate the total number of pages
-            const totalPages = Math.ceil(totalDocuments / resPerPage);
-
-            // Determine if there are previous and next pages
-            const hasPreviousPage = currentPageNum > 1;
-            const hasNextPage = currentPageNum < totalPages
-
-            // Calculate the number of previous and next pages available
-            const previousPages = currentPageNum - 1;
-            const nextPages = (totalPages - currentPageNum) < 0 ? 0 : totalPages - currentPageNum;
-
-            // Fetch user details for each report
-            const reportDetails = await Promise.all(
-                existingRecords.map(async (report: any) => {
-                    const reporter = await Users.findById(report.reporterId, 'userName email _id').lean();
-                    const reported = await Users.findById(report.reportedId, 'userName email _id').lean();
-
-                    return {
-                        ...report,
-                        reporter: reporter || null,
-                        reported: reported || null,
-                    };
-                })
-            );                        
-
-            return { 
-                data: { 
-                    existingRecords: reportDetails,
-                    totalDocuments, 
-                    hasPreviousPage, 
-                    previousPages, 
-                    hasNextPage, 
-                    nextPages,                    
-                    totalPages,
-                    currentPage: currentPageNum
-                }, 
-                statusCode: 201, 
-                msg: "Success" 
-            }
+            return await getFilteredContactAndReport(Report, query)
 
         } catch (error: any) {
             throw new Error(`Error fetching ad: ${error.message}`);
