@@ -22,14 +22,14 @@ const AdsService = {
             } : { active: true }
 
             // Check if the email already exists
-            const existingAd = await Ads.find(search, { active: true })
+            const existingRecords = await Ads.find(search, { active: true })
             .limit(resPerPage)
             .skip(skip)
 
-            if (!existingAd || existingAd.length === 0) {
+            if (!existingRecords || existingRecords.length === 0) {
                 return { 
                     data: { 
-                        existingAd,
+                        existingRecords,
                         totalDocuments: 0,
                         hasPreviousPage: false, 
                         previousPages: 0, 
@@ -60,7 +60,7 @@ const AdsService = {
 
             return { 
                 data: { 
-                    existingAd,
+                    existingRecords,
                     totalDocuments, 
                     hasPreviousPage, 
                     previousPages, 
@@ -84,14 +84,14 @@ const AdsService = {
             const skip = resPerPage * (currentPageNum - 1)
 
             // Check if the email already exists
-            const reports = await Report.find({ active: true })
+            const existingRecords = await Report.find({ active: true })
             .limit(resPerPage)
             .skip(skip)
 
-            if (!reports || reports.length === 0) {
+            if (!existingRecords || existingRecords.length === 0) {
                 return { 
                     data: { 
-                        reports,
+                        existingRecords,
                         totalDocuments: 0, 
                         hasPreviousPage: false, 
                         previousPages: 0, 
@@ -121,7 +121,7 @@ const AdsService = {
 
             // Fetch user details for each report
             const reportDetails = await Promise.all(
-                reports.map(async (report: any) => {
+                existingRecords.map(async (report: any) => {
                     const reporter = await Users.findById(report.reporterId, 'userName email _id').lean();
                     const reported = await Users.findById(report.reportedId, 'userName email _id').lean();
 
@@ -135,7 +135,7 @@ const AdsService = {
 
             return { 
                 data: { 
-                    reports,
+                    existingRecords: reportDetails,
                     totalDocuments, 
                     hasPreviousPage, 
                     previousPages, 
@@ -189,14 +189,14 @@ const AdsService = {
             const skip = resPerPage * (currentPageNum - 1)
 
             // Check if the email already exists
-            const existingAd = await Ads.find({ userid: id })
+            const existingRecords = await Ads.find({ userid: id })
             .limit(resPerPage)
             .skip(skip)
 
-            if (!existingAd || existingAd.length === 0) {
+            if (!existingRecords || existingRecords.length === 0) {
                 return { 
                     data: { 
-                        existingAd,
+                        existingRecords,
                         totalDocuments: 0, 
                         hasPreviousPage: false, 
                         previousPages: 0, 
@@ -226,7 +226,7 @@ const AdsService = {
 
             return { 
                 data: { 
-                    existingAd,
+                    existingRecords,
                     totalDocuments, 
                     hasPreviousPage, 
                     previousPages, 
