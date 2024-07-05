@@ -152,7 +152,7 @@ const AdsController = {
     editAd: async (req: any, res: Response) => {
         try {
             if(req.body.userEmail != req.user.email){
-                res.status(400).json({ data: 'Authentication error', statusCode: 400, msg: "Failure" });
+                return res.status(400).json({ data: 'Authentication error', statusCode: 400, msg: "Failure" });
             }
             
             if(!checkIfArtisan(req.body.userEmail)){
@@ -173,7 +173,7 @@ const AdsController = {
     enableDisableAd: async (req: any, res: Response) => {
         try {
             if(req.body.userEmail != req.user.email){
-                res.status(400).json({ data: 'Authentication error', statusCode: 400, msg: "Failure" });
+                return res.status(400).json({ data: 'Authentication error', statusCode: 400, msg: "Failure" });
             }
 
             if(!checkIfArtisan(req.body.userEmail)){
@@ -194,7 +194,7 @@ const AdsController = {
     postAd: async (req: any, res: Response) => {
         try {
             if(req.body.userEmail != req.user.email){
-                res.status(400).json({ data: 'Authentication error', statusCode: 400, msg: "Failure" });
+                return res.status(400).json({ data: 'Authentication error', statusCode: 400, msg: "Failure" });
             }
 
             if(!checkIfArtisan(req.body.userEmail)){
@@ -214,7 +214,7 @@ const AdsController = {
     saveAd: async (req: any, res: Response) => {
         try {
             if(req.body.userEmail != req.user.email){
-                res.status(400).json({ data: 'Authentication error', statusCode: 400, msg: "Failure" });
+                return res.status(400).json({ data: 'Authentication error', statusCode: 400, msg: "Failure" });
             }
 
             const sendData = req.body;
@@ -230,7 +230,7 @@ const AdsController = {
     createReport: async (req: any, res: Response) => {
         try {
             if(req.body.userEmail != req.user.email){
-                res.status(400).json({ data: 'Authentication error', statusCode: 400, msg: "Failure" });
+                return res.status(400).json({ data: 'Authentication error', statusCode: 400, msg: "Failure" });
             }
 
             const sendData = req.body;
@@ -246,7 +246,7 @@ const AdsController = {
     rateAd: async (req: any, res: Response) => {
         try {
             if(req.body.userEmail != req.user.email){
-                res.status(400).json({ data: 'Authentication error', statusCode: 400, msg: "Failure" });
+                return res.status(400).json({ data: 'Authentication error', statusCode: 400, msg: "Failure" });
             }
 
             const sendData = req.body;

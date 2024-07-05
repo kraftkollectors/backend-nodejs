@@ -61,7 +61,7 @@ const PaidAdsController = {
     editPaidAd: async (req: any, res: Response) => {
         try {
             if(req.body.adminEmail != req.admin.email){
-                res.status(400).json({ data: 'Authentication error', statusCode: 400, msg: "Failure" });
+                return res.status(400).json({ data: 'Authentication error', statusCode: 400, msg: "Failure" });
             }
 
             const id = req.params.id;

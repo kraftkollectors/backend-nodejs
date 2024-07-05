@@ -69,7 +69,7 @@ const DashController = {
     editAdmin: async (req: any, res: Response) => {
         try {
             if(req.body.adminEmail != req.admin.email){
-                res.status(400).json({ data: 'Authentication error', statusCode: 400, msg: "Failure" });
+                return res.status(400).json({ data: 'Authentication error', statusCode: 400, msg: "Failure" });
             }
 
             const adminid = req.params.adminid;
@@ -86,7 +86,7 @@ const DashController = {
     editCategory: async (req: any, res: Response) => {
         try {
             if(req.body.adminEmail != req.admin.email){
-                res.status(400).json({ data: 'Authentication error', statusCode: 400, msg: "Failure" });
+                return res.status(400).json({ data: 'Authentication error', statusCode: 400, msg: "Failure" });
             }
 
             const id = req.params.id;
@@ -103,7 +103,7 @@ const DashController = {
     editSubCategory: async (req: any, res: Response) => {
         try {
             if(req.body.adminEmail != req.admin.email){
-                res.status(400).json({ data: 'Authentication error', statusCode: 400, msg: "Failure" });
+                return res.status(400).json({ data: 'Authentication error', statusCode: 400, msg: "Failure" });
             }
 
             const id = req.params.id;
@@ -120,7 +120,7 @@ const DashController = {
     addCategory: async (req: any, res: Response) => {
         try {
             if(req.body.adminEmail != req.admin.email){
-                res.status(400).json({ data: 'Authentication error', statusCode: 400, msg: "Failure" });
+                return res.status(400).json({ data: 'Authentication error', statusCode: 400, msg: "Failure" });
             }
 
             const sendData = req.body;
@@ -136,7 +136,7 @@ const DashController = {
     addSubCategory: async (req: any, res: Response) => {
         try {
             if(req.body.adminEmail != req.admin.email){
-                res.status(400).json({ data: 'Authentication error', statusCode: 400, msg: "Failure" });
+                return res.status(400).json({ data: 'Authentication error', statusCode: 400, msg: "Failure" });
             }
 
             const sendData = req.body;

@@ -84,11 +84,11 @@ const PayController = {
     createCert: async (req: any, res: Response) => {
         try {
             if(req.body.userEmail != req.user.email){
-                res.status(400).json({ data: 'Authentication error', statusCode: 400, msg: "Failure" });
+                return res.status(400).json({ data: 'Authentication error', statusCode: 400, msg: "Failure" });
             }
 
             if(!checkIfArtisan(req.body.userEmail)){
-                res.status(400).json({ data: 'Not an artisan', statusCode: 400, msg: "Failure" });
+                return res.status(400).json({ data: 'Not an artisan', statusCode: 400, msg: "Failure" });
             }
 
             const sendData = req.body;
@@ -104,11 +104,11 @@ const PayController = {
     createEdu: async (req: any, res: Response) => {
         try {
             if(req.body.userEmail != req.user.email){
-                res.status(400).json({ data: 'Authentication error', statusCode: 400, msg: "Failure" });
+                return res.status(400).json({ data: 'Authentication error', statusCode: 400, msg: "Failure" });
             }
 
             if(!checkIfArtisan(req.body.userEmail)){
-                res.status(400).json({ data: 'Not an artisan', statusCode: 400, msg: "Failure" });
+                return res.status(400).json({ data: 'Not an artisan', statusCode: 400, msg: "Failure" });
             }
 
             const sendData = req.body;
@@ -124,7 +124,7 @@ const PayController = {
     becomeArtisan: async (req: any, res: Response) => {
         try {
             if(req.body.userEmail != req.user.email){
-                res.status(400).json({ data: 'Authentication error', statusCode: 400, msg: "Failure" });
+                return res.status(400).json({ data: 'Authentication error', statusCode: 400, msg: "Failure" });
             }
 
             const sendData = req.body;
@@ -140,7 +140,7 @@ const PayController = {
     makePayment: async (req: any, res: Response) => {
         try {
             if(req.body.userEmail != req.user.email){
-                res.status(400).json({ data: 'Authentication error', statusCode: 400, msg: "Failure" });
+                return res.status(400).json({ data: 'Authentication error', statusCode: 400, msg: "Failure" });
             }
 
             const sendData = req.body;
@@ -156,11 +156,11 @@ const PayController = {
     editCert: async (req: any, res: Response) => {
         try {
             if(req.body.userEmail != req.user.email){
-                res.status(400).json({ data: 'Authentication error', statusCode: 400, msg: "Failure" });
+                return res.status(400).json({ data: 'Authentication error', statusCode: 400, msg: "Failure" });
             }
 
             if(!checkIfArtisan(req.body.userEmail)){
-                res.status(400).json({ data: 'Not an artisan', statusCode: 400, msg: "Failure" });
+                return res.status(400).json({ data: 'Not an artisan', statusCode: 400, msg: "Failure" });
             }
 
             const id = req.params.id;
@@ -177,11 +177,11 @@ const PayController = {
     editEdu: async (req: any, res: Response) => {
         try {
             if(req.body.userEmail != req.user.email){
-                res.status(400).json({ data: 'Authentication error', statusCode: 400, msg: "Failure" });
+                return res.status(400).json({ data: 'Authentication error', statusCode: 400, msg: "Failure" });
             }
 
             if(!checkIfArtisan(req.body.userEmail)){
-                res.status(400).json({ data: 'Not an artisan', statusCode: 400, msg: "Failure" });
+                return res.status(400).json({ data: 'Not an artisan', statusCode: 400, msg: "Failure" });
             }
 
             const id = req.params.id;
@@ -198,11 +198,11 @@ const PayController = {
     editArtisan: async (req: any, res: Response) => {
         try {
             if(req.body.userEmail != req.user.email){
-                res.status(400).json({ data: 'Authentication error', statusCode: 400, msg: "Failure" });
+                return res.status(400).json({ data: 'Authentication error', statusCode: 400, msg: "Failure" });
             }
 
             if(!checkIfArtisan(req.body.userEmail)){
-                res.status(400).json({ data: 'Not an artisan', statusCode: 400, msg: "Failure" });
+                return res.status(400).json({ data: 'Not an artisan', statusCode: 400, msg: "Failure" });
             }
 
             const userid = req.params.userid;
@@ -219,7 +219,7 @@ const PayController = {
     deleteEdu: async (req: any, res: Response) => {
         try {
             if(!checkIfArtisan(req.body.userEmail)){
-                res.status(400).json({ data: 'Not an artisan', statusCode: 400, msg: "Failure" });
+                return res.status(400).json({ data: 'Not an artisan', statusCode: 400, msg: "Failure" });
             }
 
             const id = req.params.id;
@@ -235,7 +235,7 @@ const PayController = {
     deleteCert: async (req: any, res: Response) => {
         try {
             if(!checkIfArtisan(req.body.userEmail)){
-                res.status(400).json({ data: 'Not an artisan', statusCode: 400, msg: "Failure" });
+                return res.status(400).json({ data: 'Not an artisan', statusCode: 400, msg: "Failure" });
             }
 
             const id = req.params.id;
