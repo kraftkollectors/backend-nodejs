@@ -82,12 +82,12 @@ const BasicService = {
             const skip = resPerPage * (currentPageNum - 1)
 
             // Check if the email exists
-            const existingRecord = await Contact.find().limit(resPerPage).skip(skip)
+            const existingRecords = await Contact.find().limit(resPerPage).skip(skip)
 
-            if (!existingRecord || existingRecord.length === 0) {
+            if (!existingRecords || existingRecords.length === 0) {
                 return { 
                     data: { 
-                        existingRecord,
+                        existingRecords,
                         totalDocuments: 0, 
                         hasPreviousPage: false, 
                         previousPages: 0, 
@@ -118,7 +118,7 @@ const BasicService = {
 
             return { 
                 data: { 
-                    existingRecord,
+                    existingRecords,
                     totalDocuments, 
                     hasPreviousPage, 
                     previousPages, 
@@ -146,9 +146,9 @@ const BasicService = {
             }
 
             // Check if the email already exists
-            const existingAd = await Contact.findOne({ _id: id })
+            const existingRecords = await Contact.findOne({ _id: id })
 
-            if (!existingAd) {
+            if (!existingRecords) {
                 return { data: 'No contact found', statusCode: 404, msg: "Failure" };
             }
             
@@ -160,7 +160,7 @@ const BasicService = {
                 }
             )
 
-            return { data: { existingAd }, statusCode: 201, msg: "Success" };
+            return { data: { existingRecords }, statusCode: 201, msg: "Success" };
         } catch (error: any) {
             console.log(error);
             throw new Error(`Error logging in: ${error.message}`);
