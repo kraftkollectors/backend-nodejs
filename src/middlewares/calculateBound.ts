@@ -190,6 +190,14 @@ export async function getFilteredContact<T>(data: any) {
     const query: any = {};
     let page: any = data.page ? data.page : 1
 
+    if (data.q) {      
+      query.$or = [
+        { name: { $regex: data.q, $options: 'i' } },
+        { email: { $regex: data.q, $options: 'i' } },
+        { message: { $regex: data.q, $options: 'i' } }
+      ]
+    }
+
     if(data.only){
       if (data.only === 'unread') {
         query.read = false;
@@ -246,6 +254,12 @@ export async function getFilteredContact<T>(data: any) {
 export async function getFilteredReport<T>(data: any) {
     const query: any = {};
     let page: any = data.page ? data.page : 1
+
+    if (data.q) {      
+      query.$or = [
+        { text: { $regex: data.q, $options: 'i' } }
+      ]
+    }
 
     if(data.only){
       if (data.only === 'unread') {
