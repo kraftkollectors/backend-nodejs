@@ -4,7 +4,7 @@ import Ads from '../../models/ads'
 import mongoose from 'mongoose';
 import Report from '../../models/report';
 import Users from '../../models/users';
-import { getFilteredContactAndReport } from '../../middlewares/calculateBound';
+import { getFilteredReport } from '../../middlewares/calculateBound';
 
 
 const AdsService = {
@@ -80,7 +80,7 @@ const AdsService = {
 
     getReport: async (query: any) => {
         try {
-            return await getFilteredContactAndReport(Report, query)
+            return await getFilteredReport(query)
 
         } catch (error: any) {
             throw new Error(`Error fetching ad: ${error.message}`);

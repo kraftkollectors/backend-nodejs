@@ -8,7 +8,7 @@ import generateToken from '../../utils/tokenUtils';
 import Contact from '../../models/contact';
 import mongoose from 'mongoose';
 import { generateOtp } from '../../middlewares/generate';
-import { getFilteredContactAndReport } from '../../middlewares/calculateBound';
+import { getFilteredContact } from '../../middlewares/calculateBound';
 
 const SALT: any = process.env.SALT
 const PASSCODE: any = process.env.PASSCODE
@@ -78,7 +78,7 @@ const BasicService = {
     
     getContact: async (query: any) => {
         try {
-            return await getFilteredContactAndReport(Contact, query)
+            return await getFilteredContact(query)
             
         } catch (error: any) {
             console.log(error);

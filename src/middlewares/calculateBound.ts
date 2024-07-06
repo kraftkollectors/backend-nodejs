@@ -1,6 +1,8 @@
 import Ad from '../models/ads'
 import PaidAd from '../models/paidAd'
 import User from '../models/users'
+import Contact from '../models/contact'
+import Report from '../models/report'
 import { Model } from 'mongoose';
 
 
@@ -184,7 +186,7 @@ export async function getFilteredPaidAds(data: any) {
     };
 }
 
-export async function getFilteredContactAndReport<T>(model: Model<T>, data: any) {
+export async function getFilteredContact<T>(data: any) {
     const query: any = {};
     let page: any = data.page ? data.page : 1
 
@@ -203,8 +205,65 @@ export async function getFilteredContactAndReport<T>(model: Model<T>, data: any)
     const skip = (page - 1) * 10;
   
     // Fetch the filtered and sorted ads with pagination
-    const existingRecords = await model.find(query).sort(sortOption).skip(skip).limit(10);
-    const totalDocuments = await model.countDocuments(query);
+    const existingRecords = await Contact.find(query).sort(sortOption).skip(skip).limit(10);
+    const totalDocuments = await Contact.countDocuments(query);
+    const totalPages = Math.ceil(totalDocuments / 10);
+
+    if (!existingRecords || existingRecords.length === 0) {
+        return { 
+            data: { 
+                existingRecords, 
+                totalDocuments: 0,
+                hasPreviousPage: false, 
+                previousPages: 0, 
+                hasNextPage: false,      
+                nextPages: 0,
+                totalPages: 0,
+                currentPage: page
+            },  
+            statusCode: 201, 
+            msg: "Success" 
+        }
+    }
+  
+    return {
+        data: {
+            existingRecords,
+            totalDocuments,
+            hasPreviousPage: page > 1,
+            previousPages: page > 1 ? page - 1 : 0,
+            hasNextPage: page < totalPages,
+            nextPages: page < totalPages ? page + 1 : 0,
+            totalPages,
+            currentPage: page,
+        },  
+        statusCode: 201, 
+        msg: "Success" 
+    };
+}
+
+
+export async function getFilteredReport<T>(data: any) {
+    const query: any = {};
+    let page: any = data.page ? data.page : 1
+
+    if(data.only){
+      if (data.only === 'unread') {
+        query.read = false;
+      }else if (data.only === 'unresolved') {
+        query.resolved = false;
+      }
+    }
+  
+    // Default sorting
+    let sortOption: any = { createdAt: -1 };
+
+    // Calculate the skip value for pagination
+    const skip = (page - 1) * 10;
+  
+    // Fetch the filtered and sorted ads with pagination
+    const existingRecords = await Report.find(query).sort(sortOption).skip(skip).limit(10);
+    const totalDocuments = await Report.countDocuments(query);
     const totalPages = Math.ceil(totalDocuments / 10);
 
     if (!existingRecords || existingRecords.length === 0) {
