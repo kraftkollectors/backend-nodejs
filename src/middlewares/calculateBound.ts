@@ -37,6 +37,14 @@ export async function getFilteredAdsForAdmin(data: any) {
       ]
     }
 
+    if(data.only){
+      if (data.only === 'active') {
+        query.active = true;
+      }else if (data.only === 'inactive') {
+        query.active = false;
+      }
+    }
+
     if (data.category) {
       query.category = data.category;
     }
