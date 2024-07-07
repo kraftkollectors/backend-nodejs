@@ -181,6 +181,11 @@ const BasicService = {
             const existingUser = await User.findOne({ email: userData.email })
 
             if (existingUser) {
+                
+                if (existingUser.active === false) {
+                    return { data: 'account blocked', statusCode: 401, msg: "Failure" };
+                }
+
                 existingUser.type = 'user'
 
                 // Generate a token with user information

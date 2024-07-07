@@ -71,7 +71,8 @@ const AdsService = {
                     { category: category },
                     { subcategory: subcategory }
                 ],
-                _id: { $ne: id }
+                _id: { $ne: id },
+                active: true
             };
 
             // Find 10 similar ads in the same category or subcategory, excluding the current ad
