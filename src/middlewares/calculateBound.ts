@@ -229,9 +229,9 @@ export async function getFilteredPaidAds(data: any) {
     }
 
     if(data.only){
-      if (data.only === 'active') {
+      if (data.activeOnly === 'true') {
         query.isActive = true;
-      }else if (data.only === 'inactive') {
+      }else if (data.only === 'false') {
         query.isActive = false;
       }
     }
