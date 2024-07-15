@@ -51,6 +51,8 @@ router.patch("/dashboard/password/:userid", verifyToken, DashController.editUser
 
 // adds
 router.post("/ads", verifyToken, AdsController.postAd);
+router.post("/searchads", verifyToken, AdsController.postSearchAd);
+
 router.patch("/ads/:id", verifyToken, AdsController.editAd);
 router.patch("/ads/edit/:id", verifyToken, AdsController.enableDisableAd);
 router.delete("/ads/:id", verifyToken, AdsController.deleteAd);

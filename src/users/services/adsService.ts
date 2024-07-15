@@ -580,6 +580,24 @@ const AdsService = {
         }
     },
 
+    postSearchAd: async (userData: any) => {
+        try {
+            const serviceObjects = [];
+
+            for (const serviceId of userData) {
+                const serviceObject = await Ad.findOne({ _id: serviceId });
+                if (serviceObject) {
+                    serviceObjects.push(serviceObject);
+                }
+            }
+
+            return { data: { serviceObjects }, statusCode: 201, msg: "Success" };
+            
+        } catch (error: any) {
+            throw new Error(`Error adding post: ${error.message}`);
+        }
+    },
+
     saveAd: async (userData: any) => {
         try {
             const checkAd = await savedAd.find({ userId: userData.userId, serviceId: userData.serviceId })
