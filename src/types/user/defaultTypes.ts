@@ -19,8 +19,8 @@ export interface UserDataForgot {
 export interface UserDataArtisan {
     userId: string,
     userEmail: string,
-    firstName?: string,
-    lastName?: string,
+    firstName: string,
+    lastName: string,
     workHourFrom?: string,
     workHourTo?: string,
     website?: string,
