@@ -8,11 +8,11 @@ const ArtisanSchema = new Schema({
     },
     workHourFrom: {
         type: String,
-        required: true
+        required: false
     },
     workHourTo: {
         type: String,
-        required: true
+        required: false
     },
     website: {
         type: String,
@@ -48,17 +48,13 @@ const ArtisanSchema = new Schema({
         required: false,
         default: ''
     },
-    businessName: {
-        type: String,
-        required: true
-    },
     state: {
         type: String,
-        required: true
+        required: false
     },
     lga: {
         type: String,
-        required: true
+        required: false
     },
     areaOfSpecialization: {
         type: String,
@@ -66,7 +62,7 @@ const ArtisanSchema = new Schema({
     },
     showContact: {
         type: Boolean,
-        required: true
+        required: false
     },
     awayMessage: {
         type: String,
