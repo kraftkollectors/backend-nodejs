@@ -220,20 +220,20 @@ const BasicService = {
                 return { data: 'User With The Specified Email Not Found', statusCode: 404, msg: "Failure" };
             }
 
-            if (user.active === false) {
-                return { data: 'account blocked', statusCode: 401, msg: "Failure" };
-            }
-            
-            if (user.emailVerify === false) {
-                return { data: 'email not verified', statusCode: 401, msg: "Failure" };
-            }
-
             // Compare passwords using bcrypt
             let password: string = await bcrypt.hash(userData.password, SALT)
 
             if (user.password !== password) {
                 return { data: 'Incorrect password', statusCode: 401, msg: "Failure" };
             }
+
+            if (user.active === false) {
+                return { data: 'account blocked', statusCode: 401, msg: "Failure" };
+            }
+            
+            if (user.emailVerify === false) {
+                return { data: 'email not verified', statusCode: 401, msg: "Failure" };
+            }            
 
             user.type = 'user'
 
