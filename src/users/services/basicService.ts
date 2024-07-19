@@ -229,11 +229,7 @@ const BasicService = {
 
             if (user.active === false) {
                 return { data: 'account blocked', statusCode: 401, msg: "Failure" };
-            }
-            
-            if (user.emailVerify === false) {
-                return { data: 'email not verified', statusCode: 401, msg: "Failure" };
-            }            
+            }          
 
             user.type = 'user'
 
