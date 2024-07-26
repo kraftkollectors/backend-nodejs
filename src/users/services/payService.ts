@@ -324,14 +324,21 @@ const PayService = {
             let nin = await veriNIN(userData.nin)
             let lastNineCharacters = userData.phoneNumber.slice(-9);
 
-            if (nin === false){
-                return { data: 'Check nin provided', statusCode: 401, msg: "Failure" };
-            }else{                
+            if (nin === false) {
+                return { data: 'Check NIN provided', statusCode: 401, msg: "Failure" };
+            } else {                
+                const ninFirstName = nin.firstname?.toLowerCase() ?? '';
+                const ninLastName = nin.surname?.toLowerCase() ?? '';
+                const ninPhone = nin.telephoneno ?? '';
+            
+                const userFirstName = userData.firstName.toLowerCase();
+                const userLastName = userData.lastName.toLowerCase();
+                
                 if (
-                    nin.firstname.toLowerCase() !== userData.firstName.toLowerCase() &&
-                    nin.surname.toLowerCase() !== userData.lastName.toLowerCase() &&
-                    !nin.telephoneno.includes(lastNineCharacters)
-                  ) {
+                    ninFirstName !== userFirstName &&
+                    ninLastName !== userLastName &&
+                    !ninPhone.includes(lastNineCharacters)
+                ) {
                     return { data: 'NIN provided does not match any account details (first name, lastname, or phone)', statusCode: 401, msg: "Failure" };
                 }
             }
