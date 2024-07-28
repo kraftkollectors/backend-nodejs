@@ -9,6 +9,10 @@ const viewSchema = new Schema({
     views: {
         type: Number,
         default: 0
+    },
+    date: {
+        type: String,
+        required: true
     }
 }, { timestamps: true })
 

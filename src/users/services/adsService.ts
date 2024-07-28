@@ -25,12 +25,20 @@ const AdsService = {
     },
 
 
-    // getting total reviews
+    // getting total views per service
     totalViews: async (serviceid: any) => {
         try {
             // Count the total number of documents
-            const totalDocuments = await View.countDocuments({ serviceId: serviceid });
-            return { data: { views: totalDocuments }, statusCode: 201, msg: "Success" };
+            const result = await View.aggregate([
+                { $match: { serviceId: serviceid } },
+                { $group: { _id: "$serviceId", totalViews: { $sum: "$views" } } }
+            ]);
+    
+            if (result.length > 0) {
+                return { data: { views: result[0].totalViews }, statusCode: 201, msg: "Success" };
+            } else {
+                return { data: { views: 0 }, statusCode: 201, msg: "Success" };
+            }
 
         } catch (error: any) {
             throw new Error(`Error getting records: ${error.message}`);
@@ -45,29 +53,34 @@ const AdsService = {
     
             if (date) {
                 startDate = new Date(date);
-                startDate.setHours(0, 0, 0, 0);
+                startDate.setHours(0, 0, 0);
     
                 endDate = new Date(date);
-                endDate.setHours(23, 59, 59, 999);
+                endDate.setHours(23, 59, 59);
             } else {
                 startDate = new Date();
-                startDate.setHours(0, 0, 0, 0);
+                startDate.setHours(0, 0, 0);
     
                 endDate = new Date();
-                endDate.setHours(23, 59, 59, 999);
+                endDate.setHours(23, 59, 59);
             }
     
-            const totalDocuments = await View.countDocuments({
+            const view = await View.findOne({
                 serviceId: serviceid,
-                createdAt: { $gte: startDate, $lte: endDate }
+                date: { $gte: startDate, $lte: endDate }
             });
     
-            return { data: { views: totalDocuments }, statusCode: 201, msg: "Success" };
+            if (!view) {
+                return { data: { views: 0 }, statusCode: 201, msg: "No views found for the specified date" };
+            }
+    
+            return { data: { views: view.views }, statusCode: 201, msg: "Success" };
     
         } catch (error: any) {
             throw new Error(`Error getting records: ${error.message}`);
         }
     },
+    
 
     getSingleAd: async (id: string) => {
         try {
@@ -648,11 +661,11 @@ const AdsService = {
     // add number of views a service has
     updateViews: async (serviceId: string) => {
         try {
-            const startOfDay = getStartOfDay(new Date());
+            const date = getStartOfDay(new Date());
 
             let viewDoc = await View.findOne({
                 serviceId,
-                createdAt: { $gte: startOfDay }
+                date: { $gte: date }
             });
 
             // Check if any ads were found
@@ -661,7 +674,7 @@ const AdsService = {
                 viewDoc.views += 1;
             } else {
             // Document does not exist, create a new one
-                viewDoc = new View({ serviceId });
+                viewDoc = new View({ serviceId, date });
             }
 
             // Save the document
