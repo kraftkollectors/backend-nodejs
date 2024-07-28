@@ -45,7 +45,8 @@ const AdsController = {
     getViews: async (req: Request, res: Response) => {
         try {
             const serviceid = req.params.serviceid;
-            const data = await AdsService.getViews(serviceid);
+            const query = req.query
+            const data = await AdsService.getViews(query, serviceid);
             return res.status(data.statusCode).json(data);
 
         } catch (error: any) {

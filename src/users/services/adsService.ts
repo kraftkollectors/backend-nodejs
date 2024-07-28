@@ -25,20 +25,45 @@ const AdsService = {
     },
 
 
-    // needs correction. getting total reviews
+    // getting total reviews
     totalViews: async (serviceid: any) => {
         try {
-            return await getFilteredAds(serviceid)
+            // Count the total number of documents
+            const totalDocuments = await View.countDocuments({ serviceId: serviceid });
+            return { data: { views: totalDocuments }, statusCode: 201, msg: "Success" };
 
         } catch (error: any) {
             throw new Error(`Error getting records: ${error.message}`);
         }
     },
 
-    getViews: async (serviceid: any) => {
+    getViews: async (query: any, serviceid: any) => {
         try {
-            return await getFilteredAds(serviceid)
-
+            let date = query.date;
+    
+            let startDate, endDate;
+    
+            if (date) {
+                startDate = new Date(date);
+                startDate.setHours(0, 0, 0, 0);
+    
+                endDate = new Date(date);
+                endDate.setHours(23, 59, 59, 999);
+            } else {
+                startDate = new Date();
+                startDate.setHours(0, 0, 0, 0);
+    
+                endDate = new Date();
+                endDate.setHours(23, 59, 59, 999);
+            }
+    
+            const totalDocuments = await View.countDocuments({
+                serviceId: serviceid,
+                createdAt: { $gte: startDate, $lte: endDate }
+            });
+    
+            return { data: { views: totalDocuments }, statusCode: 201, msg: "Success" };
+    
         } catch (error: any) {
             throw new Error(`Error getting records: ${error.message}`);
         }
