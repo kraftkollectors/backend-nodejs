@@ -49,6 +49,11 @@ router.get("/dashboard/:userid", DashController.getUser);
 router.patch("/dashboard/profile/:userid", verifyToken, DashController.editUser);
 router.patch("/dashboard/password/:userid", verifyToken, DashController.editUserPassword);
 
+// views for adds
+router.get("/updateviews/:serviceid", AdsController.updateViews);
+router.get("/totalviews/:serviceid", AdsController.totalViews);
+router.get("/getviews/:serviceid", AdsController.getViews);
+
 // adds
 router.post("/ads", verifyToken, AdsController.postAd);
 router.post("/searchads", verifyToken, AdsController.postSearchAd);

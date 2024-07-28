@@ -6,16 +6,38 @@ import SubCategory from '../../models/subcategory'
 import Rating from '../../models/reviews'
 import Report from '../../models/report'
 import savedAd from '../../models/saveAds'
+import View from '../../models/views'
 import mongoose from 'mongoose';
 import { UserDataAds, UserDataReport } from '../../types/user/defaultTypes';
 import Review from '../../models/reviews';
 import { getFilteredAds } from '../../middlewares/calculateBound';
+import getStartOfDay from '../../utils/startDate';
 
 
 const AdsService = {
     getAllAd: async (query: any) => {
         try {
             return await getFilteredAds(query)
+
+        } catch (error: any) {
+            throw new Error(`Error getting records: ${error.message}`);
+        }
+    },
+
+
+    // needs correction. getting total reviews
+    totalViews: async (serviceid: any) => {
+        try {
+            return await getFilteredAds(serviceid)
+
+        } catch (error: any) {
+            throw new Error(`Error getting records: ${error.message}`);
+        }
+    },
+
+    getViews: async (serviceid: any) => {
+        try {
+            return await getFilteredAds(serviceid)
 
         } catch (error: any) {
             throw new Error(`Error getting records: ${error.message}`);
@@ -595,6 +617,38 @@ const AdsService = {
             
         } catch (error: any) {
             throw new Error(`Error adding post: ${error.message}`);
+        }
+    },
+
+    // add number of views a service has
+    updateViews: async (serviceid: string) => {
+        try {
+            const startOfDay = getStartOfDay(new Date());
+
+            let viewDoc = await View.findOne({
+                serviceid,
+                createdAt: { $gte: startOfDay }
+            });
+
+            // Check if any ads were found
+            if (viewDoc) {
+                // Document exists, increment totalViews by 1
+                viewDoc.views += 1;
+            } else {
+            // Document does not exist, create a new one
+                viewDoc = new View({ serviceid });
+            }
+
+            // Save the document
+            const saved = await viewDoc.save();
+            if(saved !== null){
+                return { data: { saved }, statusCode: 201, msg: "Success" };
+            }else{
+                return { data: 'Error creating views data', statusCode: 401, msg: "Failure" };
+            }
+            
+        } catch (error: any) {
+            throw new Error(`Error adding savedads: ${error.message}`);
         }
     },
 

@@ -324,6 +324,8 @@ const PayService = {
             let nin = await veriNIN(userData.nin)
             let lastNineCharacters = userData.phoneNumber.slice(-9);
 
+            console.log(nin);
+            
             if (nin === false) {
                 return { data: 'Check NIN provided', statusCode: 401, msg: "Failure" };
             } else {                

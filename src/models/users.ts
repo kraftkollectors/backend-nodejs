@@ -66,6 +66,11 @@ const UserSchema = new Schema({
         required: false,
         default: 'None'
     },
+    notify: {
+        type: Boolean,
+        required: false,
+        default: true
+    },
 }, { timestamps: true })
 
 

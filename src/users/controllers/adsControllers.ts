@@ -18,6 +18,42 @@ const AdsController = {
         }
     },
 
+    updateViews: async (req: Request, res: Response) => {
+        try {
+            const serviceid = req.params.serviceid;
+            const data = await AdsService.updateViews(serviceid);
+            return res.status(data.statusCode).json(data);
+
+        } catch (error: any) {
+            console.log(error.message)
+            return res.status(500).json({ data: error.message, statusCode: 400, msg: "Failure" });
+        }
+    },
+
+    totalViews: async (req: Request, res: Response) => {
+        try {
+            const serviceid = req.params.serviceid;
+            const data = await AdsService.totalViews(serviceid);
+            return res.status(data.statusCode).json(data);
+
+        } catch (error: any) {
+            console.log(error.message)
+            return res.status(500).json({ data: error.message, statusCode: 400, msg: "Failure" });
+        }
+    },
+
+    getViews: async (req: Request, res: Response) => {
+        try {
+            const serviceid = req.params.serviceid;
+            const data = await AdsService.getViews(serviceid);
+            return res.status(data.statusCode).json(data);
+
+        } catch (error: any) {
+            console.log(error.message)
+            return res.status(500).json({ data: error.message, statusCode: 400, msg: "Failure" });
+        }
+    },
+
     getSingleAd: async (req: Request, res: Response) => {
         try {
             const id = req.params.id;
