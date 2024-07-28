@@ -646,12 +646,12 @@ const AdsService = {
     },
 
     // add number of views a service has
-    updateViews: async (serviceid: string) => {
+    updateViews: async (serviceId: string) => {
         try {
             const startOfDay = getStartOfDay(new Date());
 
             let viewDoc = await View.findOne({
-                serviceid,
+                serviceId,
                 createdAt: { $gte: startOfDay }
             });
 
@@ -661,7 +661,7 @@ const AdsService = {
                 viewDoc.views += 1;
             } else {
             // Document does not exist, create a new one
-                viewDoc = new View({ serviceid });
+                viewDoc = new View({ serviceId });
             }
 
             // Save the document
