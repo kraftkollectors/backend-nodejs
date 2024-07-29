@@ -653,7 +653,7 @@ const AdsService = {
 
             let viewDoc = await View.findOne({
                 serviceId,
-                date: { $gte: date }
+                date
             });
 
             // Check if any ads were found
