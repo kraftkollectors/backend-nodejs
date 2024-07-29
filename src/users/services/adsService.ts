@@ -49,25 +49,13 @@ const AdsService = {
         try {
             let date = query.date;
     
-            let startDate, endDate;
-    
-            if (date) {
-                startDate = new Date(date);
-                startDate.setHours(0, 0, 0);
-    
-                endDate = new Date(date);
-                endDate.setHours(23, 59, 59);
-            } else {
-                startDate = new Date();
-                startDate.setHours(0, 0, 0);
-    
-                endDate = new Date();
-                endDate.setHours(23, 59, 59);
+            if (!date) {
+                date = getStartOfDay(new Date());
             }
     
             const view = await View.findOne({
                 serviceId: serviceid,
-                date: { $gte: startDate, $lte: endDate }
+                date: date
             });
     
             if (!view) {
