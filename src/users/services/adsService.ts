@@ -7,11 +7,13 @@ import Rating from '../../models/reviews'
 import Report from '../../models/report'
 import savedAd from '../../models/saveAds'
 import View from '../../models/views'
+import User from '../../models/users'
 import mongoose from 'mongoose';
 import { UserDataAds, UserDataReport } from '../../types/user/defaultTypes';
 import Review from '../../models/reviews';
 import { getFilteredAds } from '../../middlewares/calculateBound';
 import getStartOfDay from '../../utils/startDate';
+import { mailGenerator, sendmail } from '../../middlewares/mailer';
 
 
 const AdsService = {
@@ -715,8 +717,12 @@ const AdsService = {
 
     rateAd: async (userData: any) => {
         try {
+            let receiver = await User.findOne({ _id: userData.ownerId }, {  _id: 0, notify: 1, userName: 1, email: 1 } )
+            let sender = await User.findOne({ _id: userData.reviewerId }, {  _id: 0, userName: 1 } )
+
             const review = await new Review({ ...userData }).save();
             if(review !== null){
+
                 const data = await Ad.find({ _id: userData.serviceId })
                 let newRating: Number = data.rating
 
@@ -727,6 +733,31 @@ const AdsService = {
                         }
                     }
                 )
+
+                if(receiver.notify === true){
+                    var emailSender: any = {
+                        body: {
+                            name: receiver.userName,
+                            intro: `<span style="font-weight: bolder;">Review from ${sender.userName}:</span>.\n\n
+                                    A service <span style="font-weight: bolder; color: blue;">"${data.title}"</span> you posted on our platform has been reviewed by a customer.`,
+        
+                            action: {
+                                instructions: 'click to login and check out.',
+                                button: {
+                                    color: '#ffffff',
+                                    text: `<span style="font-size: 30px; font-weight: bolder; color: black">Login</span>`,
+                                    link: 'https://www.kraftkollectors.com'
+                                }
+                            },
+                            
+                            outro: 'Need help, or have questions? Just reply to this email, we\'d love to help.\n\n Team Kraftkollectors.'
+                        }
+                    };
+        
+                    let emailBody: any = mailGenerator.generate(emailSender);
+        
+                    await sendmail(receiver.email, 'You got a message', emailBody)
+                }
 
                 return { data: { review }, statusCode: 201, msg: "Success" };
             }else{

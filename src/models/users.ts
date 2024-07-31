@@ -71,6 +71,11 @@ const UserSchema = new Schema({
         required: false,
         default: true
     },
+    notifyReview: {
+        type: Boolean,
+        required: false,
+        default: true
+    },
 }, { timestamps: true })
 
 
