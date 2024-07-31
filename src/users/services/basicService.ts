@@ -16,68 +16,78 @@ const SALT: any = process.env.SALT
 const BasicService = {
     testServer: async (query: any) => {
         try {
-            const resPerPage = 10
-            const currentPageNum = Number(query.page) || 1
-            const skip = resPerPage * (currentPageNum - 1)
-
-            const search = query.keyword ? {
-                userName: {
-                    $regex: query.keyword,
-                    $options: 'i'
-                },
-                active: true
-            } : { active: true }
-
-            const user = await User.find(search, { password: 0 })
-            .limit(resPerPage)
-            .skip(skip)
-
-            if (!user || user.length === 0) {
-                return { 
-                    data: { 
-                        user, 
-                        totalDocuments: 0,
-                        hasPreviousPage: false, 
-                        previousPages: 0, 
-                        hasNextPage: false,      
-                        nextPages: 0,
-                        totalPages: 0,
-                        currentPage: currentPageNum
-                    },  
-                    statusCode: 201, 
-                    msg: "Success" 
-                }
-            }
-
-            // Count the total number of documents
-            const totalDocuments = await User.countDocuments({ active: true });
-
-            // Calculate the total number of pages
-            const totalPages = Math.ceil(totalDocuments / resPerPage);
-
-            // Determine if there are previous and next pages
-            const hasPreviousPage = currentPageNum > 1;
-            const hasNextPage = currentPageNum < totalPages
-
-            // Calculate the number of previous and next pages available
-            const previousPages = currentPageNum - 1;
-            const nextPages = (totalPages - currentPageNum) < 0 ? 0 : totalPages - currentPageNum;
-               
+            const updateResult = await User.updateMany(
+                {},
+                { $set: { notifyReview: true } }
+            );
 
             return { 
-                data: { 
-                    user, 
-                    totalDocuments,
-                    hasPreviousPage, 
-                    previousPages, 
-                    hasNextPage, 
-                    nextPages,                    
-                    totalPages,
-                    currentPage: currentPageNum
-                }, 
+                data: 'worked', 
                 statusCode: 201, 
                 msg: "Success" 
             }
+            // const resPerPage = 10
+            // const currentPageNum = Number(query.page) || 1
+            // const skip = resPerPage * (currentPageNum - 1)
+
+            // const search = query.keyword ? {
+            //     userName: {
+            //         $regex: query.keyword,
+            //         $options: 'i'
+            //     },
+            //     active: true
+            // } : { active: true }
+
+            // const user = await User.find(search, { password: 0 })
+            // .limit(resPerPage)
+            // .skip(skip)
+
+            // if (!user || user.length === 0) {
+            //     return { 
+            //         data: { 
+            //             user, 
+            //             totalDocuments: 0,
+            //             hasPreviousPage: false, 
+            //             previousPages: 0, 
+            //             hasNextPage: false,      
+            //             nextPages: 0,
+            //             totalPages: 0,
+            //             currentPage: currentPageNum
+            //         },  
+            //         statusCode: 201, 
+            //         msg: "Success" 
+            //     }
+            // }
+
+            // // Count the total number of documents
+            // const totalDocuments = await User.countDocuments({ active: true });
+
+            // // Calculate the total number of pages
+            // const totalPages = Math.ceil(totalDocuments / resPerPage);
+
+            // // Determine if there are previous and next pages
+            // const hasPreviousPage = currentPageNum > 1;
+            // const hasNextPage = currentPageNum < totalPages
+
+            // // Calculate the number of previous and next pages available
+            // const previousPages = currentPageNum - 1;
+            // const nextPages = (totalPages - currentPageNum) < 0 ? 0 : totalPages - currentPageNum;
+               
+
+            // return { 
+            //     data: { 
+            //         user, 
+            //         totalDocuments,
+            //         hasPreviousPage, 
+            //         previousPages, 
+            //         hasNextPage, 
+            //         nextPages,                    
+            //         totalPages,
+            //         currentPage: currentPageNum
+            //     }, 
+            //     statusCode: 201, 
+            //     msg: "Success" 
+            // }
             
         } catch (error: any) {
             console.log(error);
