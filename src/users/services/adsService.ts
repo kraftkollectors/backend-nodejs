@@ -187,6 +187,7 @@ const AdsService = {
 
             
             const existingRecords = await savedAd.find({ userId: userid }).lean()
+            .sort({ createdAt: -1 })
             .limit(resPerPage)
             .skip(skip)
 
@@ -318,6 +319,7 @@ const AdsService = {
 
             
             const existingRecords = await Review.find({ ownerId: userId })
+            .sort({ createdAt: -1 })
             .limit(resPerPage)
             .skip(skip)
 
@@ -387,6 +389,7 @@ const AdsService = {
 
             
             const existingRecords = await Review.find({ serviceId })
+            .sort({ createdAt: -1 })
             .limit(resPerPage)
             .skip(skip)
 
@@ -456,6 +459,7 @@ const AdsService = {
 
             
             const existingRecords = await Ad.find({ userId: userid, active: true })
+            .sort({ createdAt: -1 })
             .limit(resPerPage)
             .skip(skip)
 
