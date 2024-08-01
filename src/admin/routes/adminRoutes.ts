@@ -44,6 +44,7 @@ router.delete("/dashboard/cat/subcategory/:id", verifyToken, DashController.dele
 
 // users
 router.get("/users", UsersController.getUsers);
+router.get("/user/artisans", UsersController.getAllFilteredArtisans);
 router.get("/users/:id", UsersController.getSingleUser);
 router.patch("/users/:id", verifyToken, UsersController.enableDisableUser);
 router.delete("/users/:id", verifyToken, UsersController.deleteUser);

@@ -17,6 +17,18 @@ const UsersController = {
         }
     },
 
+    getAllFilteredArtisans: async (req: any, res: Response) => {
+        try {
+            const query = req.query
+            const data = await UsersService.getAllFilteredArtisans(query);
+            return res.status(data.statusCode).json(data);
+
+        } catch (error: any) {
+            console.log(error.message)
+            return res.status(500).json({ data: error.message, statusCode: 400, msg: "Failure" });
+        }
+    },
+
     getSingleUser: async (req: Request, res: Response) => {
         try {
             const id = req.params.id;

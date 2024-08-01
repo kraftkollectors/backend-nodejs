@@ -5,13 +5,22 @@ import Certificate from '../../models/certification'
 import Education from '../../models/education'
 import Artisan from '../../models/artisan'
 import mongoose from 'mongoose';
-import { getFilteredUsers } from '../../middlewares/calculateBound';
+import { getFilteredUsers, getUsersSet } from '../../middlewares/calculateBound';
 
 
 const UsersService = {
     getUsers: async (query: any) => {
         try {
             return await getFilteredUsers(query)
+
+        } catch (error: any) {
+            throw new Error(`Error fetching account: ${error.message}`);
+        }
+    },
+    
+    getAllFilteredArtisans: async (query: any) => {
+        try {
+            return await getUsersSet(query)
 
         } catch (error: any) {
             throw new Error(`Error fetching account: ${error.message}`);
