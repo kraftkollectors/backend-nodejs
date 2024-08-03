@@ -30,12 +30,17 @@ export async function getFilteredAdsForAdmin(data: any) {
     const query: any = {};
     let page: any = data.page ? data.page : 1
   
-    if (data.q) {      
-      query.$or = [
-        { title: { $regex: data.q, $options: 'i' } },
-        { description: { $regex: data.q, $options: 'i' } }
-      ]
+    if (data.q) {
+        // Split and filter out duplicates using Set
+        const searchTerms = Array.from(new Set(data.q.split(' ').filter((term:any) => term.trim().length > 0)));
+        query.$or = searchTerms.map(term => ({
+            $or: [
+                { title: { $regex: term, $options: 'i' } },
+                { description: { $regex: term, $options: 'i' } }
+            ]
+        }));
     }
+
 
     if(data.only){
       if (data.only === 'active') {
@@ -489,13 +494,17 @@ export async function getUsersSet(data: any) {
     const query: any = {isArtisan: true};
     let page: any = data.page ? data.page : 1
   
-    if (data.q) {      
-      query.$or = [
-        { firstName: { $regex: data.q, $options: 'i' } },
-        { lastName: { $regex: data.q, $options: 'i' } },
-        { userName: { $regex: data.q, $options: 'i' } },
-        { email: { $regex: data.q, $options: 'i' } }
-      ]
+    if (data.q) {
+        // Split and filter out duplicates using Set
+        const searchTerms = Array.from(new Set(data.q.split(' ').filter((term: any) => term.trim().length > 0)));
+        query.$or = searchTerms.map(term => ({
+            $or: [
+                { firstName: { $regex: term, $options: 'i' } },
+                { lastName: { $regex: term, $options: 'i' } },
+                { userName: { $regex: term, $options: 'i' } },
+                { email: { $regex: term, $options: 'i' } }
+            ]
+        }));
     }
   
     // Default sorting
