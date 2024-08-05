@@ -105,6 +105,18 @@ const AdsController = {
         }
     },
 
+    getServiceReviewsCount: async (req: Request, res: Response) => {
+        try {
+            const serviceid = req.params.serviceid
+            const data = await AdsService.getServiceReviewsCount(serviceid);
+            return res.status(data.statusCode).json(data);
+
+        } catch (error: any) {
+            console.log(error.message)
+            return res.status(500).json({ data: error.message, statusCode: 400, msg: "Failure" });
+        }
+    },
+
     getMyAd: async (req: any, res: Response) => {
         try {
             const userid = req.params.userid;
