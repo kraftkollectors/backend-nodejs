@@ -48,7 +48,7 @@ const startServer = async () => {
     app.use('/users', usersRoutes)
     app.use('/admin', adminRoutes)
 
-    // script to connect to vps webhook and build automatically
+    // script to connect to vps webhook to build automatically
     const script:string = `echo 'starting script' 
 git pull
 npm i
