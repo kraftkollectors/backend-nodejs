@@ -53,7 +53,7 @@ const startServer = async () => {
 git pull
 npm i
 npm run build
-npm run start
+pm2 restart app
 echo 'ended script'`;
     app.post('/webhook', async (req: any, res: any) => {
         const child = spawn("bash", ["-c", script.replace(/\n/g, "&&")]);
