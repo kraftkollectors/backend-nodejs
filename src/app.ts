@@ -6,6 +6,7 @@ import usersRoutes from './users/routes/usersRoutes'
 import adminRoutes from './admin/routes/adminRoutes'
 import databaseConnection from './database/database'
 import mySocket from "./appSocket/socketLogic";
+import { spawn } from "child_process";
 const socket = require('socket.io')
 
 
@@ -47,7 +48,30 @@ const startServer = async () => {
     app.use('/users', usersRoutes)
     app.use('/admin', adminRoutes)
 
+    const script:string = `echo 'starting script' 
+git pull
+npm i
+npm run build
+npm run start
+echo 'ended script'`;
+    app.post('/webhook', async (req: any, res: any) => {
+        const child = spawn("bash", ["-c", script.replace(/\n/g, "&&")]);
 
+        const prom = new Promise<boolean>((resolve, reject) => {
+          child.stdout.on("data", (data: any) => {
+            console.log(`stdout: ${data}`);
+          });
+      
+          child.on("close", (code: any) => {
+            console.log(`child process exited with code ${code}`);
+            if (code == 0) resolve(true);
+            else resolve(false);
+          });
+        });
+        if (await prom) return res.json({ success: true }, { status: 200 });
+
+        return res.json({ success: false }, { status: 500 });
+    })
 
     // 404 route
     app.use((req: any, res: any) => {
