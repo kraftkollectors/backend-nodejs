@@ -74,6 +74,36 @@ echo 'ended script'`;
         return res.json({ success: false }, { status: 500 });
     })
 
+    
+
+const feScript:string = `echo 'starting script'
+cd ../frontend 
+git pull origin production
+npm i
+pm2 stop npm
+rm -rf .next
+npm run build
+pm2 start npm
+echo 'ended script'`;
+    app.post('/webhook-frontend', async (req: any, res: any) => {
+        const child = spawn("bash", ["-c", feScript.replace(/\n/g, "&&")]);
+
+        const prom = new Promise<boolean>((resolve, reject) => {
+          child.stdout.on("data", (data: any) => {
+            console.log(`stdout: ${data}`);
+          });
+      
+          child.on("close", (code: any) => {
+            console.log(`child process exited with code ${code}`);
+            if (code == 0) resolve(true);
+            else resolve(false);
+          });
+        });
+        if (await prom) return res.json({ success: true }, { status: 200 });
+
+        return res.json({ success: false }, { status: 500 });
+    })
+
     // 404 route
     app.use((req: any, res: any) => {
         return res.status(404).json({ data: `Cannot ${req.method} route ${req.path}`, statusCode: 404, msg: "Failure" })
