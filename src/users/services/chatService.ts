@@ -58,7 +58,8 @@ const ChatService = {
             // Map users to include last message and timestamp
             const usersWithLastMessage = users.map((user: any) => ({
                 _id: user._id,
-                userName: user.userName,
+                firstName: user.firstName,
+                lastName: user.lastName,
                 image: user.image,
                 lastMessage: userMessages[user._id.toString()].lastMessage,
                 lastMessageTime: userMessages[user._id.toString()].lastMessageTime,
