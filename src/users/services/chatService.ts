@@ -43,7 +43,8 @@ const ChatService = {
                 if (!userMessages[otherUserId]) {
                     userMessages[otherUserId] = {
                         lastMessage: chat.message,
-                        lastMessageTime: chat.createdAt
+                        lastMessageTime: chat.createdAt,
+                        messageDoc: chat
                     };
                 }
             });
@@ -60,7 +61,8 @@ const ChatService = {
                 userName: user.userName,
                 image: user.image,
                 lastMessage: userMessages[user._id.toString()].lastMessage,
-                lastMessageTime: userMessages[user._id.toString()].lastMessageTime
+                lastMessageTime: userMessages[user._id.toString()].lastMessageTime,
+                messageDoc: userMessages[user._id.toString()].messageDoc,
             }));
                          
 
