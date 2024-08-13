@@ -53,7 +53,7 @@ const ChatService = {
             const userIds = Object.keys(userMessages);
 
             // Query the User model to get the usernames and profile pictures
-            const users = await User.find({ _id: { $in: userIds } }, 'userName image');
+            const users = await User.find({ _id: { $in: userIds } }, 'firstName lastName image');
 
             // Map users to include last message and timestamp
             const usersWithLastMessage = users.map((user: any) => ({
