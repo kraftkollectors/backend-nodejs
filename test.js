@@ -3,10 +3,10 @@
 // import mongo
 const { MongoClient } = require('mongodb');
 // Connect to the source database
-var sourceUri = 'mongodb+srv://churchill:1234@cluster0.q1pwzqc.mongodb.net/churchil'
+var sourceUri = 'mongodb+srv://'
 
 // Connect to the target database
-var targetUri = 'mongodb+srv://chucky:test12345@node-tuts.am6wbnk.mongodb.net/churchil'
+var targetUri = 'mongodb+srv://'
 
 async function transferData() {
     // Create a new MongoClient
