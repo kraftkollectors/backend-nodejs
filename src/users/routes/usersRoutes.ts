@@ -59,7 +59,7 @@ router.get("/getviews/:serviceid", AdsController.getViews);
 
 // adds
 router.post("/ads", verifyToken, AdsController.postAd);
-router.post("/searchads", verifyToken, AdsController.postSearchAd);
+router.post("/searchads", AdsController.postSearchAd);
 
 router.patch("/ads/:id", verifyToken, AdsController.editAd);
 router.patch("/ads/edit/:id", verifyToken, AdsController.enableDisableAd);
