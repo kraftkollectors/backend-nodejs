@@ -327,9 +327,9 @@ const PayService = {
             if (nin === false) {
                 return { data: 'Check NIN provided', statusCode: 401, msg: "Failure" };
             } else {                
-                const ninFirstName = nin.firstname?.toLowerCase() ?? '';
-                const ninLastName = nin.surname?.toLowerCase() ?? '';
-                const ninPhone = nin.telephoneno ?? '';
+                const ninFirstName = nin.firstName?.toLowerCase() ?? '';
+                const ninLastName = nin.lastName?.toLowerCase() ?? '';
+                const ninPhone = nin.phoneNumber ?? '';
             
                 const userFirstName = userData.firstName.toLowerCase();
                 const userLastName = userData.lastName.toLowerCase();

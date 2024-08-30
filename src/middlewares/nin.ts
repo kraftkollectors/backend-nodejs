@@ -22,6 +22,7 @@ const veriNIN = async (nin: string) => {
     
     try {
         let response: any = await axios(ZEEH_URL, options)
+        
         if(response.data.success == true && response.data.statusCode == 200){          
           return response.data.data
         }else{
