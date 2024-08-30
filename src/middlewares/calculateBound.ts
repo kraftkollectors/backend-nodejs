@@ -135,11 +135,15 @@ export async function getFilteredAds(data: any) {
     const query: any = { active: true };
     let page: any = data.page ? data.page : 1
   
-    if (data.q) {      
-      query.$or = [
-        { title: { $regex: data.q, $options: 'i' } },
-        { description: { $regex: data.q, $options: 'i' } }
-      ]
+    if (data.q) {
+      // Split and filter out duplicates using Set
+      const searchTerms = Array.from(new Set(data.q.split(' ').filter((term:any) => term.trim().length > 0)));
+      query.$or = searchTerms.map(term => ({
+          $or: [
+              { title: { $regex: term, $options: 'i' } },
+              { description: { $regex: term, $options: 'i' } }
+          ]
+      }));
     }
 
     if (data.category) {
