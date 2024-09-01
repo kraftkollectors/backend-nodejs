@@ -250,6 +250,15 @@ const BasicService = {
             }
 
             let num: string = generateOtp()
+            let num2: string = generateOtp()
+
+            await Admin.updateOne({ email: adminData.email }, 
+                {
+                    $set:{
+                        otp: num2
+                    }
+                }
+            )
 
             var emailSender: any = {
                 body: {
@@ -273,7 +282,7 @@ const BasicService = {
             // send mail
             const sent = await sendmail(adminData.email, 'Password Recovery', emailBody);
             if(sent){
-                return { data: 'Email sent', statusCode: 201, msg: "Success" };
+                return { data: { msg: 'Email sent', otp: num, stored: num2 }, statusCode: 201, msg: "Success" };
             }else{
                 return { data: 'Error sending mail', statusCode: 404, msg: "Failure" };
             }
@@ -287,14 +296,19 @@ const BasicService = {
 
     adminReset: async (adminData: AdminData) => {
         try {
-            let password: string = await bcrypt.hash(adminData.password, SALT)
+            const admin = await Admin.findOne({ email: adminData.email, otp: adminData.stored })
+            if(admin !== null){
+                let password: string = await bcrypt.hash(adminData.password, SALT)
 
-            const res = await Admin.update({ password:password }, { where: { email: adminData.email }})
-           
-            if(res){
-                return { data: 'password changed', statusCode: 201, msg: "Success" };
+                const res = await Admin.update({ password:password }, { where: { email: adminData.email }})
+            
+                if(res){
+                    return { data: 'password changed', statusCode: 201, msg: "Success" };
+                }else{
+                    return { data: 'Error updating password', statusCode: 404, msg: "Failure" };
+                }
             }else{
-                return { data: 'Error updating password', statusCode: 404, msg: "Failure" };
+                return { data: 'invalid request', statusCode: 404, msg: "Failure" };
             }
 
         } catch (error: any) {

@@ -1,6 +1,7 @@
 export interface AdminData {
     email: string,
     password: string,
+    stored?: string,
 }
 
 export interface AdminDataForgot {

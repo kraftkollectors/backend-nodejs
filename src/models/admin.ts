@@ -9,7 +9,12 @@ const AdminSchema = new Schema({
     password: {
         type: String,
         required: true
-    }
+    },
+    otp: {
+        type: String,
+        required: false,
+        default: ''
+    },
 }, { timestamps: true })
 
 
