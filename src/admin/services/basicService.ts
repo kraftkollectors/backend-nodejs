@@ -300,7 +300,13 @@ const BasicService = {
             if(admin !== null){
                 let password: string = await bcrypt.hash(adminData.password, SALT)
 
-                const res = await Admin.update({ password:password }, { where: { email: adminData.email }})
+                const res = await Admin.updateOne({ email: adminData.email }, 
+                    {
+                        $set:{
+                            password: password
+                        }
+                    }
+                )
             
                 if(res){
                     return { data: 'password changed', statusCode: 201, msg: "Success" };
