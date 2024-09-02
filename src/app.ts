@@ -36,7 +36,7 @@ const startServer = async () => {
     })
 
     // get socket connection and send to socket file
-    // Initialize socket.io with CORS settings
+    // Initialize socket.io with CORS settings for chats
     const io = socket(server, {
         cors: {
             origin: '*',
