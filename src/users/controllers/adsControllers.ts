@@ -262,10 +262,6 @@ const AdsController = {
 
     postSearchAd: async (req: any, res: Response) => {
         try {
-            if(req.body.userEmail != req.user.email){
-                return res.status(400).json({ data: 'Authentication error', statusCode: 400, msg: "Failure" });
-            }
-
             const sendData = req.body;
             const data = await AdsService.postSearchAd(sendData);
             return res.status(data.statusCode).json(data);
