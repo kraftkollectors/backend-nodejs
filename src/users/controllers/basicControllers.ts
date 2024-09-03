@@ -136,7 +136,7 @@ const BasicController = {
     getURLS: async (req: Request, res: Response) => {
         try {
             if (!req.files || !Array.isArray(req.files)) {
-                return res.status(400).json({ error: 'Please portfolio files', statusCode: 401, msg: 'Failure' });
+                return res.status(400).json({ error: 'Please upload portfolio files', statusCode: 401, msg: 'Failure' });
             }
     
             const data: any = await generateUploadURLs(req.files);           
