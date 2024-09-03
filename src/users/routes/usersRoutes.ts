@@ -10,11 +10,8 @@ import verifyToken from '../../middlewares/auth'
 let storage = multer.memoryStorage()
 
 let fileFilter = (req: any, file: any, cb: any) => {
-    if (file.mimetype.startsWith('image/') || file.mimetype.startsWith('video/')) {
-        cb(null, true);
-    } else {
-        cb(new Error('Invalid file type, only images and videos are allowed!'), false);
-    }
+    // Accept all file types
+    cb(null, true);
 };
 
 let upload = multer({
