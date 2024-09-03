@@ -84,6 +84,19 @@ const DashService = {
                 return { data: 'Please enter a correct id', statusCode: 404, msg: "Failure" };
             }
 
+            const user = await User.findOne({ _id: id })
+
+            if (!user) {
+                return { data: 'user With The Specified id Not Found', statusCode: 404, msg: "Failure" };
+            }
+
+            // Compare passwords using bcrypt
+            let olPassword: string = await bcrypt.hash(userData.oldPassword, SALT)
+
+            if (olPassword !== user.password) {
+                return { data: 'Incorrect old password entered', statusCode: 401, msg: "Failure" };
+            }
+
             userData.password = await bcrypt.hash(userData.password, SALT);
 
             let data = await User.findByIdAndUpdate(id, userData, {
