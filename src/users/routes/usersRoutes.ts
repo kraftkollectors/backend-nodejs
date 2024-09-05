@@ -17,10 +17,7 @@ let fileFilter = (req: any, file: any, cb: any) => {
 
 let upload = multer({
     storage: storage,
-    fileFilter: fileFilter,
-    limits: {
-        fileSize: 20 * 1024 * 1024
-    }
+    fileFilter: fileFilter
 })
 
 const router: Router = express.Router();
