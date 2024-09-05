@@ -40,7 +40,7 @@ const startServer = async () => {
     const io = socket(server, {
         cors: {
             origin: '*',
-            methods: ['GET', 'POST']
+            methods: ['GET', 'POST', 'PATCH', 'DELETE']
         }
     });
     mySocket(io);
