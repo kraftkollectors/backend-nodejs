@@ -3,7 +3,8 @@ const Schema: any = mongoose.Schema
 
 const CertificateSchema = new Schema({
     userId: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
         required: true
     },
     certificate: {

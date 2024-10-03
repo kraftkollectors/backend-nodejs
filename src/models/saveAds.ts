@@ -3,13 +3,15 @@ const Schema: any = mongoose.Schema
 
 const savedAdSchema = new Schema({
     serviceId: {
-        type: String,
-        required: true
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Ad',
+        required: false
     },
     userId: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
         required: true
-    }
+    },
 }, { timestamps: true })
 
 

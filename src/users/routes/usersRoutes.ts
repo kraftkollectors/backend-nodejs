@@ -46,6 +46,7 @@ router.post("/geturls", upload.array('files', 5), BasicController.getURLS);
 router.get("/dashboard/:userid", DashController.getUser);
 router.patch("/dashboard/profile/:userid", verifyToken, DashController.editUser);
 router.patch("/dashboard/password/:userid", verifyToken, DashController.editUserPassword);
+router.delete("/dashboard/deleteaccount/:userid", verifyToken, DashController.deleteAccount);
 
 // views for adds
 router.get("/updateviews/:serviceid", AdsController.updateViews);

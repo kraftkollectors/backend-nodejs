@@ -3,7 +3,8 @@ const Schema: any = mongoose.Schema
 
 const EducationSchema = new Schema({
     userId: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
         required: true
     },
     university: {

@@ -3,15 +3,18 @@ const Schema: any = mongoose.Schema
 
 const ReviewSchema = new Schema({
     ownerId: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
         required: true
     },
     serviceId: {
-        type: String,
-        required: true
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Ad',
+        required: false
     },
     reviewerId: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
         required: true
     },
     rating: {

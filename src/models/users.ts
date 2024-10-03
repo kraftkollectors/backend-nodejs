@@ -1,7 +1,29 @@
-import mongoose from "mongoose"
-const Schema: any = mongoose.Schema
+import mongoose, { Document, Schema as MongooseSchema } from 'mongoose';
 
-const UserSchema = new Schema({
+// Define User interface to type the UserSchema
+interface IUser extends Document {
+    firstName: string;
+    lastName: string;
+    userName: string;
+    email: string;
+    password?: string;
+    gender: string;
+    image?: string;
+    publicId?: string;
+    isArtisan?: boolean;
+    active?: boolean;
+    emailVerify?: boolean;
+    otp?: string;
+    lastSeen?: string;
+    paymentPlan?: string;
+    notify?: boolean;
+    notifyReview?: boolean;
+    createdAt?: Date;
+    updatedAt?: Date;
+}
+
+// Define the User Schema
+const UserSchema = new MongooseSchema<IUser>({
     firstName: {
         type: String,
         required: true
@@ -75,10 +97,28 @@ const UserSchema = new Schema({
         type: Boolean,
         required: false,
         default: true
-    },
-}, { timestamps: true })
+    }
+}, { timestamps: true });
 
+// Pre-delete hook to delete associated ads when a user is deleted
+UserSchema.pre('deleteOne', { document: true, query: false }, async function (this: IUser, next) {
+    try {
+        // 'this' refers to the user document being removed
+        await mongoose.model('Ad').deleteMany({ userId: this._id });
+        await mongoose.model('Education').deleteMany({ userId: this._id });
+        await mongoose.model('Certification').deleteMany({ userId: this._id });
+        await mongoose.model('Artisan').deleteOne({ userId: this._id });
+        await mongoose.model('Review').deleteOne({ reviewerId: this._id });
+        await mongoose.model('Payment').deleteOne({ userId: this._id });
+        await mongoose.model('Report').deleteOne({ reporterId: this._id });
+        await mongoose.model('savedAd').deleteOne({ userId: this._id });
+        await mongoose.model('Chat').deleteOne({ senderId: this._id, receiverId: this._id });
+        next();
+    } catch (err: any) {
+        next(err);
+    }
+});
 
-const User: any = mongoose.models.User ||  mongoose.model('User', UserSchema);
-
-export default User
+// Export the User model
+const User = mongoose.models.User || mongoose.model<IUser>('User', UserSchema);
+export default User;

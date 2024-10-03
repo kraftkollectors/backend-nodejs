@@ -113,6 +113,30 @@ const DashService = {
         } catch (error: any) {
             throw new Error(`Error editing account password: ${error.message}`);
         }
+    },
+
+    deleteAccount: async (id: string) => {
+        try {
+            // check if id is a valid mongoose id
+            const isValidId = mongoose.isValidObjectId(id)
+
+            if(!isValidId){
+                return { data: 'Please enter a correct id', statusCode: 404, msg: "Failure" };
+            }
+
+            const user = await User.findOne({ _id: id })
+
+            if (!user) {
+                return { data: 'user With The Specified id Not Found', statusCode: 404, msg: "Failure" };
+            }
+
+            await User.deleteOne({ _id: id });
+            
+            return { data: "account deleted", statusCode: 201, msg: "Success" };
+            
+        } catch (error: any) {
+            throw new Error(`Error editing account password: ${error.message}`);
+        }
     }
 
 }

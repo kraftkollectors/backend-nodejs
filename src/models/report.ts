@@ -3,16 +3,19 @@ const Schema: any = mongoose.Schema
 
 const ReportSchema = new Schema({
     reporterId: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
         required: true
     },
     reportedId: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
         required: true
     },
     postId: {
-        type: String,
-        required: true
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Ad',
+        required: false
     },
     text: {
         type: String,
