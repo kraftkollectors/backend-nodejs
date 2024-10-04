@@ -115,22 +115,24 @@ const DashService = {
         }
     },
 
-    deleteAccount: async (id: string) => {
+    deleteAccount: async (body: any) => {
         try {
-            // check if id is a valid mongoose id
-            const isValidId = mongoose.isValidObjectId(id)
-
-            if(!isValidId){
-                return { data: 'Please enter a correct id', statusCode: 404, msg: "Failure" };
-            }
-
-            const user = await User.findOne({ _id: id })
+            let { userEmail, userId, password } = body
+            // Check if the email exists
+            const user = await User.findOne({ email: userEmail })
 
             if (!user) {
-                return { data: 'user With The Specified id Not Found', statusCode: 404, msg: "Failure" };
+                return { data: 'User With The Specified Email Not Found', statusCode: 404, msg: "Failure" };
             }
 
-            await User.deleteOne({ _id: id });
+            // Compare passwords using bcrypt
+            password = await bcrypt.hash(password, SALT)
+
+            if (user.password !== password) {
+                return { data: 'Incorrect password', statusCode: 401, msg: "Failure" };
+            }
+
+            await User.deleteOne({ _id: userId });
             
             return { data: "account deleted", statusCode: 201, msg: "Success" };
             

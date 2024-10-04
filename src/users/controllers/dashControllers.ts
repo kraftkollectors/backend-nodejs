@@ -57,8 +57,8 @@ const DashController = {
                 return res.status(400).json({ data: 'Authentication error', statusCode: 400, msg: "Failure" });
             }
 
-            const userid = req.params.userid;
-            const data = await DashService.deleteAccount(userid);
+            const body = req.body;
+            const data = await DashService.deleteAccount(body);
             return res.status(data.statusCode).json(data);
 
         } catch (error: any) {
