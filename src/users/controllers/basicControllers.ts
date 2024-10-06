@@ -1,6 +1,8 @@
 import { Request, Response } from 'express';
 import BasicService from '../services/basicService';
 import { generateUploadURL, generateUploadURLs } from '../../middlewares/cloudinary';
+import fs from 'fs'
+import path from 'path'
 
 
 // driver login
@@ -146,6 +148,71 @@ const BasicController = {
             }
     
             return res.status(200).json({ data: data, statusCode: 201, msg: 'Success' });
+        } catch (error: any) {
+            console.log(error.message)
+            return res.status(500).json({ data: error.message, statusCode: 400, msg: "Failure" });
+        }
+    },
+
+    projectGetURL: async (req: Request, res: Response) => {
+        try {
+            if (!req.file) {
+                return res.status(400).json({ error: 'Please upload an image', statusCode: 401, msg: 'Failure' });
+            }
+
+            // if single image is being updated
+            if(req.body.oldImageUrl){                
+                const oldImageUrl = req.body.oldImageUrl
+                const imageName = oldImageUrl.split('/uploads/')[1]
+                
+                const oldFilePath = path.resolve(__dirname, '../../public/uploads', imageName)
+
+                if (fs.existsSync(oldFilePath)) {
+                    fs.unlinkSync(oldFilePath)
+                }
+            }
+
+            // Create the URL for the uploaded file
+            const uploadUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
+
+            return res.status(200).json({ data: uploadUrl, statusCode: 201, msg: 'Success' });
+        } catch (error: any) {
+            console.log(error.message)
+            return res.status(500).json({ data: error.message, statusCode: 400, msg: "Failure" });
+        }
+    },
+
+    projectGetURLS: async (req: Request, res: Response) => {
+        try {
+            if (!req.files || !Array.isArray(req.files)) {
+                return res.status(400).json({ error: 'Please upload files', statusCode: 401, msg: 'Failure' });
+            }
+
+            // if multiple images are being updated
+            if(req.body.oldImageUrls){
+                const imageUrls = req.body.oldImageUrls
+                imageUrls.forEach((imageObj: any) => {
+                    const imageUrl = imageObj.uploadUrl;
+                    if (imageUrl) {
+                        const imageName = imageUrl.split('/uploads/')[1]
+                        
+                        const oldFilePath = path.resolve(__dirname, '../../public/uploads', imageName)
+
+                        if (fs.existsSync(oldFilePath)) {
+                            fs.unlinkSync(oldFilePath)
+                            console.log(`Deleted file: ${oldFilePath}`);
+                        } else {
+                            console.log(`File not found: ${oldFilePath}`);
+                        }
+                    }
+                });
+            }         
+    
+            const imageUrls = req.files.map(file => ({
+                uploadUrl: `${req.protocol}://${req.get('host')}/uploads/${file.filename}`
+            }));
+    
+            return res.status(200).json({ data: imageUrls, statusCode: 201, msg: 'Success' });
         } catch (error: any) {
             console.log(error.message)
             return res.status(500).json({ data: error.message, statusCode: 400, msg: "Failure" });

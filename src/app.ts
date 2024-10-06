@@ -8,6 +8,7 @@ import databaseConnection from './database/database'
 import mySocket from "./appSocket/socketLogic";
 import { spawn } from "child_process";
 const socket = require('socket.io')
+import path from 'path'
 
 
 let app: any = express()
@@ -19,6 +20,7 @@ const startServer = async () => {
     await databaseConnection(DBURI)
 
     app.use(cors())
+    app.use('/uploads', express.static(path.join(__dirname, '../public/uploads')));
 
     app.use(express.json({ limit: '50mb' }));
     app.use(express.urlencoded({ extended: true, limit: '50mb' }));
@@ -28,7 +30,7 @@ const startServer = async () => {
     const server = app.listen(PORT, (req: any, res: any) => {
         // cron job to run every 24 hrs
         require('./utils/checker') 
-        console.log(`listening on port ${PORT}`)
+        console.log(`Typescript App Started..........listening on port ${PORT}`)
     })
     .on('error', (err: any) => {
         console.log(err)

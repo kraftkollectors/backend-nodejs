@@ -6,6 +6,7 @@ import PayController from '../controllers/payControllers';
 import ChatController from '../controllers/chatControllers';
 import multer from 'multer'
 import verifyToken from '../../middlewares/auth'
+import uploads from '../../middlewares/uploads';
 
 let storage = multer.memoryStorage()
 
@@ -39,6 +40,10 @@ router.post("/contact", BasicController.contact);
 // Upload Files to Cloud And Get UploadURL
 router.post("/geturl", upload.single("file"), BasicController.getURL);
 router.post("/geturls", upload.array('files', 5), BasicController.getURLS);
+
+// Upload Files to project And Get UploadURL
+router.post("/projectgeturl", uploads.single("file"), BasicController.projectGetURL);
+router.post("/projectgeturls", uploads.array('files', 5), BasicController.projectGetURLS);
 
 
 // Authenticated Routes
