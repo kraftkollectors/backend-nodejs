@@ -107,12 +107,12 @@ UserSchema.pre('deleteOne', { document: true, query: false }, async function (th
         await mongoose.model('Ad').deleteMany({ userId: this._id });
         await mongoose.model('Education').deleteMany({ userId: this._id });
         await mongoose.model('Certification').deleteMany({ userId: this._id });
-        await mongoose.model('Artisan').deleteOne({ userId: this._id });
-        await mongoose.model('Review').deleteOne({ reviewerId: this._id });
-        await mongoose.model('Payment').deleteOne({ userId: this._id });
-        await mongoose.model('Report').deleteOne({ reporterId: this._id });
-        await mongoose.model('savedAd').deleteOne({ userId: this._id });
-        await mongoose.model('Chat').deleteOne({ senderId: this._id, receiverId: this._id });
+        await mongoose.model('Artisan').deleteMany({ userId: this._id });
+        await mongoose.model('Review').deleteMany({ reviewerId: this._id });
+        await mongoose.model('Payment').deleteMany({ userId: this._id });
+        await mongoose.model('Report').deleteMany({ reporterId: this._id });
+        await mongoose.model('savedAd').deleteMany({ userId: this._id });
+        await mongoose.model('Chat').deleteMany({ senderId: this._id, receiverId: this._id });
         next();
     } catch (err: any) {
         next(err);
