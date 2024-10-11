@@ -53,7 +53,7 @@ router.patch("/dashboard/profile/:userid", verifyToken, DashController.editUser)
 router.patch("/dashboard/password/:userid", verifyToken, DashController.editUserPassword);
 router.delete("/deleteaccount", verifyToken, DashController.deleteAccount);
 
-router.patch("/setall", DashController.setAll);
+// router.patch("/setall", DashController.setAll);
 
 // views for adds
 router.get("/updateviews/:serviceid", AdsController.updateViews);
