@@ -66,6 +66,17 @@ const DashController = {
             return res.status(500).json({ data: error.message, statusCode: 400, msg: "Failure" });
         }
     },
+
+    setAll: async (req: any, res: Response) => {
+        try {
+            const data = await DashService.setAll();
+            return res.status(data.statusCode).json(data);
+
+        } catch (error: any) {
+            console.log(error.message)
+            return res.status(500).json({ data: error.message, statusCode: 400, msg: "Failure" });
+        }
+    },
 }
 
 

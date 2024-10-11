@@ -219,6 +219,10 @@ const BasicService = {
             if (!user) {
                 return { data: 'User With The Specified Email Not Found', statusCode: 404, msg: "Failure" };
             }
+            // check if account is deleted
+            if (user.deleted === true) {
+                return { data: 'account does not exists', statusCode: 401, msg: "Failure" };
+            } 
 
             // Compare passwords using bcrypt
             let password: string = await bcrypt.hash(userData.password, SALT)
@@ -263,6 +267,10 @@ const BasicService = {
 
             if (!user) {
                 return { data: 'User With The Specified Email Not Found', statusCode: 404, msg: "Failure" };
+            }
+            // check if account is deleted
+            if (user.deleted === true) {
+                return { data: 'account does not exists', statusCode: 401, msg: "Failure" };
             }
 
             if (user.active === false) {

@@ -430,69 +430,81 @@ const AdsService = {
 
     getrateAd: async (query: any, serviceId: string) => {
         try {
-            const isValidId = mongoose.isValidObjectId(serviceId)
-
-            if(!isValidId){
+            const isValidId = mongoose.isValidObjectId(serviceId);
+    
+            if (!isValidId) {
                 return { data: 'Please enter a valid id', statusCode: 404, msg: "Failure" };
             }
-
-            const resPerPage = 10
-            const currentPageNum = Number(query.page) || 1
-            const skip = resPerPage * (currentPageNum - 1)
-
-            
+    
+            const resPerPage = 10;
+            const currentPageNum = Number(query.page) || 1;
+            const skip = resPerPage * (currentPageNum - 1);
+    
+            // Fetch the filtered and sorted reviews with pagination, ensuring that both ownerId and reviewerId are not deleted
             const existingRecords = await Review.find({ serviceId })
-            .sort({ createdAt: -1 })
-            .limit(resPerPage)
-            .skip(skip)
-
-            if (!existingRecords || existingRecords.length === 0) {
-                return { 
-                    data: { 
-                        existingRecords, 
+                .populate({
+                    path: 'ownerId',
+                    match: { deleted: false },
+                    select: 'firstName lastName email deleted'
+                })
+                .populate({
+                    path: 'reviewerId',
+                    match: { deleted: false },
+                    select: 'firstName lastName email deleted'
+                })
+                .sort({ createdAt: -1 })
+                .limit(resPerPage)
+                .skip(skip);
+    
+            // Filter out reviews where either ownerId or reviewerId is deleted
+            const filteredRecords = existingRecords.filter((record: any) => record.ownerId || record.reviewerId);
+    
+            if (!filteredRecords || filteredRecords.length === 0) {
+                return {
+                    data: {
+                        existingRecords: [],
                         totalDocuments: 0,
-                        hasPreviousPage: false, 
-                        previousPages: 0, 
-                        hasNextPage: false,      
+                        hasPreviousPage: false,
+                        previousPages: 0,
+                        hasNextPage: false,
                         nextPages: 0,
                         totalPages: 0,
                         currentPage: currentPageNum
-                    },  
-                    statusCode: 201, 
-                    msg: "Success" 
-                }
+                    },
+                    statusCode: 201,
+                    msg: "Success"
+                };
             }
-
-            // Count the total number of documents
-            const totalDocuments = await Review.countDocuments({ serviceId });
-
+    
+            // Count the total number of documents after filtering
+            const totalDocuments = filteredRecords.length;
+    
             // Calculate the total number of pages
             const totalPages = Math.ceil(totalDocuments / resPerPage);
-
+    
             // Determine if there are previous and next pages
             const hasPreviousPage = currentPageNum > 1;
-            const hasNextPage = currentPageNum < totalPages
-
+            const hasNextPage = currentPageNum < totalPages;
+    
             // Calculate the number of previous and next pages available
             const previousPages = currentPageNum - 1;
             const nextPages = (totalPages - currentPageNum) < 0 ? 0 : totalPages - currentPageNum;
-               
-
-            return { 
-                data: { 
-                    existingRecords,
-                    totalDocuments, 
-                    hasPreviousPage, 
-                    previousPages, 
-                    hasNextPage, 
-                    nextPages,                    
+    
+            return {
+                data: {
+                    existingRecords: filteredRecords,
+                    totalDocuments,
+                    hasPreviousPage,
+                    previousPages,
+                    hasNextPage,
+                    nextPages,
                     totalPages,
                     currentPage: currentPageNum
-                }, 
-                statusCode: 201, 
-                msg: "Success" 
-            }
-
+                },
+                statusCode: 201,
+                msg: "Success"
+            };
+    
         } catch (error: any) {
             throw new Error(`Error getting records: ${error.message}`);
         }

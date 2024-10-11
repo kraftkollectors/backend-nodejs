@@ -12,6 +12,7 @@ interface IUser extends Document {
     publicId?: string;
     isArtisan?: boolean;
     active?: boolean;
+    deleted?: boolean;
     emailVerify?: boolean;
     otp?: string;
     lastSeen?: string;
@@ -68,6 +69,11 @@ const UserSchema = new MongooseSchema<IUser>({
         required: false,
         default: true
     },
+    deleted: {
+        type: Boolean,
+        required: false,
+        default: false
+    },
     emailVerify: {
         type: Boolean,
         required: false,
@@ -98,26 +104,7 @@ const UserSchema = new MongooseSchema<IUser>({
         required: false,
         default: true
     }
-}, { timestamps: true });
-
-// Pre-delete hook to delete associated ads when a user is deleted
-UserSchema.pre('deleteOne', { document: true, query: false }, async function (this: IUser, next) {
-    try {
-        // 'this' refers to the user document being removed
-        await mongoose.model('Ad').deleteMany({ userId: this._id });
-        await mongoose.model('Education').deleteMany({ userId: this._id });
-        await mongoose.model('Certification').deleteMany({ userId: this._id });
-        await mongoose.model('Artisan').deleteMany({ userId: this._id });
-        await mongoose.model('Review').deleteMany({ reviewerId: this._id });
-        await mongoose.model('Payment').deleteMany({ userId: this._id });
-        await mongoose.model('Report').deleteMany({ reporterId: this._id });
-        await mongoose.model('savedAd').deleteMany({ userId: this._id });
-        await mongoose.model('Chat').deleteMany({ senderId: this._id, receiverId: this._id });
-        next();
-    } catch (err: any) {
-        next(err);
-    }
-});
+}, { timestamps: true })
 
 // Export the User model
 const User = mongoose.models.User || mongoose.model<IUser>('User', UserSchema);

@@ -74,7 +74,10 @@ const UsersService = {
             }
 
             // Check if the email already exists
-            await Users.findByIdAndDelete({ _id: id })
+            await Users.updateOne(
+                { _id: id },
+                { $set: { deleted: true } }
+              );
 
             return { data: 'account deleted', statusCode: 201, msg: "Success" };
         } catch (error: any) {

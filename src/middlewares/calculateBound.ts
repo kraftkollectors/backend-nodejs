@@ -92,15 +92,15 @@ export async function getFilteredAdsForAdmin(data: any) {
   const existingRecords = await Ad.find(query)
       .populate({
           path: 'userId',
-          select: 'active',
-          match: { active: true }
+          match: { deleted: false },
+          select: 'deleted'
       })
       .sort(sortOption)
       .skip(skip)
       .limit(10);
 
   // Filter out ads where the user is inactive (userId will be null if user is inactive)
-  const filteredRecords = existingRecords.filter((record: any) => record.userId);
+  const filteredRecords = existingRecords.filter((record: any) => record.userId !== null)
 
   const totalDocuments = await Ad.countDocuments(query);
   const totalPages = Math.ceil(totalDocuments / 10);
@@ -200,15 +200,15 @@ export async function getFilteredAds(data: any) {
     const existingRecords = await Ad.find(query)
     .populate({
         path: 'userId',
-        select: 'active',
-        match: { active: true }
+        match: { deleted: false },
+        select: 'deleted'
     })
     .sort(sortOption)
     .skip(skip)
     .limit(10);
 
-  // Filter out ads where the user is inactive (userId will be null if user is inactive)
-  const filteredRecords = existingRecords.filter((record: any) => record.userId);
+  // Filter out ads where the user is inactive (userId will be null if user is inactive) 
+  const filteredRecords = existingRecords.filter((record: any) => record.userId !== null)
 
   const totalDocuments = await Ad.countDocuments(query);
   const totalPages = Math.ceil(totalDocuments / 10);
@@ -405,14 +405,31 @@ export async function getFilteredReport<T>(data: any) {
     const skip = (page - 1) * 10;
   
     // Fetch the filtered and sorted ads with pagination
-    const existingRecords = await Report.find(query).sort(sortOption).skip(skip).limit(10);
+    const existingRecords = await Report.find(query)
+        .populate({
+            path: 'reporterId',
+            match: { deleted: false },
+            select: 'deleted'
+        })
+        .populate({
+            path: 'reportedId',
+            match: { deleted: false },
+            select: 'deleted'
+        })
+        .sort(sortOption)
+        .skip(skip)
+        .limit(10);
+
+    // Filter out reports where both reporterId and reportedId are deleted
+    const filteredRecords = existingRecords.filter((record: any) => record.reporterId || record.reportedId);
+
     const totalDocuments = await Report.countDocuments(query);
     const totalPages = Math.ceil(totalDocuments / 10);
 
-    if (!existingRecords || existingRecords.length === 0) {
+    if (!filteredRecords || filteredRecords.length === 0) {
         return { 
             data: { 
-                existingRecords, 
+                existingRecords: [], 
                 totalDocuments: 0,
                 hasPreviousPage: false, 
                 previousPages: 0, 
@@ -428,7 +445,7 @@ export async function getFilteredReport<T>(data: any) {
   
     return {
         data: {
-            existingRecords,
+            existingRecords: filteredRecords,
             totalDocuments,
             hasPreviousPage: page > 1,
             previousPages: page > 1 ? page - 1 : 0,
@@ -443,7 +460,7 @@ export async function getFilteredReport<T>(data: any) {
 }
 
 export async function getFilteredUsers(data: any) {
-    const query: any = {};
+    const query: any = { deleted: false };
     let page: any = data.page ? data.page : 1
   
     if (data.q) {      
@@ -515,7 +532,7 @@ export async function getFilteredUsers(data: any) {
 
 
 export async function getUsersSet(data: any) {
-    const query: any = {isArtisan: true};
+    const query: any = {isArtisan: true, deleted : false };
     let page: any = data.page ? data.page : 1
   
     if (data.q) {

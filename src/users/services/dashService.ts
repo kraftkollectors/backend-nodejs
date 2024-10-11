@@ -132,9 +132,26 @@ const DashService = {
                 return { data: 'Incorrect password', statusCode: 401, msg: "Failure" };
             }
 
-            await User.deleteOne({ _id: userId });
+            await User.updateOne(
+                { _id: userId },
+                { $set: { deleted: true } }
+            );
             
             return { data: "account deleted", statusCode: 201, msg: "Success" };
+            
+        } catch (error: any) {
+            throw new Error(`Error editing account password: ${error.message}`);
+        }
+    },
+
+    setAll: async () => {
+        try {
+            await User.updateMany(
+                {},
+                { $set: { deleted: false } }
+            );
+            
+            return { data: "accounts updated", statusCode: 201, msg: "Success" };
             
         } catch (error: any) {
             throw new Error(`Error editing account password: ${error.message}`);
