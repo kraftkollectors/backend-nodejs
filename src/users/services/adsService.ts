@@ -445,19 +445,28 @@ const AdsService = {
                 .populate({
                     path: 'ownerId',
                     match: { deleted: false },
-                    select: 'firstName lastName email deleted'
+                    select: '_id'
                 })
                 .populate({
                     path: 'reviewerId',
                     match: { deleted: false },
-                    select: 'firstName lastName email deleted'
+                    select: '_id'
                 })
                 .sort({ createdAt: -1 })
                 .limit(resPerPage)
                 .skip(skip);
     
             // Filter out reviews where either ownerId or reviewerId is deleted
-            const filteredRecords = existingRecords.filter((record: any) => record.ownerId || record.reviewerId);
+            const filteredRecords = existingRecords
+            .filter((record: any) => record.ownerId || record.reviewerId)
+            .map((record: any) => {
+                // Convert ownerId and reviewerId to strings if they exist
+                return {
+                ...record.toObject(),
+                ownerId: record.ownerId ? record.ownerId._id.toString() : null,
+                reviewerId: record.reviewerId ? record.reviewerId._id.toString() : null,
+                };
+            });
     
             if (!filteredRecords || filteredRecords.length === 0) {
                 return {

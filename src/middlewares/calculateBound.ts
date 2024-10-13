@@ -91,16 +91,24 @@ export async function getFilteredAdsForAdmin(data: any) {
   // Fetch the filtered and sorted ads with pagination, ensuring only ads from active users are included
   const existingRecords = await Ad.find(query)
       .populate({
-          path: 'userId',
-          match: { deleted: false },
-          select: 'deleted'
+        path: 'userId',
+        select: '_id',
+        match: { deleted: false }
       })
       .sort(sortOption)
       .skip(skip)
       .limit(10);
 
   // Filter out ads where the user is inactive (userId will be null if user is inactive)
-  const filteredRecords = existingRecords.filter((record: any) => record.userId !== null)
+  const filteredRecords = existingRecords
+  .filter((record: any) => record.userId !== null)
+  .map((record: any) => {
+    // Convert userId to a string if it exists
+    return {
+      ...record.toObject(),
+      userId: record.userId._id.toString()
+    };
+  });
 
   const totalDocuments = await Ad.countDocuments(query);
   const totalPages = Math.ceil(totalDocuments / 10);
@@ -199,16 +207,24 @@ export async function getFilteredAds(data: any) {
     // Fetch the filtered and sorted ads with pagination, ensuring only ads from active users are included
     const existingRecords = await Ad.find(query)
     .populate({
-        path: 'userId',
-        match: { deleted: false },
-        select: 'deleted'
+      path: 'userId',
+      select: '_id',
+      match: { deleted: false }
     })
     .sort(sortOption)
     .skip(skip)
     .limit(10);
 
   // Filter out ads where the user is inactive (userId will be null if user is inactive) 
-  const filteredRecords = existingRecords.filter((record: any) => record.userId !== null)
+  const filteredRecords = existingRecords
+  .filter((record: any) => record.userId !== null)
+  .map((record: any) => {
+    // Convert userId to a string if it exists
+    return {
+      ...record.toObject(),
+      userId: record.userId._id.toString()
+    };
+  });
 
   const totalDocuments = await Ad.countDocuments(query);
   const totalPages = Math.ceil(totalDocuments / 10);
@@ -409,19 +425,28 @@ export async function getFilteredReport<T>(data: any) {
         .populate({
             path: 'reporterId',
             match: { deleted: false },
-            select: 'deleted'
+            select: '_id'
         })
         .populate({
             path: 'reportedId',
             match: { deleted: false },
-            select: 'deleted'
+            select: '_id'
         })
         .sort(sortOption)
         .skip(skip)
         .limit(10);
 
     // Filter out reports where both reporterId and reportedId are deleted
-    const filteredRecords = existingRecords.filter((record: any) => record.reporterId || record.reportedId);
+    const filteredRecords = existingRecords
+    .filter((record: any) => record.reporterId || record.reportedId)
+    .map((record: any) => {
+      // Convert reporterId and reportedId to strings if they exist
+      return {
+        ...record.toObject(),
+        reporterId: record.reporterId ? record.reporterId._id.toString() : null,
+        reportedId: record.reportedId ? record.reportedId._id.toString() : null,
+      };
+    });
 
     const totalDocuments = await Report.countDocuments(query);
     const totalPages = Math.ceil(totalDocuments / 10);
